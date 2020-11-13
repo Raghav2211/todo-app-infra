@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.klab.config;
+package com.klab.todo.config;
 
 import java.util.List;
 

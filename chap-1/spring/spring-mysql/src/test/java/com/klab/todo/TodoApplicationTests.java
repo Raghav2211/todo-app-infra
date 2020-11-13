@@ -1,10 +1,10 @@
-package com.klab;
+package com.klab.todo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringMysqlApplicationTests {
+class TodoApplicationTests {
 
 	@Test
 	void contextLoads() {

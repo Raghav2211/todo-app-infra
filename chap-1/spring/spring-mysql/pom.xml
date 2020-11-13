@@ -9,7 +9,7 @@
 		<version>2.4.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.klab</groupId>
+	<groupId>com.klab.todo</groupId>
 	<artifactId>spring-mysql</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-mysql</name>
