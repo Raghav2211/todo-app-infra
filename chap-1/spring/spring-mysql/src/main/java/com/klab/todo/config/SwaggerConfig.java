@@ -5,6 +5,7 @@ package com.klab.todo.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,16 +19,17 @@ import springfox.documentation.spring.web.plugins.Docket;
 @Configuration
 public class SwaggerConfig {
 
+    @Value("${klab.todo.build.version}")
+    private String buildVersion;
+
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
-                .select().apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any()).build().apiInfo(metaData());
+        return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
+                .apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build().apiInfo(metaData());
     }
 
     private ApiInfo metaData() {
-        return new ApiInfo("TODO App on Kubernetes application", "TODO App on Kubernetes application", "0.1.0",
+        return new ApiInfo("TODO App on Kubernetes application", "TODO App on Kubernetes application", buildVersion,
                 "Terms of service",
                 new Contact("TODO",
                         "https://github.com/Raghav2211/kubernetes-lab/tree/spring-mysql/chap-1/spring/spring-mysql",
