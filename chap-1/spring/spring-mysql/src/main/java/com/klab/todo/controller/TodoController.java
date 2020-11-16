@@ -50,7 +50,7 @@ public class TodoController {
 
     @ApiOperation(value = "Create Todo", response = Todo.class, responseHeaders = {
             @ResponseHeader(name = "Location", description = "Location of created todo") })
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Todo successfully created", responseHeaders = {
+    @ApiResponses(value = { @ApiResponse(code = 201, message = "Todo successfully created", responseHeaders = {
             @ResponseHeader(name = "Location", description = "Location of created todo") }) })
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo, UriComponentsBuilder ucBuilder) {
