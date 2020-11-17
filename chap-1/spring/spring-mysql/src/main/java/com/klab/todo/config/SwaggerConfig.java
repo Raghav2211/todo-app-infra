@@ -25,7 +25,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
-                .apis(RequestHandlerSelectors.any()).paths(PathSelectors.any()).build().apiInfo(metaData());
+                .apis(RequestHandlerSelectors.basePackage("com.klab.todo")).paths(PathSelectors.any()).build().apiInfo(metaData());
     }
 
     private ApiInfo metaData() {
