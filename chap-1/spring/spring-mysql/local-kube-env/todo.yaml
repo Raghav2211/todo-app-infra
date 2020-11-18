@@ -35,7 +35,12 @@ spec:
             - name: MYSQL_PASSWORD
               value: root
             - name: MYSQL_DB_NAME
-              value: klab      
+              value: klab   
+      initContainers:
+        - name: init-mysql
+          image: busybox
+          command: ['sh', '-c', 'until nslookup mysql; do echo waiting for mysql; sleep 2; done;']
+                       
 ---
 apiVersion: v1
 kind: Service
