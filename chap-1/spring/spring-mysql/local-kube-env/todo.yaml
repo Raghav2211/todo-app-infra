@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: klab-todo
+  labels:
+    app: klab-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: klab-todo
+  template:
+    metadata:
+      labels:
+        app: klab-todo
+    spec:
+      containers:
+        - name: klab-todo
+          image: klab-spring-mysql:0.0.1
+          imagePullPolicy: Never
+          resources:
+              requests:
+                memory: "1Gi"
+                cpu: "250m"
+              limits:
+                memory: "2Gi"
+                cpu: "500m"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              value: mysql
+            - name: MYSQL_USER
+              value: root
+            - name: MYSQL_PASSWORD
+              value: root
+            - name: MYSQL_DB_NAME
+              value: klab      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: klab-todo
+spec:
+  selector:
+    app: klab-todo
+  type: LoadBalancer  
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30000
