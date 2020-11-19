@@ -1,33 +1,34 @@
-# Setting up kubernetes cluster in local using minikube
+# Deploy Todo Application in Local kubernetes cluster
 
-- Install and run minikube
+- Setup minikube  
+    https://minikube.sigs.k8s.io/docs/start/    
 
-  Use following instructions to install minikube
-  
-    https://minikube.sigs.k8s.io/docs/start/
-## Running application
  - Use Own Local Docker Images With Minikube
  
  ```bash
     eval $(minikube docker-env)
  ```
- - Build your docker image
+ - Build docker image
  
  ```bash
     docker build -f ./Dockerfile.mvn --tag klab-spring-mysql:0.0.1 .
  ```
  
- - Start local todo cluster
+ - Deploy to local cluster
  
  ```bash
-    cd <app-path>/local-kube-env
-    kubectl apply -f ./
+    cd <path>/chap-1/spring/spring-mysql
+    kubectl apply -f ./local-kube-env
  ```
 
  - Verify all pods are up and running
  
  ```bash
-    kubectl get pods
+   $ kubectl get pods
+    NAME                         READY   STATUS    RESTARTS   AGE
+    klab-todo-6f4f69b7d7-8t8kg   1/1     Running   0          92m
+    mysql-58b87bf444-pshmk       1/1     Running   0          92m
+    
  ```
 
  - Execute below command in a separate terminal which creates a route to services deployed with type LoadBalancer and sets their Ingress to their ClusterIP.
@@ -36,6 +37,6 @@
      minikube tunnel
  ```
 
- - Access todo swagger api endpoint in browser with below url.
+ - Access swagger api endpoint with below url.
  
     http://localhost:8080/swagger-ui/
