@@ -31,10 +31,15 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: root
             - name: MYSQL_DATABASE
-              value: klab  
+              value: klab
           ports:
             - containerPort: 3306
               name: mysql
+          livenessProbe:
+            tcpSocket:
+              port: mysql
+            initialDelaySeconds: 10
+            periodSeconds: 2
           volumeMounts:
             - name: mysql-pv-storage
               mountPath: /var/lib/mysql

@@ -19,14 +19,22 @@ spec:
           image: klab-spring-mysql:0.0.1
           imagePullPolicy: Never
           resources:
-              requests:
-                memory: "1Gi"
-                cpu: "250m"
-              limits:
-                memory: "2Gi"
-                cpu: "500m"
+            requests:
+              memory: "1Gi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "500m"
           ports:
             - containerPort: 8080
+              name: klabtodo
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: klabtodo
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            timeoutSeconds: 10
           env:
             - name: MYSQL_HOST
               value: mysql
@@ -35,12 +43,17 @@ spec:
             - name: MYSQL_PASSWORD
               value: root
             - name: MYSQL_DB_NAME
-              value: klab   
+              value: klab
       initContainers:
         - name: init-mysql
           image: busybox
-          command: ['sh', '-c', 'until nslookup mysql; do echo waiting for mysql; sleep 2; done;']
-                       
+          command:
+            [
+              "sh",
+              "-c",
+              "until nslookup mysql; do echo waiting for mysql; sleep 2; done;",
+            ]
+
 ---
 apiVersion: v1
 kind: Service
@@ -49,9 +62,9 @@ metadata:
 spec:
   selector:
     app: klab-todo
-  type: LoadBalancer  
+  type: LoadBalancer
   ports:
-  - port: 8080
-    targetPort: 8080
-    protocol: TCP
-    nodePort: 30000
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      nodePort: 30000
