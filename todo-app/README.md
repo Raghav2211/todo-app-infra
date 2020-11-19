@@ -15,10 +15,11 @@ TODO App uses following technologies:
 * [Junit] - Unit test
 * [MySql] - Backend data store
 * [Docker] - OS level virtualization
+* [Minikube] - Local kubernetes
 
 
-## Build
-### Maven ###
+## Build ##
+##### Maven #####
 Build application using below command
 
 ```bash
@@ -30,7 +31,7 @@ or
 ./mvnw clean install
 ```
 
-### Gradle ###
+##### Gradle #####
 Build application using below command
 
 ```bash
@@ -40,4 +41,20 @@ or
 
 ```bash
 ./gradlew clean build
+```
+
+##### Docker image #####
+
+```bash
+docker build -f Dockerfile.mvn --tag klab-todo:0.0.1 .
+```
+or
+
+```bash
+docker build -f Dockerfile.gradle --tag klab-todo:0.0.1 .
+```
+
+## Run ##
+```bash
+docker-compose up -d
 ```

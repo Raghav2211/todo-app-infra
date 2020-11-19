@@ -11,14 +11,13 @@
  - Build docker image
  
  ```bash
-    docker build -f ./Dockerfile.mvn --tag klab-spring-mysql:0.0.1 .
+    docker build -f ../Dockerfile.mvn --tag klab-todo:0.0.1 ../.
  ```
  
  - Deploy to local cluster
  
  ```bash
-    cd <path>/chap-1/spring/spring-mysql
-    kubectl apply -f ./local-kube-env
+    kubectl apply -f .
  ```
 
  - Verify all pods are up and running

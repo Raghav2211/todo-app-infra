@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: klab-todo
-          image: klab-spring-mysql:0.0.1
+          image: klab-todo:0.0.1
           imagePullPolicy: Never
           resources:
             requests:

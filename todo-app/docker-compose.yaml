@@ -9,8 +9,8 @@ services:
       MYSQL_DATABASE: klab
       MYSQL_ROOT_PASSWORD: root
   klabapp:
-    image: klab-spring-mysql:0.0.1
-    container_name: klab-spring-mysql
+    image: klab-todo:0.0.1
+    container_name: klab-todo
     restart: on-failure:5 
     depends_on:
       - klabmysql
