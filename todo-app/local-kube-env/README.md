@@ -8,11 +8,9 @@
  ```bash
     eval $(minikube docker-env)
  ```
- - Build docker image
+ - Build
  
- ```bash
-    docker build -f ../Dockerfile.mvn --tag klab-todo:0.0.1 ../.
- ```
+    [Build & Create Docker Image](../README.md#build)
  
  - Deploy to local cluster
  
