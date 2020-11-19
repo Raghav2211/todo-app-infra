@@ -1,7 +1,7 @@
-# kubernetes-lab
-Repository contain practical example with kubernetes 
+# Kubernetes Lab
+Practical examples with kubernetes on local & AWS environment
 
-# TODO
+#### TODO ####
 - Todo App deployment on AWS 
 - Add Prometheus,Grafana & Tracing
 - Add CI/CD (github action)
