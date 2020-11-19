@@ -41,7 +41,3 @@ or
 ```bash
 ./gradlew clean build
 ```
-
-## Contributors
-- Raghav2211
-- ayashbaral
