@@ -10,5 +10,4 @@ public class TodoException {
     private String message;
     private String requestedURI;
 
- 
 }
