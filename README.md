@@ -1,5 +1,5 @@
-# Kubernetes Lab
-Practical examples with kubernetes on local & AWS environment
+# K8s Lab
+Practical examples with k8s on local & AWS environment
 
 #### TODO ####
 - Todo App deployment on AWS 
