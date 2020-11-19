@@ -3,7 +3,7 @@
 - Setup minikube  
     https://minikube.sigs.k8s.io/docs/start/    
 
- - Use Own Local Docker Images With Minikube
+ - Link host docker client to the VM's docker daemon
  
  ```bash
     eval $(minikube docker-env)
