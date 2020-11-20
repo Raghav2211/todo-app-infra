@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.klab.todo.entity.Todo;
+import com.klab.todo.exception.TodoException;
 import com.klab.todo.service.ITodoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -54,10 +55,9 @@ public class TodoController {
             @ResponseHeader(name = "Location", description = "Location of created todo") }) })
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo, UriComponentsBuilder ucBuilder) {
-        Todo created = todoService.create(todo);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/todo/{id}").buildAndExpand(todo.getId()).toUri());
-        return new ResponseEntity<Todo>(created, headers, HttpStatus.CREATED);
+        return new ResponseEntity<Todo>(todoService.create(todo), headers, HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "View all Todos", response = List.class)
@@ -70,29 +70,19 @@ public class TodoController {
 
     @ApiOperation(value = "Update Todo", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Todo successfully updated", response = Todo.class),
-            @ApiResponse(code = 404, message = "Provide todo is not found") })
+            @ApiResponse(code = 404, message = "Todo record Id doesn't exist", response = TodoException.class) })
     @PutMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
-        Optional<Todo> optTodo = todoService.findById(todo.getId());
-        if (!optTodo.isPresent()) {
-            return new ResponseEntity<Todo>(HttpStatus.NOT_FOUND);
-        }
-        todoService.update(todo);
-        return new ResponseEntity<Todo>(todo, HttpStatus.OK);
+        return new ResponseEntity<Todo>(todoService.update(todo), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Delete Todo by provide id", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 204, message = "Todo successfully deleted"),
-            @ApiResponse(code = 404, message = "Todo not found") })
+            @ApiResponse(code = 404, message = "Todo record doesn't exist", response = TodoException.class) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<Todo> deleteTodo(@PathVariable("id") long id) {
-        Optional<Todo> optTodo = todoService.findById(id);
-        if (!optTodo.isPresent()) {
-            return new ResponseEntity<Todo>(HttpStatus.NOT_FOUND);
-        }
-        todoService.delete(id);
-        return new ResponseEntity<Todo>(optTodo.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Todo>(todoService.delete(id).get(), HttpStatus.NO_CONTENT);
     }
 
 }

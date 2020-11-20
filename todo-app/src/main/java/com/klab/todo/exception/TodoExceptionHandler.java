@@ -1,5 +1,6 @@
 package com.klab.todo.exception;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,18 @@ public class TodoExceptionHandler {
 
         TodoException error = new TodoException();
         error.setMessage(MY_SQL_UNAVAILABLE);
+        error.setRequestedURI(request.getRequestURI());
+
+        return error;
+    }
+    
+    @ExceptionHandler(PersistenceException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public @ResponseBody TodoException handlePersistence(final Exception exception,
+            final HttpServletRequest request) {
+        
+        TodoException error = new TodoException();
+        error.setMessage(exception.getMessage());
         error.setRequestedURI(request.getRequestURI());
 
         return error;
