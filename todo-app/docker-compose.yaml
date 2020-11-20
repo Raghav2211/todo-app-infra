@@ -1,7 +1,7 @@
 version: "3"
 services:
   klabmysql:
-    image: mysql
+    image: mysql:8.0.22
     container_name: mysql
     ports:
       - 3306:3306

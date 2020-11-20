@@ -25,7 +25,7 @@ spec:
         app: mysql
     spec:
       containers:
-        - image: mysql
+        - image: mysql:8.0.22
           name: mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
