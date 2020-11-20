@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.klab.todo.entity.Todo;
+import com.klab.todo.exception.TodoException;
 import com.klab.todo.service.ITodoService;
 
 import io.swagger.annotations.ApiOperation;
@@ -69,7 +70,7 @@ public class TodoController {
 
     @ApiOperation(value = "Update Todo", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Todo successfully updated", response = Todo.class),
-            @ApiResponse(code = 404, message = "Provide todo is not found") })
+            @ApiResponse(code = 404, message = "Todo record Id doesn't exist", response = TodoException.class) })
     @PutMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
         return new ResponseEntity<Todo>(todoService.update(todo), HttpStatus.OK);
@@ -77,7 +78,7 @@ public class TodoController {
 
     @ApiOperation(value = "Delete Todo by provide id", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 204, message = "Todo successfully deleted"),
-            @ApiResponse(code = 404, message = "Todo not found") })
+            @ApiResponse(code = 404, message = "Todo record doesn't exist", response = TodoException.class) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<Todo> deleteTodo(@PathVariable("id") long id) {
