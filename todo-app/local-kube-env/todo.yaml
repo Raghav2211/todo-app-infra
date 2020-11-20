@@ -37,13 +37,25 @@ spec:
             timeoutSeconds: 10
           env:
             - name: MYSQL_HOST
-              value: mysql
+              valueFrom:
+                configMapKeyRef:
+                  key: url
+                  name: mysql-config
             - name: MYSQL_USER
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: mysql-secret
             - name: MYSQL_PASSWORD
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: mysql-secret
             - name: MYSQL_DB_NAME
-              value: klab
+              valueFrom:
+                configMapKeyRef:
+                  key: database
+                  name: mysql-config
       initContainers:
         - name: init-mysql
           image: busybox
