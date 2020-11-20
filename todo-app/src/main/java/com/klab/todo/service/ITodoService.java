@@ -14,6 +14,6 @@ public interface ITodoService {
 
     public Iterable<Todo> findAll();
 
-    public void delete(long id);
+    public Optional<Todo> delete(long id);
 
 }
