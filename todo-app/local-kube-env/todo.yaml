@@ -56,15 +56,15 @@ spec:
                 configMapKeyRef:
                   key: database
                   name: mysql-config
-            - name: APP_USER
+            - name: BASIC_AUTH_USER
               valueFrom:
                 secretKeyRef:
-                  key: username
+                  key: basic-auth-username
                   name: todo-secret
-            - name: APP_PASSWORD
+            - name: BASIC_AUTH_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: password
+                  key: basic-auth-password
                   name: todo-secret
       initContainers:
         - name: init-mysql

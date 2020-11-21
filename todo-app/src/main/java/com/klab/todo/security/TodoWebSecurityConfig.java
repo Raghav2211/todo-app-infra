@@ -12,9 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value(value = "${api.secuirity.username}")
+    private static final String USER = "USER";
+    @Value(value = "${api.basic.auth.username}")
     private String basicAuthUserName;
-    @Value(value = "${api.secuirity.password}")
+    @Value(value = "${api.basic.auth.password}")
     private String basicAuthPassWord;
 
     @Override
@@ -26,7 +27,7 @@ public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(basicAuthUserName).password(basicAuthPassWord).roles("USER");
+        auth.inMemoryAuthentication().withUser(basicAuthUserName).password(basicAuthPassWord).roles(USER);
     }
 
 }
