@@ -36,7 +36,7 @@ public class TodoService implements ITodoService {
         return todoRepository.save(todo);
     }
 
-    public Optional<Todo> findById(long id) {
+    public Optional<Todo> findById(Long id) {
         return todoRepository.findById(id);
     }
 
@@ -44,7 +44,7 @@ public class TodoService implements ITodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<Todo> delete(long id) {
+    public Optional<Todo> delete(Long id) {
         Optional<Todo> optTodo = todoRepository.findById(id);
         if (!optTodo.isPresent()) {
             throw new PersistenceException("Todo record doesn't exist");
