@@ -56,6 +56,16 @@ spec:
                 configMapKeyRef:
                   key: database
                   name: mysql-config
+            - name: APP_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: todo-secret
+            - name: APP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: todo-secret
       initContainers:
         - name: init-mysql
           image: busybox
