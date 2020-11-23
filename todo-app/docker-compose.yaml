@@ -1,7 +1,7 @@
 version: "3"
 services:
   klabmysql:
-    image: mysql
+    image: mysql:8.0.22
     container_name: mysql
     ports:
       - 3306:3306
@@ -21,3 +21,5 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_DB_NAME: klab
+      BASIC_AUTH_USER: admin
+      BASIC_AUTH_PASSWORD: "{noop}password"

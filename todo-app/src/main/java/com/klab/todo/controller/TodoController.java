@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +45,7 @@ public class TodoController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Retrieved todo successfully"),
             @ApiResponse(code = 404, message = "Todo is not found") })
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Todo> getTodoById(@PathVariable("id") long id) {
+    public ResponseEntity<Todo> getTodoById(@PathVariable("id") Long id) {
         Optional<Todo> todo = todoService.findById(id);
         return todo.isPresent() ? new ResponseEntity<Todo>(todo.get(), HttpStatus.OK)
                 : new ResponseEntity<Todo>(HttpStatus.NOT_FOUND);
@@ -81,7 +83,7 @@ public class TodoController {
             @ApiResponse(code = 404, message = "Todo record doesn't exist", response = TodoException.class) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", headers = "Accept=application/json")
-    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") long id) {
+    public ResponseEntity<Todo> deleteTodo(@PathVariable("id") @NotBlank(message = "Id should be non null") Long id) {
         return new ResponseEntity<Todo>(todoService.delete(id).get(), HttpStatus.NO_CONTENT);
     }
 

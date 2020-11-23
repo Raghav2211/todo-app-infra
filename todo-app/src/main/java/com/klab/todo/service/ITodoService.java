@@ -10,10 +10,10 @@ public interface ITodoService {
 
     public Todo update(Todo user);
 
-    public Optional<Todo> findById(long id);
+    public Optional<Todo> findById(Long id);
 
     public Iterable<Todo> findAll();
 
-    public Optional<Todo> delete(long id);
+    public Optional<Todo> delete(Long id);
 
 }
