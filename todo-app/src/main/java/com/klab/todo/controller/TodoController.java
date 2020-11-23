@@ -43,7 +43,8 @@ public class TodoController {
 
     @ApiOperation(value = "View Todo by provide id", response = Todo.class, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Retrieved todo successfully"),
-            @ApiResponse(code = 404, message = "Todo is not found") })
+            @ApiResponse(code = 404, message = "Todo is not found"), })
+    @ApiResponse(code = 401, message = "Unauthorized")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Todo> getTodoById(@PathVariable("id") Long id) {
         Optional<Todo> todo = todoService.findById(id);
@@ -53,8 +54,10 @@ public class TodoController {
 
     @ApiOperation(value = "Create Todo", response = Todo.class, responseHeaders = {
             @ResponseHeader(name = "Location", description = "Location of created todo") })
-    @ApiResponses(value = { @ApiResponse(code = 201, message = "Todo successfully created", responseHeaders = {
-            @ResponseHeader(name = "Location", description = "Location of created todo") }) })
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Todo successfully created", responseHeaders = {
+                    @ResponseHeader(name = "Location", description = "Location of created todo") }),
+            @ApiResponse(code = 401, message = "Unauthorized") })
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo, UriComponentsBuilder ucBuilder) {
         HttpHeaders headers = new HttpHeaders();
@@ -64,7 +67,8 @@ public class TodoController {
 
     @ApiOperation(value = "View all Todos", response = List.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Retrieved all todos", response = Todo.class, responseContainer = "List") })
+            @ApiResponse(code = 200, message = "Retrieved all todos", response = Todo.class, responseContainer = "List"),
+            @ApiResponse(code = 401, message = "Unauthorized") })
     @GetMapping(headers = "Accept=application/json")
     public List<Todo> getAllTodo() {
         return StreamSupport.stream(todoService.findAll().spliterator(), false).collect(Collectors.toList());
@@ -72,7 +76,8 @@ public class TodoController {
 
     @ApiOperation(value = "Update Todo", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Todo successfully updated", response = Todo.class),
-            @ApiResponse(code = 404, message = "Todo record Id doesn't exist", response = TodoException.class) })
+            @ApiResponse(code = 404, message = "Todo record Id doesn't exist", response = TodoException.class),
+            @ApiResponse(code = 401, message = "Unauthorized") })
     @PutMapping(headers = "Accept=application/json")
     public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) {
         return new ResponseEntity<Todo>(todoService.update(todo), HttpStatus.OK);
@@ -80,7 +85,8 @@ public class TodoController {
 
     @ApiOperation(value = "Delete Todo by provide id", response = Todo.class)
     @ApiResponses(value = { @ApiResponse(code = 204, message = "Todo successfully deleted"),
-            @ApiResponse(code = 404, message = "Todo record doesn't exist", response = TodoException.class) })
+            @ApiResponse(code = 404, message = "Todo record doesn't exist", response = TodoException.class),
+            @ApiResponse(code = 401, message = "Unauthorized") })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<Todo> deleteTodo(@PathVariable("id") @NotBlank(message = "Id should be non null") Long id) {
