@@ -1,4 +1,4 @@
-# Deploy Todo Application in Local kubernetes cluster
+# Deploy Todo Application in K8s cluster using helm
 
 - Setup minikube  
     https://minikube.sigs.k8s.io/docs/start/    
@@ -12,11 +12,16 @@
  
     [Build & Create Docker Image](../README.md#build)
  
- - Deploy to local cluster
+ - Deploy  mysql
  
- ```bash
-    kubectl apply -f .
- ```
+    ```bash
+       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml
+    ```
+ - Deploy Todo-app    
+ 
+    ```bash
+       helm install klab-todo ./klab-todo -f env/<env>/klab-todo-secret.yaml
+    ```   
 
  - Verify all pods are up and running
  

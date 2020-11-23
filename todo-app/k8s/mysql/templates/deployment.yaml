@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mysql.fullname" . }}
+  labels: {{- include "mysql.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "mysql.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "mysql.selectorLabels" . | nindent 8 }}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                 - key: kubernetes.io/hostname
+                   operator: In
+                   values:
+{{- if .Values.affinityNodes -}}                    
+                   {{- range .Values.affinityNodes }}
+                     - {{ . }}
+                   {{- end }}
+{{else}}
+                     - {{ default "minikube" }}
+{{end}}                                        
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: tcp
+              containerPort: {{ .Values.service.port }}
+          livenessProbe:
+            tcpSocket:
+              port: tcp
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql    
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ template "mysql.fullname" . }}-secret
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: database
+                  name: {{ template "mysql.fullname" . }}-config    
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: mysql-storage
+        {{- if .Values.persistence.local }}
+          persistentVolumeClaim:
+            claimName: {{ template "mysql.fullname" . }}-claim
+        {{end}}    

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mysql.fullname" . }}-config
+  labels:
+    app: {{ template "mysql.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+data:
+  url: {{ template "mysql.fullname" . }}
+  database: {{ .Values.mysqlDatabaseName | required "Mysql database name is required" }}
+{{- range $key, $val := .Values.mysqlConfig }}
+  {{ $key }}: {{ $val }}
+{{- end }}
