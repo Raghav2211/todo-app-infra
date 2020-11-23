@@ -15,7 +15,7 @@
  - Deploy  mysql
  
     ```bash
-        helm install mysql ./mysql -f <env>/local/mysql-secret.yaml -f <env>/local/mysql-values.yaml
+       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml
     ```
  - Deploy Todo-app    
  
