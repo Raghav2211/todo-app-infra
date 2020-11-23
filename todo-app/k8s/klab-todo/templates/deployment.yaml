@@ -68,6 +68,16 @@ spec:
                 configMapKeyRef:
                   key: database
                   name: {{ default "mysql" .Values.mysqlRef }}-config    
+            - name: BASIC_AUTH_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: basic-auth-username
+                  name: {{ include "klab-todo.fullname" . }}-secret
+            - name: BASIC_AUTH_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: basic-auth-password
+                  name: {{ include "klab-todo.fullname" . }}-secret
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       initContainers:
