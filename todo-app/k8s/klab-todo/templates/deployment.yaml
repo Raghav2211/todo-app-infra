@@ -70,12 +70,12 @@ spec:
                   name: {{ default "mysql" .Values.mysqlRef }}-config    
             - name: BASIC_AUTH_USER
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: basic-auth-username
                   name: {{ include "klab-todo.fullname" . }}-secret
             - name: BASIC_AUTH_PASSWORD
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   key: basic-auth-password
                   name: {{ include "klab-todo.fullname" . }}-secret
           resources:

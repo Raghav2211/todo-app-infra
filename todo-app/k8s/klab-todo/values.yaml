@@ -35,3 +35,8 @@ initContainers:
     image: busybox 
     tag: latest
     imagePullPolicy: IfNotPresent  
+
+# basicAuthUsername :- Spring security basic auth username
+basicAuthUsername: 
+  # basicAuthPassword :- Spring security basic auth password
+basicAuthPassword:
