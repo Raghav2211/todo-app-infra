@@ -17,17 +17,24 @@ public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private String basicAuthUserName;
     @Value(value = "${api.basic.auth.password}")
     private String basicAuthPassWord;
+    @Value(value = "${klab.todo.security.basic-auth.enable:false}")
+    private Boolean isBasicAuthEnable;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().antMatchers("/actuator/info", "/actuator/health").permitAll()
-                .anyRequest().authenticated().and().httpBasic();
-
+        if (isBasicAuthEnable) {
+            http.csrf().disable().authorizeRequests().antMatchers("/actuator/info", "/actuator/health").permitAll()
+                    .anyRequest().authenticated().and().httpBasic();
+        } else {
+            http.authorizeRequests().antMatchers("/").permitAll();
+        }
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser(basicAuthUserName).password(basicAuthPassWord).roles(USER);
+        if (isBasicAuthEnable) {
+            auth.inMemoryAuthentication().withUser(basicAuthUserName).password(basicAuthPassWord).roles(USER);
+        }
     }
 
 }
