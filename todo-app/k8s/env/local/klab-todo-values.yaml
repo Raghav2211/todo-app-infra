@@ -1,2 +1,2 @@
 todoConfig:
-  security-basic-auth-enable: true
+  securityBasicAuthEnable: true

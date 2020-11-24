@@ -44,4 +44,4 @@ security:
 
 # todoConfig :- Config for todoApp
 todoConfig:
-  security-basic-auth-enable: false # Enable/ Disable basic-auth     
+  securityBasicAuthEnable: false # Enable/ Disable basic-auth    
