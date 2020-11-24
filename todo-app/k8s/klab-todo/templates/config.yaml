@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "mysql.fullname" . }}-config
+  name: {{ template "klab-todo.fullname" . }}-config
   labels:
-    app: {{ template "mysql.fullname" . }}
+    app: {{ template "klab-todo.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
 data:
-  url: {{ template "mysql.fullname" . }}
-{{- range $key, $val := .Values.mysqlConfig }}
+{{- range $key, $val := .Values.todoConfig }}
   {{ $key }}: {{ $val | quote }}
 {{- end }}

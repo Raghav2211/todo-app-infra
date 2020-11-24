@@ -36,7 +36,12 @@ initContainers:
     tag: latest
     imagePullPolicy: IfNotPresent  
 
-# basicAuthUsername :- Spring security basic auth username
-basicAuthUsername: 
-  # basicAuthPassword :- Spring security basic auth password
-basicAuthPassword:
+# security :- Spring security 
+security:
+  basicAuth:
+    username: # Basic auth username
+    password: # Basic auth password
+
+# todoConfig :- Config for todoApp
+todoConfig:
+  securityBasicAuthEnable: false # Enable/ Disable basic-auth    

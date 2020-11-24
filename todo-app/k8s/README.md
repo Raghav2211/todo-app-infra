@@ -15,13 +15,24 @@
  - Deploy  mysql
  
     ```bash
+       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml
+    ```
+    or
+    
+    ```bash
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml
     ```
+    
  - Deploy Todo-app    
  
     ```bash
        helm install klab-todo ./klab-todo -f env/<env>/klab-todo-secret.yaml
-    ```   
+    ```  
+    or
+    
+    ```bash
+       helm install klab-todo ./klab-todo -f env/<env>/klab-todo-secret.yaml -f env/<env>/klab-todo-values.yaml
+    ```  
 
  - Verify all pods are up and running
  

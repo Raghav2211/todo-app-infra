@@ -21,5 +21,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_DB_NAME: klab
-      BASIC_AUTH_USER: admin
-      BASIC_AUTH_PASSWORD: "{noop}password"
+      # UnComment below 3 properties to enable basic auth security
+      #KLAB_TODO_SECURITY_BASIC_AUTH_ENABLE: "true"
+      #KLAB_TODO_SECURITY_BASIC_AUTH_USERNAME: "admin"
+      #KLAB_TODO_SECURITY_BASIC_AUTH_PASSWORD: "{noop}password"

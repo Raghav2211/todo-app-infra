@@ -1,6 +1,3 @@
-#mysqlDatabaseName is a databaseName for startup
-mysqlDatabaseName: klab  
-
 persistence:
   local: true
   storageClass: local 
