@@ -21,5 +21,6 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_DB_NAME: klab
+      BASIC_AUTH_ENABLE: "true"
       BASIC_AUTH_USER: admin
       BASIC_AUTH_PASSWORD: "{noop}password"

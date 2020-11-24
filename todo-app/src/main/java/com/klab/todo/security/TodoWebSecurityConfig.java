@@ -13,11 +13,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String USER = "USER";
-    @Value(value = "${api.basic.auth.username}")
+    @Value(value = "${klab.todo.security.basic.auth.username}")
     private String basicAuthUserName;
-    @Value(value = "${api.basic.auth.password}")
+    @Value(value = "${klab.todo.security.basic.auth.password}")
     private String basicAuthPassWord;
-    @Value(value = "${klab.todo.security.basic-auth.enable:false}")
+    @Value(value = "${klab.todo.security.basic.auth.enable}")
     private Boolean isBasicAuthEnable;
 
     @Override

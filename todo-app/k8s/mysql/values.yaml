@@ -29,6 +29,7 @@ persistence: {}
 #mysqlConfig :- Configuration for mysql
 #required url & database
 mysqlConfig:
+  database: klab
 
 # affinityNodes is the nodes list in which pod will deploy
 # default - minikube
