@@ -2,13 +2,14 @@ package com.psi.todo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
-
-@SpringBootTest(properties = {"spring.datasource.url=jdbc:mysql://127.0.0.1:3306/psi", "spring.datasource.username=root","spring.datasource.password=root"})
+@SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 class TodoApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
