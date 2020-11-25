@@ -28,7 +28,7 @@ public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
             http.csrf().disable().authorizeRequests().antMatchers("/actuator/info", "/actuator/health").permitAll()
                     .anyRequest().authenticated().and().httpBasic();
         } else {
-            http.authorizeRequests().antMatchers("/").permitAll();
+            http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
         }
     }
 
