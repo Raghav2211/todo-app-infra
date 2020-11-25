@@ -9,7 +9,7 @@
         <version>2.4.0</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.klab.todo</groupId>
+    <groupId>com.psi.todo</groupId>
     <artifactId>todo-app</artifactId>
     <version>0.0.1</version>
     <name>Todo App</name>
