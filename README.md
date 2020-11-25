@@ -1,4 +1,4 @@
-# K8s Lab
+# PSI Lab
 Practical examples with k8s on local & AWS environment
 
 #### TASK LIST ####

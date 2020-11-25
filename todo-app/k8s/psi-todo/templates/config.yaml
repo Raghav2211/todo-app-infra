@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "psi-todo.fullname" . }}-config
+  labels:
+    app: {{ template "psi-todo.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+data:
+{{- range $key, $val := .Values.todoConfig }}
+  {{ $key }}: {{ $val | quote }}
+{{- end }}

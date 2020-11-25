@@ -26,12 +26,12 @@
  - Deploy Todo-app    
  
     ```bash
-       helm install klab-todo ./klab-todo -f env/<env>/klab-todo-secret.yaml
+       helm install psi-todo ./psi-todo
     ```  
     or
     
     ```bash
-       helm install klab-todo ./klab-todo -f env/<env>/klab-todo-secret.yaml -f env/<env>/klab-todo-values.yaml
+       helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
     ```  
 
  - Verify all pods are up and running
@@ -39,7 +39,7 @@
  ```bash
    $ kubectl get pods
     NAME                         READY   STATUS    RESTARTS   AGE
-    klab-todo-6f4f69b7d7-8t8kg   1/1     Running   0          92m
+    psi-todo-6f4f69b7d7-8t8kg    1/1     Running   0          92m
     mysql-58b87bf444-pshmk       1/1     Running   0          92m
     
  ```
