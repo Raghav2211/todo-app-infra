@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "klab-todo.fullname" . }}
-  labels: {{- include "klab-todo.labels" . | nindent 4 }}
+  name: {{ include "psi-todo.fullname" . }}
+  labels: {{- include "psi-todo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "klab-todo.selectorLabels" . | nindent 6 }}
+      {{- include "psi-todo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "klab-todo.selectorLabels" . | nindent 8 }}
+        {{- include "psi-todo.selectorLabels" . | nindent 8 }}
     spec:
       affinity:
         nodeAffinity:
@@ -68,22 +68,22 @@ spec:
                 configMapKeyRef:
                   key: database
                   name: {{ default "mysql" .Values.mysqlRef }}-config
-            - name: KLAB_TODO_SECURITY_BASIC_AUTH_ENABLE
+            - name: PSI_TODO_SECURITY_BASIC_AUTH_ENABLE
               valueFrom:
                 configMapKeyRef:
                   key: securityBasicAuthEnable
-                  name: {{ include "klab-todo.fullname" . }}-config 
+                  name: {{ include "psi-todo.fullname" . }}-config 
             {{- if .Values.todoConfig.securityBasicAuthEnable }}                                               
-            - name: KLAB_TODO_SECURITY_BASIC_AUTH_USERNAME
+            - name: PSI_TODO_SECURITY_BASIC_AUTH_USERNAME
               valueFrom:
                 secretKeyRef:
                   key: security-basic-auth-username
-                  name: {{ include "klab-todo.fullname" . }}-secret
-            - name: KLAB_TODO_SECURITY_BASIC_AUTH_PASSWORD
+                  name: {{ include "psi-todo.fullname" . }}-secret
+            - name: PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: security-basic-auth-password
-                  name: {{ include "klab-todo.fullname" . }}-secret
+                  name: {{ include "psi-todo.fullname" . }}-secret
             {{- end }}      
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

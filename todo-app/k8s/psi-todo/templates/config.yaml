@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "klab-todo.fullname" . }}-config
+  name: {{ template "psi-todo.fullname" . }}-config
   labels:
-    app: {{ template "klab-todo.fullname" . }}
+    app: {{ template "psi-todo.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
 data:

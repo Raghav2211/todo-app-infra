@@ -1,7 +1,7 @@
 #Default values fo Todo app
 replicaCount: 1
 image:
-  repository: klab-todo
+  repository: psi-todo
   pullPolicy: Never
   tag: "0.0.1"
 
