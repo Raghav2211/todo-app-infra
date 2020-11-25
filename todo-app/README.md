@@ -47,12 +47,12 @@ or
 ##### Docker image #####
 
 ```bash
-docker build -f Dockerfile.mvn --tag psi-todo:0.0.1 .
+docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
 ```
 or
 
 ```bash
-docker build -f Dockerfile.gradle --tag psi-todo:0.0.1 .
+docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
 ```
 
 ## Run ##

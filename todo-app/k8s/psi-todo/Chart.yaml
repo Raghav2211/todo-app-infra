@@ -2,5 +2,5 @@ apiVersion: v2
 name: psi-todo
 description: A Helm chart for Todo Rest API
 type: application
-version: 0.1.0
-appVersion: 0.0.1
+version: 1.0.0
+appVersion: 1.0.0
