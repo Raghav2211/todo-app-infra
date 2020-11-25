@@ -8,6 +8,6 @@ import lombok.Setter;
 public class TodoException {
 
     private String message;
-    private String requestedURI;
+    private Integer code;
 
 }

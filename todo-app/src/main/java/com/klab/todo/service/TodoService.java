@@ -2,11 +2,10 @@ package com.klab.todo.service;
 
 import java.util.Optional;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.klab.todo.dto.TodoResource;
 import com.klab.todo.entity.Todo;
 import com.klab.todo.repository.TodoRepository;
 
@@ -20,20 +19,15 @@ public class TodoService implements ITodoService {
         this.todoRepository = todoRepository;
     }
 
-    public Todo create(Todo todo) {
-        return todoRepository.save(todo);
+    public Todo create(TodoResource todoResource) {
+        return todoRepository.save(mapTodo(todoResource));
     }
 
-    public Todo update(Todo todo) {
-
-        if(null == todo.getId())
-            throw new PersistenceException(String.format("Todo record to update is without id"));
-        Optional<Todo> optTodo = todoRepository.findById(todo.getId());
-        if (!optTodo.isPresent()) {
-            throw new PersistenceException(String.format("Todo record Id %s doesn't exist", todo.getId()));
-        }
-
-        return todoRepository.save(todo);
+    public Todo update(TodoResource todoResource,Long id) {
+        Optional<Todo> todo=todoRepository.findById(id);
+        todo.get().setContent(todoResource.getContent());
+        todo.get().setIsComplete(todoResource.getIsComplete());
+        return todoRepository.save(todo.get());
     }
 
     public Optional<Todo> findById(Long id) {
@@ -44,12 +38,14 @@ public class TodoService implements ITodoService {
         return todoRepository.findAll();
     }
 
-    public Optional<Todo> delete(Long id) {
-        Optional<Todo> optTodo = todoRepository.findById(id);
-        if (!optTodo.isPresent()) {
-            throw new PersistenceException("Todo record doesn't exist");
-        }
-        todoRepository.deleteById(id);
-        return optTodo;
+    public void delete(Long id) {
+         todoRepository.deleteById(id);
+    }
+    
+    private Todo mapTodo(TodoResource todoResource) {
+        Todo todo=new Todo();
+        todo.setContent(todoResource.getContent());
+        todo.setIsComplete(todoResource.getIsComplete());
+        return todo;
     }
 }
