@@ -26,7 +26,7 @@
  - Deploy Todo-app    
  
     ```bash
-       helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml
+       helm install psi-todo ./psi-todo
     ```  
     or
     
