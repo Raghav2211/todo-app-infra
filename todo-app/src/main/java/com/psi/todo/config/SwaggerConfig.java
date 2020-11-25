@@ -42,8 +42,8 @@ public class SwaggerConfig {
 
     private ApiInfo metaData() {
         return new ApiInfo(appName, appDescription, buildProperties.getVersion(), "Terms of service",
-                new Contact("Todo", "https://github.com/Raghav2211/kubernetes-lab.git", "todo@todo.com"),
-                "Todo Licence", "http://localhost:8080", List.of());
+                new Contact("Todo", "https://github.com/Raghav2211/psi-lab.git", "todo@todo.com"),
+                "PSI Todo Licence", "http://localhost:8080", List.of());
     }
 
 }

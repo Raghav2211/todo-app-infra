@@ -47,12 +47,12 @@ or
 ##### Docker image #####
 
 ```bash
-docker build -f Dockerfile.mvn --tag klab-todo:0.0.1 .
+docker build -f Dockerfile.mvn --tag psi-todo:0.0.1 .
 ```
 or
 
 ```bash
-docker build -f Dockerfile.gradle --tag klab-todo:0.0.1 .
+docker build -f Dockerfile.gradle --tag psi-todo:0.0.1 .
 ```
 
 ## Run ##

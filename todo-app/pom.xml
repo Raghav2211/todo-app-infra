@@ -10,7 +10,7 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.psi.todo</groupId>
-    <artifactId>todo-app</artifactId>
+    <artifactId>psi-todo</artifactId>
     <version>0.0.1</version>
     <name>Todo App</name>
     <description>Todo Rest API</description>
