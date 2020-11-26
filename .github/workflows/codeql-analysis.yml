@@ -39,7 +39,7 @@ jobs:
       
     # Add java-11 https://github.com/github/codeql-action/issues/97  
     - name: Setup Java JDK
-      uses: actions/setup-java@v1.3.0
+      uses: actions/setup-java@v1
       with:
         java-version: 14
 
