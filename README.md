@@ -1,3 +1,5 @@
+![Build](https://github.com/Raghav2211/psi-lab/workflows/Build/badge.svg)
+
 # PSI Lab
 Practical examples with k8s on local & AWS environment
 
