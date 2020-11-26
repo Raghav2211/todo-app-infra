@@ -57,5 +57,5 @@ docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
 
 ## Run ##
 ```bash
-docker-compose up -d
+docker-compose --env-file=env/<env>/Docker.env up -d
 ```

@@ -6,8 +6,8 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: psi
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
   psitodoapp:
     image: psi-todo:1.0.0
     container_name: psi-todo
@@ -18,10 +18,10 @@ services:
       - 8080:8080
     environment:
       MYSQL_HOST: psimysql:3306
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_DB_NAME: psi
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DB_NAME: ${MYSQL_DATABASE}
       # UnComment below 3 properties to enable basic auth security
-      #PSI_TODO_SECURITY_BASIC_AUTH_ENABLE: "true"
-      #PSI_TODO_SECURITY_BASIC_AUTH_USERNAME: "admin"
-      #PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD: "{noop}password"
+      #PSI_TODO_SECURITY_BASIC_AUTH_ENABLE: ${BASIC_AUTH_ENABLE}
+      #PSI_TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
+      #PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
