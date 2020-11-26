@@ -22,4 +22,4 @@ jobs:
     - name: Build with Gradle
       run: ./todo-app/gradlew build
     - name: Build with Maven
-      run: ./todo-app/mvnw -B package
+      run: mvn -B package --file ./todo-app/pom.xml
