@@ -89,16 +89,16 @@ public class TodoController {
         return new ResponseEntity<Todo>(todoService.update(todo, todoRequest.getId()), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Delete Todo by provide id", response = String.class)
-    @ApiResponses(value = { @ApiResponse(code = 204, message = "Todo successfully deleted"),
-            @ApiResponse(code = 400, message = "Todo record doesn't exist"),
+    @ApiOperation(value = "Delete Todo by provide id")
+    @ApiResponses(value = { @ApiResponse(code = 204, message = "Todo successfully deleted", response = Void.class),
+            @ApiResponse(code = 400, message = "Todo record doesn't exist", response = TodoException.class),
             @ApiResponse(code = 401, message = "Unauthorized"),
             @ApiResponse(code = 500, message = "No Todo with id exists!", response = TodoException.class) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}", headers = "Accept=application/json")
     public ResponseEntity<?> deleteTodo(@Validated(ValidationSequence.class) TodoDeleteRequest todoRequest) {
         todoService.delete(todoRequest.getId());
-        return new ResponseEntity<>("Todo successfully deleted", HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
