@@ -4,19 +4,19 @@ me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
 function create_cluster () {
 
-	# Swarm mode using Docker Machine
+	# Input manager & worker nodes
 	read -p 'No of manager nodes: ' managers 
 	read -p 'No of worker nodes: ' workers 
 	if [ -z "$managers" ] || [ -z "$workers" ] 
 	then 
 	    echo 'Inputs cannot be blank please try again!' 
-	    exit 0 
+	    exit 1 
 	fi 
 	# Validate input is number or not & > 0
 	if ! [[ "$managers" =~ ^[+-]?[1-9]+\.?[1-9]*$ ]] || ! [[ "$workers" =~ ^[+-]?[1-9]+\.?[1-9]*$ ]] 
 	then 
 	    echo "Managers/Worker nodes must be a numbers and > 0" 
-	    exit 0 
+	    exit 1 
 	fi
 
 	# create manager machines
@@ -30,17 +30,14 @@ function create_cluster () {
 		docker-machine create -d virtualbox worker$idx;
 	done
 
-	# initialize swarm mode and create a manager
 	docker-machine ssh manager1 "docker swarm init --listen-addr $(docker-machine ip manager1) --advertise-addr $(docker-machine ip manager1)"
 
-	# get manager and worker tokens
 	export manager_token=`docker-machine ssh manager1 "docker swarm join-token manager -q"`
 	export worker_token=`docker-machine ssh manager1 "docker swarm join-token worker -q"`
 
 	echo "manager_token: $manager_token"
 	echo "worker_token: $worker_token"
 
-	# other masters join swarm
 	if [ $managers -gt 1 ]; then
 		for node in $(seq 2 $managers);
 		do
@@ -53,10 +50,8 @@ function create_cluster () {
 		done
 	fi
 
-	# show members of swarm
 	docker-machine ssh manager1 "docker node ls"
 
-	# workers join swarm
 	for node in $(seq 1 $workers);
 	do
 		docker-machine ssh worker$node \
@@ -67,7 +62,6 @@ function create_cluster () {
 		$(docker-machine ip manager1)"
 	done
 
-	# show members of swarm
 	docker-machine ssh manager1 "docker node ls"
 }
 
