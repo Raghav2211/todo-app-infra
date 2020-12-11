@@ -2,7 +2,7 @@
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
-function create_cluster () {
+function create_cluster() {
 
 	# Input manager & worker nodes
 	read -p 'No of manager nodes: ' managers 
@@ -65,7 +65,15 @@ function create_cluster () {
 	docker-machine ssh manager1 "docker node ls"
 }
 
-function delete_cluster () {
+function view_cluster() {
+	docker-machine ls -q | grep '^manager1$'> /dev/null || { echo "No manager node exit"; exit 1; }
+	echo -e "------------------------------------------------------------\033[1mNodes\033[0m------------------------------------------------------------"
+	docker-machine ssh manager1 "docker node ls"
+	echo -e "------------------------------------------------------------\033[1mVm(s)\033[0m------------------------------------------------------------"
+	docker-machine ls 
+}
+
+function delete_cluster() {
     {	
 		read
 		while read -r name active driver state url swarm docker error
@@ -76,7 +84,7 @@ function delete_cluster () {
 }
 
 function help() {
-    echo "Usage:    ${me} [-hcd]  [-h help] [-c create_cluster] [-d delete_cluster] "
+    echo "Usage:    ${me} [-hcd]  [-h|--help help] [-c|--create Create a new swarm cluster] [-d|--delete Delete new swarm cluster] [-v|--view View cluster info/health]"
 }
 if [ $# -eq 0 ]
 then
@@ -90,6 +98,9 @@ case $1 in
 	--delete|-d)
             delete_cluster
             ;;            
+	--view|-v)
+            view_cluster
+            ;;                        
     --help|-h)
             help
             ;;
