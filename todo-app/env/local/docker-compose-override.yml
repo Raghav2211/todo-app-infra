@@ -1,0 +1,14 @@
+version: "3"
+services:
+  psimysql: 
+    deploy: 
+      placement: 
+        constraints: 
+          - "node.role == worker"
+  psitodoapp:
+    image: localhost:5000/psi-todo 
+    deploy: 
+      replicas: 2
+      placement: 
+        constraints: 
+          - "node.role == worker"        
