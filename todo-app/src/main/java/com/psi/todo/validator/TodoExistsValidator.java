@@ -5,15 +5,15 @@ import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.stereotype.Component;
 
-import com.psi.todo.repository.TodoRepository;
+import com.psi.todo.service.ITodoService;
 
 @Component
 public class TodoExistsValidator implements ConstraintValidator<TodoExists, Long> {
 
-    private TodoRepository todoRepository;
+    private ITodoService todoService;
 
-    public TodoExistsValidator(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
+    public TodoExistsValidator(ITodoService todoService) {
+        this.todoService = todoService;
     }
 
     public boolean isValid(Long id, ConstraintValidatorContext context) {
@@ -21,6 +21,6 @@ public class TodoExistsValidator implements ConstraintValidator<TodoExists, Long
     }
 
     private boolean isTodoPresent(Long id) {
-        return todoRepository.findById(id).isPresent();
+        return todoService.findById(id).isPresent();
     }
 }
