@@ -13,3 +13,4 @@ else
         echo "Unknown OS"
         exit 1;
 fi
+echo "Docker machine installed $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
