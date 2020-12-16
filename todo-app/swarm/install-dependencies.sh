@@ -15,11 +15,12 @@ install_choco() {
 }
 
 install_docker_machine_linux() {
+  curl --version &> /dev/null || { echo "Installing curl...."; apt-get -qq update; apt-get install -qy curl 1> /dev/null; }
   docker-machine --version &> /dev/null || 
   { 
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
     chmod +x /tmp/docker-machine && 
-    sudo cp /tmp/docker-machine /usr/local/bin/docker-machine; 
+    cp /tmp/docker-machine /usr/local/bin/docker-machine; 
   }
 }
 
@@ -37,6 +38,13 @@ install_docker_machine_win() {
     if [[ ! -d "$HOME/bin" ]]; then mkdir -p "$HOME/bin"; fi && \
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-Windows-x86_64.exe > "$HOME/bin/docker-machine.exe" && \
     chmod +x "$HOME/bin/docker-machine.exe"; 
+  }
+}
+
+install_virtualbox_linux() {
+  vboxmanage --version &> /dev/null || 
+  { 
+      apt-get -qq update && apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
   }
 }
 
@@ -88,7 +96,7 @@ install_docker_machine() {
 install_virtualbox() {
   echo "Installing virtualbox....."
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    echo "TODO"
+    install_virtualbox_linux
  elif [[ "$OSTYPE" == "darwin"* ]]; then 
     install_virtualbox_darwin
  elif [[ "$OSTYPE" == "msys" ]]; then    
