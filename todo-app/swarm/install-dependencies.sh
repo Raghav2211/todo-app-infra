@@ -19,8 +19,8 @@ install_docker_machine_linux() {
   docker-machine --version &> /dev/null || 
   { 
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
-    chmod +x /tmp/docker-machine && 
-    cp /tmp/docker-machine /usr/local/bin/docker-machine; 
+    sudo chmod +x /tmp/docker-machine && 
+    sudo cp /tmp/docker-machine /usr/local/bin/docker-machine; 
   }
 }
 
@@ -44,7 +44,7 @@ install_docker_machine_win() {
 install_virtualbox_linux() {
   vboxmanage --version &> /dev/null || 
   { 
-      apt-get -qq update && apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
+      sudo apt-get -qq update && sudo apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
   }
 }
 
