@@ -2,22 +2,27 @@
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
-check_install_brew() {
-  brew --version &> /dev/null || 
-  { 
-    curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; 
-  }
+install_helpers_linux() {
+  echo "Install helper libraries(curl)....."  
+  curl --version &> /dev/null || { echo "Installing curl...."; apt-get -qq update; apt-get install -qy curl 1> /dev/null; }
 }
 
-install_choco() {
+install_helpers_darwin() {
+  echo "Install helper libraries(brew)....."
+  brew --version &> /dev/null || { curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; }
+}
+
+install_helpers_win() {
+  echo "Install helper libraries(choco)....."  
   chmod +x ChocolateyInstallNonAdmin.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './ChocolateyInstallNonAdmin.ps1'
 }
 
 install_docker_machine_linux() {
-  curl --version &> /dev/null || { echo "Installing curl...."; apt-get -qq update; apt-get install -qy curl 1> /dev/null; }
+  install_helpers_linux
   docker-machine --version &> /dev/null || 
   { 
+    echo "Installing dokcer-machine....."
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
     sudo chmod +x /tmp/docker-machine && 
     sudo cp /tmp/docker-machine /usr/local/bin/docker-machine; 
@@ -25,8 +30,10 @@ install_docker_machine_linux() {
 }
 
 install_docker_machine_darwin() {
+  install_helpers_darwin
   docker-machine --version &> /dev/null || 
   { 
+    echo "Installing dokcer-machine....."
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
     chmod +x /usr/local/bin/docker-machine; 
   }
@@ -35,6 +42,7 @@ install_docker_machine_darwin() {
 install_docker_machine_win() {
   docker-machine --version &> /dev/null || 
   { 
+    echo "Installing dokcer-machine....."
     if [[ ! -d "$HOME/bin" ]]; then mkdir -p "$HOME/bin"; fi && \
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-Windows-x86_64.exe > "$HOME/bin/docker-machine.exe" && \
     chmod +x "$HOME/bin/docker-machine.exe"; 
@@ -44,64 +52,64 @@ install_docker_machine_win() {
 install_virtualbox_linux() {
   vboxmanage --version &> /dev/null || 
   { 
+      echo "Installing virtualbox....."
       sudo apt-get -qq update && sudo apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
   }
 }
 
 install_virtualbox_darwin() {
   vboxmanage --version &> /dev/null || 
-  { 
-    read -p "Do you wish to install virtualbox[Y/n]?" in; 
-    case ${in:0:1} in
-      y|Y )
-          export HOMEBREW_NO_AUTO_UPDATE=1
-          brew cask --quiet install virtualbox
-      ;;
-      n/N )
-          echo "VirtualBox not installed"
-      ;;
-    esac
+  {
+    # Check whether os support vitualization 
+    if [[ "$(sysctl kern.hv_support | awk '{split($0,a,": "); print a[2]}')" == 1 ]] ; then
+      read -p "Virtualization not support, do you wish to install virtualbox[Y/n]?" in; 
+      case $in in
+        y|Y) ;;
+        *) exit 1 ;; 
+      esac
+    fi
+    install_helpers_darwin
+    echo "Installing virtualbox....."
+    export HOMEBREW_NO_AUTO_UPDATE=1; brew install --quiet virtualbox;     
   }
 }
 
 install_virtualbox_win() {
-  install_choco
+  install_helpers_win
   vboxmanage --version &> /dev/null || 
   { 
     read -p "Do you wish to install virtualbox[Y/n]?" in; 
     case ${in:0:1} in
-      y|Y )              
+      y|Y ) 
+          echo "Installing virtualbox....."             
           choco install virtualbox
       ;;
-      n/N )
-          echo "VirtualBox not installed"
+      n|N )
+          exit 1
       ;;
     esac
   }    
 }
 
 install_docker_machine() {
-  echo "Installing dokcer-machine....."
- if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_docker_machine_linux 
- elif [[ "$OSTYPE" == "darwin"* ]]; then 
-    check_install_brew
+  elif [[ "$OSTYPE" == "darwin"* ]]; then 
     install_docker_machine_darwin
- elif [[ "$OSTYPE" == "msys" ]]; then    
+  elif [[ "$OSTYPE" == "msys" ]]; then    
     install_docker_machine_win
- fi
+  fi
 
 }
 
 install_virtualbox() {
-  echo "Installing virtualbox....."
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_virtualbox_linux
- elif [[ "$OSTYPE" == "darwin"* ]]; then 
+  elif [[ "$OSTYPE" == "darwin"* ]]; then 
     install_virtualbox_darwin
- elif [[ "$OSTYPE" == "msys" ]]; then    
+  elif [[ "$OSTYPE" == "msys" ]]; then    
     install_virtualbox_win
- fi
+  fi
 }
 
 help() {
@@ -152,7 +160,7 @@ case $1 in
           ;;       
 
 esac
-echo "=================================================="
-echo "Docker machine installed ---  $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
-echo "VirtualBox installed     ---  $( vboxmanage --version )"
-echo "=================================================="
+# echo "=================================================="
+# echo "Docker machine installed ---  $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
+# echo "VirtualBox installed     ---  $( vboxmanage --version )"
+# echo "=================================================="
