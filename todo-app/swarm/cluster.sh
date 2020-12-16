@@ -22,20 +22,12 @@ function create_cluster() {
   # create manager machines
   for idx in $(seq 1 $managers);
   do
-     if [[ "$OSTYPE" == "msys" ]]; then 
-       docker-machine create -d virtualbox --virtualbox-no-vtx-check manager$idx;
-     else
-       docker-machine create -d virtualbox manager$idx;
-     fi
+  	docker-machine create -d virtualbox --virtualbox-no-vtx-check manager$idx;
   done
   # create worker machines
   for idx in $(seq 1 $workers);
   do
-    if [[ "$OSTYPE" == "msys" ]]; then 
-      docker-machine create -d virtualbox --virtualbox-no-vtx-check worker$idx;
-    else
-      docker-machine create -d virtualbox worker$idx;
-    fi
+  	docker-machine create -d virtualbox --virtualbox-no-vtx-check worker$idx;
   done
 
   docker-machine ssh manager1 "docker swarm init --listen-addr $(docker-machine ip manager1) --advertise-addr $(docker-machine ip manager1)"
