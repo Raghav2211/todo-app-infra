@@ -3,8 +3,8 @@
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
 install_helpers_linux() {
-  echo "Install helper libraries(curl)....."  
-  curl --version &> /dev/null || { echo "Installing curl...."; apt-get -qq update; apt-get install -qy curl 1> /dev/null; }
+  echo "Install helper libraries(curl,sysfsutils)....."  
+  curl --version &> /dev/null || { echo "Installing curl...."; apt-get -qq update; apt-get install -qy curl sysfsutils 1> /dev/null; }
 }
 
 install_helpers_darwin() {
@@ -50,8 +50,18 @@ install_docker_machine_win() {
 }
 
 install_virtualbox_linux() {
+  install_helpers_linux
   vboxmanage --version &> /dev/null || 
   { 
+      if systool -m kvm_amd -v &> /dev/null || systool -m kvm_intel -v &> /dev/null ; then
+        echo "AMD-V / VT-X is enabled"
+      else
+        read -p "Virtualization not support, do you wish to install virtualbox[Y/n]?" in; 
+        case $in in
+          y|Y) ;;
+          *) exit 1 ;; 
+        esac
+      fi
       echo "Installing virtualbox....."
       sudo apt-get -qq update && sudo apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
   }
@@ -61,7 +71,7 @@ install_virtualbox_darwin() {
   vboxmanage --version &> /dev/null || 
   {
     # Check whether os support vitualization 
-    if [[ "$(sysctl kern.hv_support | awk '{split($0,a,": "); print a[2]}')" == 1 ]] ; then
+    if [[ "$(sysctl kern.hv_support | awk '{split($0,a,": "); print a[2]}')" != 1 ]] ; then
       read -p "Virtualization not support, do you wish to install virtualbox[Y/n]?" in; 
       case $in in
         y|Y) ;;
