@@ -50,8 +50,6 @@ function create_cluster() {
     done
   fi
 
-  docker-machine ssh manager1 "docker node ls"
-
   for node in $(seq 1 $workers);
   do
     docker-machine ssh worker$node \
@@ -61,8 +59,7 @@ function create_cluster() {
     --advertise-addr $(docker-machine ip worker$node) \
     $(docker-machine ip manager1)"
   done
-
-  docker-machine ssh manager1 "docker node ls"
+  
 }
 
 function view_cluster() {
