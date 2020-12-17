@@ -170,7 +170,3 @@ case $1 in
           ;;       
 
 esac
-# echo "=================================================="
-# echo "Docker machine installed ---  $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
-# echo "VirtualBox installed     ---  $( vboxmanage --version )"
-# echo "=================================================="
