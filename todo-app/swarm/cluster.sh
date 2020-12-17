@@ -84,31 +84,67 @@ function delete_cluster() {
 }
 
 function help() {
-    echo "Usage:    ${me} [-hcd]  [-h|--help help] [-c|--create Create a new swarm cluster] [-d|--delete Delete swarm cluster] [-v|--view View cluster info/health]"
+   	echo "Usage:    ${me} [OPTIONS] COMMAND"
+    echo ""
+    echo "Author:"
+    echo "   PSI Lab Contributors - <$(git config --get remote.origin.url)>"
+    echo ""
+    echo "Options:"
+    echo " --create, -c                    Create a new cluster with specify manager/worker nodes"
+    echo " --delete, -d                    Delete clsuter"
+    echo " --view, -v                      View cluster"
+    echo " --help, -h                      show help"
+    echo ""
+    echo "Commands:"
+    echo " local                           Create/Delete/View local cluster" 
+
 }
-if [ $# -eq 0 ]
-then
-        help
-fi
 case $1 in
 
     --create|-c)
-            create_cluster
+			case $2 in
+			 local)
+			  	create_cluster
+			  	;;
+			  *)
+			  	echo "Unrecognized option: ${2}"
+			  	help
+			  	exit 128
+			  	;;
+			esac  	
             ;;
   --delete|-d)
-            delete_cluster
+			case $2 in
+			 local)
+			  	delete_cluster
+			  	;;
+			  *)
+			  	echo "Unrecognized option: ${2}"
+			  	help
+			  	exit 128
+			  	;;
+			esac  	
             ;;            
   --view|-v)
-            view_cluster
-            ;;                        
+            case $2 in
+			 local)
+			  	view_cluster
+			  	;;
+			  *)
+			  	echo "Unrecognized option: ${2}"
+			  	help
+			  	exit 128
+			  	;;
+			esac  	
+            ;; 
     --help|-h)
             help
             ;;
      *)
       echo "Unrecognized option: ${1}"
       help
-        exit 1
-        ;;       
+      exit 128
+      ;;       
 
 esac
 
