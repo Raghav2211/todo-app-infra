@@ -63,7 +63,7 @@ install_virtualbox_linux() {
         esac
       fi
       echo "Installing virtualbox....."
-      sudo apt-get -qq update && sudo apt install -y virtualbox virtualbox-dkms virtualbox-ext-pack;
+      sudo apt-get -qq update && DEBIAN_FRONTEND=noninteractive apt-get -qq update && sudo apt install -qqy --no-install-recommends virtualbox;
   }
 }
 
@@ -156,7 +156,7 @@ case $1 in
             *)
               echo "Unrecognized option : ${2}" 
               help 
-              exit 1
+              exit 128
               ;;
           esac    
           ;;
@@ -166,7 +166,7 @@ case $1 in
    *)
           echo "Unrecognized option : ${1}"
           help
-          exit 1
+          exit 128
           ;;       
 
 esac
