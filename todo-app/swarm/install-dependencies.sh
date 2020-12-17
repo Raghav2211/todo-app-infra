@@ -8,8 +8,7 @@ install_helpers_linux() {
 }
 
 install_helpers_darwin() {
-  echo "Install helper libraries(brew)....."
-  brew --version &> /dev/null || { curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; }
+  brew --version &> /dev/null || { curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
 }
 
 install_helpers_win() {
@@ -35,8 +34,9 @@ install_docker_machine_darwin() {
   { 
     echo "Installing dokcer-machine....."
     curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
-    chmod +x /usr/local/bin/docker-machine; 
+    chmod +x /usr/local/bin/docker-machine ; 
   }
+  echo -e "\xE2\x9C\x94 Dokcer machine -- $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
 }
 
 install_docker_machine_win() {
@@ -82,6 +82,7 @@ install_virtualbox_darwin() {
     echo "Installing virtualbox....."
     export HOMEBREW_NO_AUTO_UPDATE=1; brew install --quiet virtualbox;     
   }
+  echo -e "\xE2\x9C\x94 Vitualbox -- $( vboxmanage --version )\n";
 }
 
 install_virtualbox_win() {
