@@ -1,8 +1,18 @@
 # Deploy Todo Application in K8s cluster using helm
 
-- Setup minikube  
-    https://minikube.sigs.k8s.io/docs/start/    
+- Local Deployment
+- AWS Deployment
 
+## Local Deployment ##
+
+- Setup minikube
+
+   Install  Dependencies and run minikube
+
+   ```bash
+    ./setup.sh boot local  
+   ```
+   
  - Link host docker client to the VM's docker daemon
  
  ```bash
@@ -13,13 +23,13 @@
     [Build & Create Docker Image](../README.md#build)
  
  - Deploy  mysql
- 
+    
     ```bash
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml
     ```
-    or
-    
-    ```bash
+    or # (Passing env file to override default properties) 
+          
+    ```bash        
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml
     ```
     
@@ -28,7 +38,7 @@
     ```bash
        helm install psi-todo ./psi-todo
     ```  
-    or
+    or # (Passing env file to override default properties) 
     
     ```bash
        helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
