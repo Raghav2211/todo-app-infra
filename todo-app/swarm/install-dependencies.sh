@@ -8,7 +8,7 @@ install_helpers_linux() {
 }
 
 install_helpers_darwin() {
-  brew --version &> /dev/null || { curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
+  brew --version &> /dev/null || { eval $(if [ "$debug" -eq 1 ]; then echo "curl -fSL"; else echo "curl -fsSL"; fi) https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
 }
 
 install_helpers_win() {
@@ -32,8 +32,8 @@ install_docker_machine_darwin() {
   install_helpers_darwin
   docker-machine --version &> /dev/null || 
   { 
-    echo "Installing dokcer-machine....."
-    curl -L -s https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
+    echo "Installing dokcer-machine.....";
+    eval $(if [ "$debug" -eq 1 ]; then echo "curl -L"; else echo "curl -L -s"; fi) https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/usr/local/bin/docker-machine && \
     chmod +x /usr/local/bin/docker-machine ; 
   }
   echo -e "\xE2\x9C\x94 Dokcer machine -- $(docker-machine --version | awk '{split($0,a," "); print a[3]}' | sed 's/.$//')"
@@ -80,7 +80,8 @@ install_virtualbox_darwin() {
     fi
     install_helpers_darwin
     echo "Installing virtualbox....."
-    export HOMEBREW_NO_AUTO_UPDATE=1; brew install --quiet virtualbox;     
+    cmd=$(if [ "$debug" -eq 1 ]; then echo "brew install virtualbox"; else echo "brew install --quiet virtualbox"; fi)
+    export HOMEBREW_NO_AUTO_UPDATE=1; eval ${cmd};     
   }
   echo -e "\xE2\x9C\x94 Vitualbox -- $( vboxmanage --version )\n";
 }
@@ -130,7 +131,7 @@ help() {
     echo "   PSI Lab Contributors - <$(git config --get remote.origin.url)>"
     echo ""
     echo "Options:"
-    echo " --install, -i                    Install specific tool/dependency for docker-swarm cluster"
+    echo " --debug, -D                      Enable debug mode"
     echo " --help, -h                       show help"
     echo ""
     echo "Commands:"
@@ -139,35 +140,51 @@ help() {
     echo " docker-machine                   Install Docker machine" 
 }
 
-case $1 in
+debug=0
 
-  --install|-i)
-          case $2 in
+if [ $# -lt 1 ]; then
+    help
+fi
 
-            virtualbox) 
-              install_virtualbox
-              ;;
-            docker-machine)
-              install_docker_machine
-              ;;
-            all)
-              install_docker_machine
-              install_virtualbox
-              ;;  
-            *)
-              echo "Unrecognized option : ${2}" 
-              help 
-              exit 128
-              ;;
-          esac    
-          ;;
-  --help|-h)
+
+while test -n "$1"; do
+   case "$1" in
+      --debug|-D)
+         debug=1
+         shift
+         ;;
+       all)
+         if [[ $# -gt 1 ]]; then
+          echo "Too many args";
+          exit 1;  
+         fi   
+         install_docker_machine
+         install_virtualbox
+         shift
+         ;;  
+       virtualbox)
+         if [[ $# -gt 1 ]]; then
+          echo "Too many args ";
+          exit 1;  
+         fi
+         install_virtualbox 
+         shift
+         ;;
+       docker-machine)
+         if [[ $# -gt 1 ]]; then
+          echo "Too many args ";
+          exit 1;  
+         fi 
+         install_docker_machine
+         shift
+         ;;
+        --help|-h)
           help
-          ;;
-   *)
+          shift
+          ;; 
+       *) 
           echo "Unrecognized option : ${1}"
           help
-          exit 128
-          ;;       
-
-esac
+          exit 1;  
+   esac
+done
