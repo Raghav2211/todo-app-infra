@@ -27,10 +27,10 @@
     ```bash
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml
     ```
-    or # (Passing env file to override default properties) 
+    or (Passing env file to override default properties which are optional)
           
     ```bash        
-       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml
+       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml 
     ```
     
  - Deploy Todo-app    
@@ -38,7 +38,7 @@
     ```bash
        helm install psi-todo ./psi-todo
     ```  
-    or # (Passing env file to override default properties) 
+    or (Passing env file to override default properties which are optional) 
     
     ```bash
        helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
