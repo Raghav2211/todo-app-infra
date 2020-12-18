@@ -34,10 +34,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package
     - name: Build local image
-      run: docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
-    - name: Build the stack
+      run: |
+        docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
+        docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
+    - name: Build local stack
       run: docker-compose --env-file=env/local/Docker.env up -d
-    - name: Test
+    - name: Test local stack
       run: |
         sleep 120
         docker run --network container:psi-todo appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/actuator/health
