@@ -22,18 +22,18 @@ function create_cluster() {
   # create manager machines
   for idx in $(seq 1 $managers);
   do
-  	docker-machine create -d virtualbox --virtualbox-no-vtx-check manager$idx;
+  	eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) create -d virtualbox --virtualbox-no-vtx-check manager$idx;
   done
   # create worker machines
   for idx in $(seq 1 $workers);
   do
-  	docker-machine create -d virtualbox --virtualbox-no-vtx-check worker$idx;
+  	eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) create -d virtualbox --virtualbox-no-vtx-check worker$idx;
   done
 
-  docker-machine ssh manager1 "docker swarm init --listen-addr $(docker-machine ip manager1) --advertise-addr $(docker-machine ip manager1)"
+  eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ssh manager1 "docker swarm init --listen-addr $(docker-machine ip manager1) --advertise-addr $(docker-machine ip manager1)"
 
-  export manager_token=`docker-machine ssh manager1 "docker swarm join-token manager -q"`
-  export worker_token=`docker-machine ssh manager1 "docker swarm join-token worker -q"`
+  export manager_token=`eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ssh manager1 "docker swarm join-token manager -q"`
+  export worker_token=`eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ssh manager1 "docker swarm join-token worker -q"`
 
   echo "manager_token: $manager_token"
   echo "worker_token: $worker_token"
@@ -41,7 +41,7 @@ function create_cluster() {
   if [ $managers -gt 1 ]; then
     for node in $(seq 2 $managers);
     do
-      docker-machine ssh manager$node \
+      eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ssh manager$node \
         "docker swarm join \
         --token $manager_token \
         --listen-addr $(docker-machine ip manager$node) \
@@ -52,13 +52,14 @@ function create_cluster() {
 
   for node in $(seq 1 $workers);
   do
-    docker-machine ssh worker$node \
+    eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ssh worker$node \
     "docker swarm join \
     --token $worker_token \
     --listen-addr $(docker-machine ip worker$node) \
     --advertise-addr $(docker-machine ip worker$node) \
     $(docker-machine ip manager1)"
   done
+  exit 0;
   
 }
 
@@ -68,6 +69,7 @@ function view_cluster() {
   docker-machine ssh manager1 "docker node ls"
   echo -e "------------------------------------------------------------\033[1mVm(s)\033[0m------------------------------------------------------------"
   docker-machine ls 
+  exit 0;
 }
 
 function delete_cluster() {
@@ -77,7 +79,8 @@ function delete_cluster() {
     do
         docker-machine rm -y $name
     done
-  } < <(docker-machine ls)
+  } < <(eval $(if [ "$debug" -eq 1 ]; then echo "docker-machine --debug"; else echo "docker-machine"; fi) ls)
+  exit 0;
 }
 
 function help() {
@@ -87,61 +90,100 @@ function help() {
     echo "   PSI Lab Contributors - <$(git config --get remote.origin.url)>"
     echo ""
     echo "Options:"
-    echo " --create, -c                    Create a new cluster with specify manager/worker nodes"
-    echo " --delete, -d                    Delete clsuter"
-    echo " --view, -v                      View cluster"
-    echo " --help, -h                      show help"
+    echo " --debug, -D                    Enable debug mode"
+    echo " --help, -h                     show help"
     echo ""
     echo "Commands:"
-    echo " local                           Create/Delete/View local cluster" 
+    echo " create <env>                   Create a new cluster with specify manager/worker nodes for specific environment"
+    echo " delete <env>                   Delete clsuter for specific environment"
+    echo " view   <env>                   View clsuter for specific environment"
 
 }
-case $1 in
 
-    --create|-c)
-			case $2 in
+debug=0 # disable debug 
+
+if [ $# -lt 1 ]; then
+    help
+fi
+
+while test -n "$1"; do
+   case "$1" in
+      --debug|-D)
+		 if [[ $# -eq 1 ]]; then
+		 	help
+		 fi	
+         debug=1 # enable debug 
+         shift
+         ;;
+       create)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	create_cluster
 			  	;;
 			  *)
 			  	echo "Unrecognized option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;;
-  --delete|-d)
-			case $2 in
+		 esac  	
+         shift
+         ;;  
+       delete)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	delete_cluster
 			  	;;
 			  *)
 			  	echo "Unrecognized option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;;            
-  --view|-v)
-            case $2 in
+		 esac  	
+         shift
+         ;;  
+       view)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	view_cluster
 			  	;;
 			  *)
-			  	echo "Unrecognized option: ${2}"
+			  	echo "Unrecognizedd option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;; 
-    --help|-h)
-            help
-            ;;
-     *)
-      echo "Unrecognized option: ${1}"
-      help
-      exit 128
-      ;;       
-
-esac
-
+		 esac  	
+         shift
+         ;;  
+        --help|-h)
+          help
+          shift
+          ;; 
+       *) 
+			
+          echo "Unrecognizedd option : ${1}"
+          help
+          exit 1;  
+   esac
+done
+debug=0  # disable debug 
