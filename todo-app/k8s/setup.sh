@@ -2,6 +2,10 @@
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
+install_helpers_darwin() {
+  brew --version &> /dev/null || { eval $(if [ "$debug" -eq 1 ]; then echo "curl -fSL"; else echo "curl -fsSL"; fi) https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
+}
+
 install_helpers_win() {
   echo "Install helper libraries(choco)....."  
   chmod +x ChocolateyInstallNonAdmin.ps1
@@ -18,20 +22,23 @@ create_internal_swtich(){
   chmod +x CreateInternalSwitch.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './CreateInternalSwitch.ps1'
 }
+
+install_start_minikube_darwin() {
+  install_helpers_darwin
+  minikube version &> /dev/null || { echo "Installing minikube....."; eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) minikube; }
+  echo -e "\xE2\x9C\x94 Minikube -- $( minikube version )";
+  minikube start --kubernetes-version=v1.19.2;
+  exit 0;
+}
+
 install_start_minikube_win() {
   enable_hyperv_win
   install_helpers_win
-  docker --version &> /dev/null || 
-  { 
-    choco install docker-for-windows –pre
-  }
-  minikube --version &> /dev/null || 
-  { 
-    choco install minikube
-  }
+  docker --version &> /dev/null || { choco install docker-for-windows –pre; }
+  minikube --version &> /dev/null || { choco install minikube; }
   create_internal_swtich
-  minikube start — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube” — v=7 — alsologtostderr
-      
+  minikube start --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube” — v=7 — alsologtostderr
+  exit 0;    
 }
 
 
@@ -39,7 +46,7 @@ install_start_minikube() {
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     install_virtualbox_linux
   elif [[ "$OSTYPE" == "darwin"* ]]; then 
-    install_virtualbox_darwin
+    install_start_minikube_darwin
   elif [[ "$OSTYPE" == "msys" ]]; then    
     install_start_minikube_win
   fi
@@ -56,7 +63,7 @@ help() {
     echo " --help, -h                       show help"
     echo ""
     echo "Commands:"
-    echo " bootlocal                        Install and Start Minikube"
+    echo " bootlocal                        Install and Start Minikube on local"
 }
 
 debug=0
