@@ -6,9 +6,9 @@ services:
         constraints: 
           - "node.role == worker"
   psitodoapp:
-    image: localhost:5000/psi-todo 
+    image: ${PSI_TODO_STACK_IMAGE}
     deploy: 
-      replicas: 2
+      replicas: ${PSI_TODO_REPLICA}
       placement: 
         constraints: 
           - "node.role == worker" 
