@@ -1,7 +1,6 @@
 # Deploy Todo Application in K8s cluster using helm
 
 - Local Deployment
-- AWS Deployment
 
 ## Local Deployment ##
 
@@ -10,13 +9,13 @@
    Install  Dependencies and run minikube
 
     ```bash
-     ./setup.sh boot local  
+       ./setup.sh boot local  
     ```
    
  - Link host docker client to the VM's docker daemon
  
     ```bash
-     eval $(minikube docker-env)  
+       eval $(minikube docker-env)  
     ```
  - Build
  
