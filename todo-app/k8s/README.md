@@ -9,7 +9,7 @@
    Install  Dependencies and run minikube
 
     ```bash
-       ./setup.sh boot local  
+       bash setup.sh bootlocal  
     ```
    
  - Link host docker client to the VM's docker daemon
