@@ -23,13 +23,11 @@
     [Build & Create Docker Image](../README.md#build)
  
  - Deploy  mysql
-    
+          
     ```bash
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml
-    ```
-    or (Passing env file to override default properties which is optional)
-          
-    ```bash        
+       # or
+       # Passing env file to override default properties which is optional     
        helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml 
     ```
     
@@ -37,10 +35,9 @@
  
     ```bash
        helm install psi-todo ./psi-todo
-    ```  
-    or (Passing env file to override default properties which is optional) 
-    
-    ```bash
+       # or
+       # Passing env file to override default properties which is optional
+
        helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
     ```  
 
