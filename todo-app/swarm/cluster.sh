@@ -87,61 +87,102 @@ function help() {
     echo "   PSI Lab Contributors - <$(git config --get remote.origin.url)>"
     echo ""
     echo "Options:"
-    echo " --create, -c                    Create a new cluster with specify manager/worker nodes"
-    echo " --delete, -d                    Delete clsuter"
-    echo " --view, -v                      View cluster"
-    echo " --help, -h                      show help"
+    echo " --debug, -D                    Enable debug mode"
+    echo " --help, -h                     show help"
     echo ""
     echo "Commands:"
-    echo " local                           Create/Delete/View local cluster" 
+    echo " create <env>                   Create a new cluster with specify manager/worker nodes for specific environment"
+    echo " delete <env>                   Delete clsuter for specific environment"
+    echo " view   <env>                   View clsuter for specific environment"
 
 }
-case $1 in
 
-    --create|-c)
-			case $2 in
+debug=0
+
+if [ $# -lt 1 ]; then
+    help
+fi
+
+while test -n "$1"; do
+   case "$1" in
+      --debug|-D)
+		 if [[ $# -eq 1 ]]; then
+		 	help
+		 fi	
+         debug=1
+         shift
+         ;;
+       create)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	create_cluster
+			  	exit 0;
 			  	;;
 			  *)
 			  	echo "Unrecognized option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;;
-  --delete|-d)
-			case $2 in
+		 esac  	
+         shift
+         ;;  
+       delete)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	delete_cluster
+			  	exit 0;
 			  	;;
 			  *)
 			  	echo "Unrecognized option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;;            
-  --view|-v)
-            case $2 in
+		 esac  	
+         shift
+         ;;  
+       view)
+         if [[ $# -gt 2 ]]; then
+          echo "Too many args";
+          exit 1;
+         elif [[ $# -lt 2 ]]; then
+          help
+          exit 1;	   
+         fi   
+         case $2 in
 			 local)
 			  	view_cluster
+			  	exit 0;
 			  	;;
 			  *)
-			  	echo "Unrecognized option: ${2}"
+			  	echo "Unrecognizedd option: ${2}"
 			  	help
-			  	exit 128
+			  	exit 1
 			  	;;
-			esac  	
-            ;; 
-    --help|-h)
-            help
-            ;;
-     *)
-      echo "Unrecognized option: ${1}"
-      help
-      exit 128
-      ;;       
-
-esac
-
+		 esac  	
+         shift
+         ;;  
+        --help|-h)
+          help
+          shift
+          ;; 
+       *) 
+			
+          echo "Unrecognizedd option : ${1}"
+          help
+          exit 1;  
+   esac
+done
