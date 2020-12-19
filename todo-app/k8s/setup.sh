@@ -23,10 +23,20 @@ create_internal_swtich(){
   powershell.exe -ExecutionPolicy RemoteSigned -File './CreateInternalSwitch.ps1'
 }
 
+install_helm_darwin() {
+  helm version &> /dev/null || { echo "Installing helm....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) helm; }
+  echo -e "\xE2\x9C\x94 Helm -- $( helm version | awk '{split($0,a," "); print a[1]}' | awk '{split($0,a,":"); print a[2]}'| sed 's/.$//' )";
+}
+
+install_minikube_darwin() {
+  minikube version &> /dev/null || { echo "Installing minikube....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) minikube; }
+  echo -e "\xE2\x9C\x94 Minikube -- $( minikube version | awk '{split($0,a," "); print a[3]}' )";
+}
+
 install_start_minikube_darwin() {
   install_helpers_darwin
-  minikube version &> /dev/null || { echo "Installing minikube....."; eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) minikube; }
-  echo -e "\xE2\x9C\x94 Minikube -- $( minikube version )";
+  install_helm_darwin
+  install_minikube_darwin
   minikube start --kubernetes-version=v1.19.2;
   exit 0;
 }
@@ -66,7 +76,7 @@ help() {
     echo " bootlocal                        Install and Start Minikube on local"
 }
 
-debug=0
+debug=0 # disable debug 
 
 if [ $# -lt 1 ]; then
     help
@@ -76,7 +86,10 @@ fi
 while test -n "$1"; do
    case "$1" in
       --debug|-D)
-         debug=1
+         if [[ $# -eq 1 ]]; then
+		 	    help
+		    fi	 
+         debug=1 # enable debug 
          shift
          ;;
        bootlocal)
@@ -93,3 +106,4 @@ while test -n "$1"; do
           exit 1;  
    esac
 done
+debug=0 # disable debug 
