@@ -47,12 +47,13 @@ or
 ##### Docker image #####
 
 ```bash
-docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
+
+docker build --tag psi-todo:1.0.0 .
 ```
-or
+If you use Gradle, you can run it with the following command
 
 ```bash
-docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
+docker build --build-arg JAR_FILE=build/libs/\*.jar --tag psi-todo:1.0.0 .
 ```
 
 ## Run ##
