@@ -38,7 +38,7 @@ jobs:
         docker build --tag psi-todo .
         docker build --build-arg JAR_FILE=build/libs/\*.jar --tag psi-todo .
     - name: Build local stack
-      run: docker-compose --env-file=env/local/Docker.env up -d
+      run: docker-compose --env-file=env/ci/Docker.env up -d
     - name: Test local stack
       run: |
         sleep 120
