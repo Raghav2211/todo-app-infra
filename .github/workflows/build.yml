@@ -35,8 +35,8 @@ jobs:
       run: mvn -B package
     - name: Build local image
       run: |
-        docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
-        docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
+        docker build --tag psi-todo .
+        docker build --build-arg JAR_FILE=build/libs/\*.jar --tag psi-todo .
     - name: Build local stack
       run: docker-compose --env-file=env/local/Docker.env up -d
     - name: Test local stack
