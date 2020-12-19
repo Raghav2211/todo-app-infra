@@ -33,33 +33,32 @@ install_minikube_darwin() {
   echo -e "\xE2\x9C\x94 Minikube -- $( minikube version | awk '{split($0,a," "); print a[3]}' )";
 }
 
-install_start_minikube_darwin() {
+boot_minikube_darwin() {
   install_helpers_darwin
   install_helm_darwin
   install_minikube_darwin
   minikube start --kubernetes-version=v1.19.2;
-  exit 0;
 }
 
-install_start_minikube_win() {
+boot_minikube_win() {
   enable_hyperv_win
   install_helpers_win
   docker --version &> /dev/null || { choco install docker-for-windows –pre; }
   minikube --version &> /dev/null || { choco install minikube; }
   create_internal_swtich
   minikube start --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube” — v=7 — alsologtostderr
-  exit 0;    
 }
 
 
-install_start_minikube() {
+boot_local() {
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    install_virtualbox_linux
+    echo "TODO -- Install miinikube & helm"
   elif [[ "$OSTYPE" == "darwin"* ]]; then 
-    install_start_minikube_darwin
+    boot_minikube_darwin
   elif [[ "$OSTYPE" == "msys" ]]; then    
-    install_start_minikube_win
+    boot_minikube_win
   fi
+  exit 0;
 }
 
 help() {
@@ -97,7 +96,7 @@ while test -n "$1"; do
           echo "Too many args";
           exit 1;  
          fi   
-         install_start_minikube
+         boot_local
          shift
          ;;  
        *) 

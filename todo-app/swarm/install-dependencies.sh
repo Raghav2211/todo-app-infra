@@ -111,7 +111,7 @@ install_docker_machine() {
   elif [[ "$OSTYPE" == "msys" ]]; then    
     install_docker_machine_win
   fi
-
+  exit 0;
 }
 
 install_virtualbox() {
@@ -122,6 +122,7 @@ install_virtualbox() {
   elif [[ "$OSTYPE" == "msys" ]]; then    
     install_virtualbox_win
   fi
+  exit 0;
 }
 
 help() {
@@ -140,7 +141,7 @@ help() {
     echo " docker-machine                   Install Docker machine" 
 }
 
-debug=0
+debug=0 # disable debug 
 
 if [ $# -lt 1 ]; then
     help
@@ -150,7 +151,10 @@ fi
 while test -n "$1"; do
    case "$1" in
       --debug|-D)
-         debug=1
+         if [[ $# -eq 1 ]]; then
+          help
+         fi 
+         debug=1 # enable debug 
          shift
          ;;
        all)
@@ -188,3 +192,5 @@ while test -n "$1"; do
           exit 1;  
    esac
 done
+
+debug=0 # disable debug 
