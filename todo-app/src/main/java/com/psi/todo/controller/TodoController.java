@@ -35,7 +35,7 @@ import io.swagger.annotations.ResponseHeader;
 
 @Validated(ValidationSequence.class)
 @RestController
-@RequestMapping(value = { "/todo" })
+@RequestMapping(value = { "/api/v1/todo" })
 public class TodoController {
 
     private ITodoService todoService;
