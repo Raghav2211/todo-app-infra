@@ -2,4 +2,6 @@ version: "3"
 services:
   psimysql: 
     volumes: 
-      - "./env/local/mysqldata:/var/lib/mysql:cached"
+      - "./env/local/mysqldata:/var/lib/mysql:cached" # Strong consistency is quite expensive, requiring coordination between all of a files writers to guarantee 
+                                                      # they don’t inappropriately clobber each other’s changes
+                                                      # So Relax consistency guarantees using `cached` mode (Don’t do this in production …)
