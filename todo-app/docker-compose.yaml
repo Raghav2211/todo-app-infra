@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
   psitodoapp:
-    image: ${PSI_TODO_IMAGE}
+    image: psi-todo:${PSI_TODO_IMAGE_TAG:-latest}
     container_name: psi-todo
     restart: on-failure:5 
     depends_on:
