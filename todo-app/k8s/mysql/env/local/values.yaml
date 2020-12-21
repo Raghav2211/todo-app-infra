@@ -1,0 +1,7 @@
+persistence:
+  local: true
+  storageClass: local 
+  accessMode: 
+    - ReadWriteOnce
+  size: 1Gi
+  hostPath: /mnt/data
