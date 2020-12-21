@@ -15,6 +15,21 @@
        # Boot local cluster [ Swarm Manager(s)/Worker(s) node ]
        $ bash cluster.sh create local
     ```
+    
+   Verify cluster 
+
+    ```bash
+       $ bash cluster.sh view local
+       ------------------------------------------------------------Nodes------------------------------------------------------------
+       ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+       zsrfmw8g8wavf8nsq1uo8xz7j *   manager1            Ready               Active              Leader              19.03.12
+       quwa5fhv5vk7cuzw8m88prj8m     worker1             Ready               Active                                  19.03.12
+       ------------------------------------------------------------Vm(s)------------------------------------------------------------
+       NAME       ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER      ERRORS
+       manager1   *        virtualbox   Running   tcp://192.168.99.149:2376           v19.03.12   
+       worker1    -        virtualbox   Running   tcp://192.168.99.150:2376           v19.03.12 
+    ```
+   
    
  - Link host docker client to the VM's docker daemon
  
