@@ -4,7 +4,6 @@ ARG GROUP=psi
 ARG UID=1000
 ARG GID=1000
 ARG JAR_FILE=target/*.jar
-RUN echo $JAR_FILE
 RUN groupadd -g ${GID} ${GROUP} && useradd -u ${UID} -g ${GROUP} ${USER}
 USER ${USER}:${GROUP}
 COPY ${JAR_FILE} app.jar
