@@ -1,7 +1,7 @@
 version: "3"
 services:
   psimysql:
-    image: mysql:8.0.22
+    image: mysql:${MYSQL_IMAGE_TAG:-8.0.22}
     container_name: mysql
     ports:
       - 3306:3306
@@ -9,7 +9,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
   psitodoapp:
-    image: psi-todo:1.0.0
+    image: ${PSI_TODO_IMAGE}
     container_name: psi-todo
     restart: on-failure:5 
     depends_on:

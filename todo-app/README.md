@@ -47,15 +47,19 @@ or
 ##### Docker image #####
 
 ```bash
-docker build -f Dockerfile.mvn --tag psi-todo:1.0.0 .
+
+docker build --tag psi-todo:1.0.0 .
 ```
-or
+If you use Gradle, you can run it with the following command
 
 ```bash
-docker build -f Dockerfile.gradle --tag psi-todo:1.0.0 .
+docker build --build-arg JAR_FILE=build/libs/\*.jar --tag psi-todo:1.0.0 .
 ```
 
 ## Run ##
 ```bash
 docker-compose --env-file=env/<env>/Docker.env up -d
+#or 
+# Override default docker-compose configuration
+docker-compose --env-file=env/<env>/Docker.env -f docker-compose.yaml -f env/<env>/docker-compose-override.yml up -d
 ```

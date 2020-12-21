@@ -1,0 +1,14 @@
+version: "3"
+services:
+  psimysql: 
+    deploy: 
+      placement: 
+        constraints: 
+          - "node.role == worker"
+  psitodoapp:
+    image: ${PSI_TODO_STACK_IMAGE}
+    deploy: 
+      replicas: ${PSI_TODO_REPLICA}
+      placement: 
+        constraints: 
+          - "node.role == worker" 

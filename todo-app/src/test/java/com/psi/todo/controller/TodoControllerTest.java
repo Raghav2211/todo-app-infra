@@ -42,11 +42,11 @@ public class TodoControllerTest {
 
     private static final String TODO_RECORD_DOESN_T_EXIST = "Todo record doesn't exist";
 
-    private static final String TODO_ROOT = "/todo";
+    private static final String TODO_ROOT = "/api/v1/todo";
 
-    private static final String TODO_FINDBY_NULL = "/todo/null";
+    private static final String TODO_FINDBY_NULL = "/api/v1/todo/null";
 
-    private static final String TODO_FINDBY_ID = "/todo/1";
+    private static final String TODO_FINDBY_ID = "/api/v1/todo/1";
 
     @Autowired
     private MockMvc mockMvc;
@@ -212,7 +212,7 @@ public class TodoControllerTest {
     @Test
     public void testDeleteWithNegativeTodoId() {
         MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc.perform(MockMvcRequestBuilders.delete("/todo/-1").accept(MEDIA_TYPE_JSON_UTF8))
+        String error = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/todo/-1").accept(MEDIA_TYPE_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
                 .getMessage();
         assertTrue(error.contains(TOOD_ID_MUST_BE_GRATER_THAN_0));
