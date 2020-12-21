@@ -59,4 +59,7 @@ docker build --build-arg JAR_FILE=build/libs/\*.jar --tag psi-todo:1.0.0 .
 ## Run ##
 ```bash
 docker-compose --env-file=env/<env>/Docker.env up -d
+#or 
+# Override default docker-compose configuration
+docker-compose --env-file=env/<env>/Docker.env -f docker-compose.yaml -f env/<env>/docker-compose-override.yml up -d
 ```
