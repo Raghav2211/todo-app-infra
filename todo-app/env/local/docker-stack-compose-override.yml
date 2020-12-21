@@ -3,9 +3,9 @@ services:
   psimysql: 
     deploy:
       labels:
-        name: "mysql"
+        name: mysql
         version: ${MYSQL_IMAGE_TAG:-8.0.22}
-        component: "database"
+        component: database
         env: "local"
       placement: 
         constraints: 
@@ -16,7 +16,7 @@ services:
       labels:
         name: psi-todo
         version: ${PSI_TODO_IMAGE_TAG:-latest}
-        component: "rest"
+        component: web
         env: "local" 
       replicas: ${PSI_TODO_REPLICA}
       placement: 
