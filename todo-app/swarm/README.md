@@ -25,7 +25,7 @@
  
     [Build & Create Docker Image](../README.md#build)
  
- - Deploy stack
+ - Deploy the Stack
           
     ```bash
     # Local registry
@@ -60,3 +60,28 @@
  - Access swagger api endpoint with below url.
  
     http://localhost:8080/swagger-ui/
+    
+ - Uninstalling the Stack 
+ 
+    
+    ```bash
+       $ docker stack rm psi-todo
+    ```   
+    
+  - Configuration
+  
+    The following table lists the configurable parameters of the kube2iam chart and their default values.
+
+    Parameter | Description | Default
+    --- | --- | ---
+    `PSI_TODO_REPLICA` | No of replica for Todo-app | `1`
+    `PSI_TODO_STACK_IMAGE` | Todo-app Image | `localhost:5000/psi-todo`    
+    `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
+    `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
+    `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
+    `MYSQL_USER` | Username of new user to create | `root`        
+    `MYSQL_PASSWORD` | Password for the new user | `root`            
+    `MYSQL_DATABASE` | Name for new database to create | `psi`                
+    `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
+    `MYSQL_DATA_DEST_PATH` | Mount directory path in mysql container | `/var/lib/mysql`                        
+      
