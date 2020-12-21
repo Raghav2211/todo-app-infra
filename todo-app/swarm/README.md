@@ -58,11 +58,11 @@
     $ docker image remove localhost:5000/psi-todo
     
     # Deploy todo app cluster 
-    $ docker stack deploy -c <(docker-compose --env-file=env/<env>/Docker.env -f docker-compose.yaml -f env/<env>/docker-stack-compose-override.yml config) psi-todo
+    $ docker stack deploy -c <(docker-compose --env-file=../env/<env>/Docker.env -f ../docker-compose.yaml -f ../env/<env>/docker-stack-compose-override.yml config) psi-todo
     
     # or 
     # Apply persistent with mysql 
-    docker stack deploy -c <(docker-compose --env-file=env/local/Docker.env -f docker-compose.yaml -f env/local/docker-stack-compose-override.yml -f env/local/docker-stack-persistent-compose-override.yml config) psi-todo
+    docker stack deploy -c <(docker-compose --env-file=../env/local/Docker.env -f ../docker-compose.yaml -f ../env/local/docker-stack-compose-override.yml -f ../env/local/docker-stack-persistent-compose-override.yml config) psi-todo
     
     ```
 
