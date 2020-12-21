@@ -11,7 +11,7 @@ exit_if_fail(){
 }
 
 install_helpers_darwin() {
-  brew --version &> /dev/null || { eval $(if [ "$debug" -eq 1 ]; then echo "curl -fSL"; else echo "curl -fsSL"; fi) https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
+  brew --version &> /dev/null || { eval $(if [ "$debug" -eq 1 ]; then echo "curl -fSL"; else echo "curl -fsSL"; fi) https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n";exit_if_fail; }
 }
 
 install_helpers_win() {
@@ -25,11 +25,13 @@ enable_hyperv_win(){
   echo "Enabling Hyper-V if not enabled....."  
   chmod +x EnableHyperV.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './EnableHyperV.ps1'
+  exit_if_fail;
 }
 create_internal_swtich(){
   echo "Creating Virtual Switch of type Internal....."  
   chmod +x CreateInternalSwitch.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './CreateInternalSwitch.ps1'
+  exit_if_fail;
 }
 
 install_helm_darwin() {

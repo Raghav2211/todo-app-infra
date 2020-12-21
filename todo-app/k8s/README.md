@@ -23,25 +23,11 @@
  
  - Deploy  mysql
           
-    ```bash
-       helm install --dry-run --debug mysql ./mysql -f env/<env>/mysql-secret.yaml
-       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml
-       # or
-       # Passing env file to override default properties which is optional
-       helm install --dry-run --debug mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml 
-       helm install mysql ./mysql -f env/<env>/mysql-secret.yaml -f env/<env>/mysql-values.yaml 
-    ```
+    [Deploy MySql using helm](mysql/README.md#Installing the Chart)
     
  - Deploy Todo-app    
  
-    ```bash
-       helm install --dry-run --debug psi-todo ./psi-todo
-       helm install psi-todo ./psi-todo
-       # or
-       # Passing env file to override default properties which is optional
-       helm install --dry-run --debug ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
-       helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
-    ```  
+    [Deploy todo app  using helm](psi-todo/README.md#Installing the Chart)
 
  - Verify all pods are up and running
  
