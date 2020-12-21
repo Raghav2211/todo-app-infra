@@ -99,6 +99,7 @@
     `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
     `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
     `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
+    `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                    
     `MYSQL_USER` | Username of new user to create | `root`        
     `MYSQL_PASSWORD` | Password for the new user | `root`            
     `MYSQL_DATABASE` | Name for new database to create | `psi`                

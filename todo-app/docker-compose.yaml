@@ -1,7 +1,7 @@
 version: "3"
 services:
   psimysql:
-    image: mysql:${MYSQL_IMAGE_TAG:-8.0.22}
+    image: mysql:${MYSQL_IMAGE_TAG}
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
