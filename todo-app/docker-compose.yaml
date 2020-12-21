@@ -1,19 +1,15 @@
 version: "3"
 services:
   psimysql:
-    image: mysql:${MYSQL_IMAGE_TAG:-8.0.22}
-    container_name: mysql
-    ports:
-      - 3306:3306
+    image: mysql:${MYSQL_IMAGE_TAG}
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
   psitodoapp:
-    image: ${PSI_TODO_IMAGE}
-    container_name: psi-todo
-    restart: on-failure:5 
+    image: psi-todo:${PSI_TODO_IMAGE_TAG:-latest}
     depends_on:
-      - psimysql
+      - psimysql # will not wait for mysql to be “ready” before starting todo-app , It'll only confirm dependency order & 
+                 # will automatic create dependencies which include in service defination
     ports:
       - 8080:8080
     environment:
