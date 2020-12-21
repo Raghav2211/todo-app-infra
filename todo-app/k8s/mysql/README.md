@@ -56,7 +56,6 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `persistence.accessMode`                     | ReadWriteOnce or ReadOnly                                                                    | ReadWriteOnce                                        |
 | `persistence.existingClaim`                  | Name of existing persistent volume                                                           | `nil`                                                |
 | `persistence.hostPath`                        | Subdirectory of the volume to mount                                                          | `nil`                                                |
-| `nodeSelector`                               | Node labels for pod assignment                                                               | {}                                                   |
 | `affinityNodes`                                   | affinityNodes is the nodes list in which pod will deploy                                                            | `[]`                                                   |
 | `service.type`                               | Kubernetes service type                                                                      | ClusterIP                                            |
 | `service.port`                     | Service Port to be exposed outside                                                                      | 3306                                                 |
