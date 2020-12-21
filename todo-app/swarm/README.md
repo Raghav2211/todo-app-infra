@@ -70,7 +70,7 @@
     
   - Configuration
   
-    The following table lists the configurable parameters of the kube2iam chart and their default values.
+    The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
 
     Parameter | Description | Default
     --- | --- | ---
