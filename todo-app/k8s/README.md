@@ -27,7 +27,7 @@
     
  - Deploy Todo-app    
  
-    [Deploy todo app  using helm](psi-todo/README.md#Installing%20the%20Chart)
+    [Deploy Todo App  using helm](psi-todo/README.md#Installing%20the%20Chart)
 
  - Verify all pods are up and running
  
