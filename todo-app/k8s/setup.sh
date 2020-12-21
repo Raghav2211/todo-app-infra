@@ -2,6 +2,14 @@
 
 me="$(basename "$(test -L "$0" && readlink "$0" || echo "$0")")"
 
+exit_if_fail(){
+  ret=$?
+  if [ $ret -ne 0 ]; then
+  echo "entering if.."
+  exit $ret
+  fi
+}
+
 install_helpers_darwin() {
   brew --version &> /dev/null || { eval $(if [ "$debug" -eq 1 ]; then echo "curl -fSL"; else echo "curl -fsSL"; fi) https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh; echo -e "\xE2\x9C\x94 Installed helper libraries(brew)\n"; }
 }
@@ -10,6 +18,7 @@ install_helpers_win() {
   echo "Install helper libraries(choco)....."  
   chmod +x ChocolateyInstallNonAdmin.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './ChocolateyInstallNonAdmin.ps1'
+  exit_if_fail
 }
 
 enable_hyperv_win(){
@@ -24,12 +33,12 @@ create_internal_swtich(){
 }
 
 install_helm_darwin() {
-  helm version &> /dev/null || { echo "Installing helm....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) helm; }
+  helm version &> /dev/null || { echo "Installing helm....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) helm;exit_if_fail; }
   echo -e "\xE2\x9C\x94 Helm -- $( helm version | awk '{split($0,a," "); print a[1]}' | awk '{split($0,a,":"); print a[2]}'| sed 's/.$//' )";
 }
 
 install_minikube_darwin() {
-  minikube version &> /dev/null || { echo "Installing minikube....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) minikube; }
+  minikube version &> /dev/null || { echo "Installing minikube....."; HOMEBREW_NO_AUTO_UPDATE=1 eval $(if [ "$debug" -eq 1 ]; then echo "brew install -dv"; else echo "brew install -q"; fi) minikube; exit_if_fail;}
   echo -e "\xE2\x9C\x94 Minikube -- $( minikube version | awk '{split($0,a," "); print a[3]}' )";
 }
 
@@ -38,15 +47,18 @@ boot_minikube_darwin() {
   install_helm_darwin
   install_minikube_darwin
   minikube start --kubernetes-version=v1.19.2;
+  exit_if_fail;
 }
 
 boot_minikube_win() {
   enable_hyperv_win
   install_helpers_win
-  docker --version &> /dev/null || { choco install docker-for-windows –pre; }
-  minikube --version &> /dev/null || { choco install minikube; }
+  docker --version &> /dev/null || { echo "Installing docker for windows.....";choco install docker-for-windows –pre; exit_if_fail;}
+  minikube --version &> /dev/null || { echo "Installing minikube for windows.....";choco install minikube;exit_if_fail; }
+  helm --version &> /dev/null || { echo "Installing helm for windows.....";choco install kubernetes-helm;exit_if_fail; }
   create_internal_swtich
-  minikube start --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube” — v=7 — alsologtostderr
+  minikube start --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube”
+  exit_if_fail;
 }
 
 
