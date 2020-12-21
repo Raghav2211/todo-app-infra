@@ -24,8 +24,8 @@ The above command deploys Todo App on the Kubernetes cluster in the default conf
 To install the chart with the release name `psi-todo` with secrets from secret env file and with overridden default properties,Execute dry run command for verification, then the command:
 
 ```bash
-$ helm install --dry-run --debug ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
-$ helm install psi-todo ./psi-todo -f env/<env>/psi-todo-secret.yaml -f env/<env>/psi-todo-values.yaml
+$ helm install --dry-run --debug ./psi-todo -f env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install psi-todo ./psi-todo -f env/<env>/secret.yaml -f env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
