@@ -23,11 +23,11 @@
  
  - Deploy  mysql
           
-    [Deploy MySql using helm](mysql/README.md#Installing the Chart)
+    [Deploy MySql using helm](mysql/README.md#Installing%20the%20Chart)
     
  - Deploy Todo-app    
  
-    [Deploy todo app  using helm](psi-todo/README.md#Installing the Chart)
+    [Deploy todo app  using helm](psi-todo/README.md#Installing%20the%20Chart)
 
  - Verify all pods are up and running
  
