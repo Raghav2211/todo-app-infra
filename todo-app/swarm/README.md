@@ -105,5 +105,4 @@
     `MYSQL_ROOT_PASSWORD` | Password for the root user | ``                
     `MYSQL_DATABASE` | Name for new database to create | ``                
     `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
-    `MYSQL_DATA_DEST_PATH` | Mount directory path in mysql container | `/var/lib/mysql`                        
       
