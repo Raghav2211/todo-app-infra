@@ -15,10 +15,10 @@ To install the chart with the release name `psi-todo`,Execute dry run command fo
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug psi-todo ./psi-todo
+$ helm install --dry-run --debug psi-todo psi-todo
 
 # Install chart
-$ helm install psi-todo ./psi-todo
+$ helm install psi-todo psi-todo
 ```
 
 
@@ -28,10 +28,10 @@ To install the chart with the release name `psi-todo` with secrets from secret e
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug ./psi-todo -f env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install --dry-run --debug psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/env/<env>/values.yaml
 
 # Install chart
-$ helm install psi-todo ./psi-todo -f env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install psi-todo psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
