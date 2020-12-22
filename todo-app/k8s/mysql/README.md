@@ -46,8 +46,8 @@ The following table lists the configurable parameters of the MySQL chart and the
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `replicaCount`                                 | Number of instance to run at any time                                                      | 1 |
 | `image`                                        | `mysql` image configuration.                                                               | ` ` |
-| `image.repository`                             | `mysql` image pull policy.                                                                 | `IfNotPresent`|
-| `image.pullPolicy`                             | `mysql` image repository.                                                                  | `mysql`|
+| `image.repository`                             | `mysql` image repository.                                                                  | `mysql`|
+| `image.pullPolicy`                             | `mysql` image pull policy.                                                                 | `IfNotPresent`|
 | `image.tag`                                    | `mysql` image tag.                                                                         | `8.0.22`|
 | `service`                                      | `mysql` service configuration                                                              | ` ` |
 | `service.type`                                 | Kubernetes service type                                                                    | `ClusterIP`|
