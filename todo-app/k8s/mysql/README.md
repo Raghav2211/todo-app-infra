@@ -15,8 +15,8 @@ This chart bootstraps a single node MySQL deployment on a [Kubernetes](http://ku
 To install the chart with the release name `mysql` with secrets from secret env file,Execute dry run command for verification , then the command :
 
 ```bash
-$ helm install --dry-run --debug --name mysql ./mysql -f env/<env>/secret.yaml
-$ helm install --name mysql ./mysql -f env/<env>/secret.yaml
+$ helm install --dry-run --debug --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml
+$ helm install --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml
 ```
 
 The above command deploys MySQL on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -24,8 +24,8 @@ The above command deploys MySQL on the Kubernetes cluster in the default configu
 To install the chart with the release name `mysql` with secrets from secret env file and with overridden default properties,Execute dry run command for verification, then the command:
 
 ```bash
-$ helm install --dry-run --debug --name mysql ./mysql -f env/<env>/secret.yaml -f env/<env>/values.yaml
-$ helm install --name mysql ./mysql -f env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install --dry-run --debug --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install --name mysql ./mysql -f ./myslq/env/<env>/secret.yaml -f ./mysql/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
@@ -44,28 +44,34 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `image.repository`                                      | `mysql` image repository.                                                                    | `mysql`                                              |
-| `image.tag`                                   | `mysql` image tag.                                                                           | `8.0.22`                                             |
-| `image.pullPolicy`                            | Image pull policy                                                                            | `IfNotPresent`                                       |
-| `mysqlConfig.mysqlUser`                                  | Username of new user to create.                                                              | `nil`                                                |
-| `mysqlConfig.mysqlPassword`                              | Password for the new user. Ignored if existing secret is provided                            | Random 10 characters                                 |
-| `mysqlConfig.database`                              | Name for new database to create.                                                             | `psi`                                                |
-| `persistence`                        | persistence is to recover data after pod kill                                                                | `nil`                                                |
-| `persistence.size`                           | Size of persistent volume claim                                                              | 8Gi RW                                               |
-| `persistence.storageClass`                   | Type of persistent volume claim                                                              | nil                                                  |
-| `persistence.accessMode`                     | ReadWriteOnce or ReadOnly                                                                    | ReadWriteOnce                                        |
-| `persistence.existingClaim`                  | Name of existing persistent volume                                                           | `nil`                                                |
-| `persistence.hostPath`                        | Subdirectory of the volume to mount                                                          | `nil`                                                |
-| `affinityNodes`                                   | affinityNodes is the nodes list in which pod will deploy                                                            | `[]`                                                   |
+| `replicaCount`                                 | Number of instance to run at any time                                                   | 1                                              |
+| `image`                                   | `mysql` image configuration.                                                                          | ` `                                             |
+| `image.repository`                            | `mysql` image repository.                                                                         | mysql                                       |
+| `image.tag`                                  | `mysql` image tag.                                                              | `8.0.22`                                                |
+| `service`                              | `mysql` service configuration                            | ` `                                 |
+| 
 | `service.type`                               | Kubernetes service type                                                                      | ClusterIP                                            |
 | `service.port`                     | Service Port to be exposed outside                                                                      | 3306                                                 |
-
+| `resources`                     | `mysql` CPU/Memory resource requests/limits                                                                    | `{}`                                                 |
+| `resources.limits`                     | `mysql` resource limits                                                                    | ` `                                                 | 
+| `resources.limits.cpu`                     | `mysql` CPU resource limits                                                                    | ` `                                                 |
+| `resources.limits.memory`                     | `mysql` Memory resource limits                                                                    | ` `                                                 |
+| `resources.requests`                         | `mysql` resource request configuration                                                                    | ` `                                                 |
+| `resources.requests.cpu`                    | `mysql` CPU resource request configuration                                                                    | ` `                                                 |
+| `resources.requests.memory`                | `mysql` memory resource request configuration                                                                    | ` `                                                 |
+| `persistence`                                  | persistence is to recover data after pod kill                                                                    | `{}`                                                 |
+| `persistence.local`                          | persistence for local enabled or not                                                                    | ` `                                                 |
+| `persistence.storageClass`                 | Type of persistent volume claim                                                                    | ` `                                                 |
+| `persistence.accessMode`                 | ReadWriteOnce or ReadOnly                                                                   | ` `                                                 |
+| `persistence.size`                 | Size of persistent volume claim                                                                  | ` `                                                 |
+| `persistence.hostPath`                 | HostPath of the volume to mount                                                                  | ` `                                                 |
+| `mysqlConfig`                 | Configuration for mysql                                                                  | ` `                                                 |
+| `mysqlConfig.database`     |  database name                                                                 | `psi`                                                 |
+| `mysqlUsername`     |  database user name                                                                 | ` `                                                 |
+| `mysqlPassword`     |  database password                                                                 | ` `                                                 |
+| `affinityNodes`     | affinityNodes is the nodes list in which pod will deploy                                                                 | `[]`                                                 |
 ## Persistence
 
-The [MySQL](https://hub.docker.com/_/mysql/) image stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
+Persistence configuration stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
 
-By default a PersistentVolumeClaim is created and mounted into that directory. In order to disable this functionality
-you can change the values.yaml to disable persistence and use an emptyDir instead.
-
-> *"An emptyDir volume is first created when a Pod is assigned to a Node, and exists as long as that Pod is running on that node. When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever."*
-1.19.2
+PersistentVolume will be created for local if `persistence.local` is set to true and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.local` should be set as false.

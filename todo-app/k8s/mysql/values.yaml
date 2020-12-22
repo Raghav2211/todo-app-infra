@@ -31,6 +31,10 @@ persistence: {}
 mysqlConfig:
   database: psi
 
+# Database user name and password
+#mysqlUsername: root
+#mysqlPassword: root
+
 # affinityNodes is the nodes list in which pod will deploy
 # default - minikube
 affinityNodes: []
