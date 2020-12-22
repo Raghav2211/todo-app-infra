@@ -34,8 +34,8 @@ config:
 
 
 # Database user name and password
-#mysqlUsername: root
-#mysqlPassword: root
+#username: root
+#password: root
 
   
 # nodeAffinity policy

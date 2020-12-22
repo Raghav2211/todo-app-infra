@@ -66,10 +66,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `persistence.accessMode`                       | ReadWriteOnce or ReadOnly                                                                  | ` `  |
 | `persistence.size`                             | Size of persistent volume claim                                                            | ` `  |
 | `persistence.hostPath`                         | HostPath of the volume to mount                                                            | ` `  |
-| `mysqlConfig`                                  | Configuration for mysql                                                                    | ` `  |
-| `mysqlConfig.database`                         |  database name                                                                             | `psi`|
-| `mysqlUsername`                                |  database user name                                                                        | ` `  |
-| `mysqlPassword`                                |  database password                                                                         | ` `  |
+| `config`                                      | Configuration for mysql                                                                    | `{ database: psi }`  |
+| `config.database`                              |  Database name                                                                             | `psi`|
+| `username`                                     |  Database user name                                                                        | ` `  |
+| `password`                                     |  Database password                                                                         | ` `  |
 | `affinityNodes`                                | affinityNodes is the nodes list in which pod will deploy                                   | `[]` |
 
 
