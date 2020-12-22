@@ -59,7 +59,8 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `resources.requests.cpu`                       | `mysql` CPU resource request configuration                                                 | ` `  |
 | `resources.requests.memory`                    | `mysql` memory resource request configuration                                              | ` `  |
 | `persistence`                                  | persistence is to recover data after pod kill                                              | `{}` |
-| `persistence.enabled`                          | persistence for local enabled or not                                                       | ` `  |
+| `persistence.enabled`                          | persistence for enabled or not                                                             | ` `  |
+| `persistence.local`                            | persistence for local enabled or not                                                       | ` `  |
 | `persistence.storageClass`                     | Type of persistent volume claim                                                            | ` `  |
 | `persistence.accessMode`                       | ReadWriteOnce or ReadOnly                                                                  | ` `  |
 | `persistence.size`                             | Size of persistent volume claim                                                            | ` `  |
