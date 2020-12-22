@@ -12,7 +12,7 @@ This chart bootstraps a single node MySQL deployment on a [Kubernetes](http://ku
 
 ## Installing the Chart
 
-To install the chart with the release name `mysql` with secrets from secret env file,Execute dry run command for verification , then the command :
+To install the chart with the release name `mysql` with secret file,Execute dry run command for verification , then the command :
 
 ```bash
 $ helm install --dry-run --debug --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml
@@ -21,7 +21,7 @@ $ helm install --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml
 
 The above command deploys MySQL on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
-To install the chart with the release name `mysql` with secrets from secret env file and with overridden default properties,Execute dry run command for verification, then the command:
+To install the chart with the release name `mysql` with secret file and with overridden default properties,Execute dry run command for verification, then the command:
 
 ```bash
 $ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml -f env/<env>/values.yaml
