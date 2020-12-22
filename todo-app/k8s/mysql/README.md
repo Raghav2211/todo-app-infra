@@ -24,8 +24,8 @@ The above command deploys MySQL on the Kubernetes cluster in the default configu
 To install the chart with the release name `mysql` with secrets from secret env file and with overridden default properties,Execute dry run command for verification, then the command:
 
 ```bash
-$ helm install --dry-run --debug --name mysql ./mysql -f ./mysql/env/<env>/secret.yaml -f env/<env>/values.yaml
-$ helm install --name mysql ./mysql -f ./myslq/env/<env>/secret.yaml -f ./mysql/env/<env>/values.yaml
+$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml -f env/<env>/values.yaml
+$ helm install mysql mysql -f myslq/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
@@ -76,4 +76,4 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 Persistence configuration stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
 
-PersistentVolume will be created for local if `persistence.enabled` is set to `true` and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set as `false`.
+PersistentVolume will be created if `persistence.enabled` is set to `true` and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set as `false`.
