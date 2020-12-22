@@ -51,14 +51,39 @@ The following table lists the configurable parameters of the PSI-TODO chart and 
 | `image.tag`                                    | `psi-todo` image tag.                                                                      | `1.0.0`|
 | `livenessProbe`                                | Indicates whether the container is running.                                                | ` ` |
 | `livenessProbe.enabled`                        | Indicates liveness probe is enabled orn not.                                               | `false ` |
-| `livenessProbe.initialDelaySeconds`            | Indicates how long kubectl wait before taking action.                                      | `60 ` |
-| `livenessProbe.periodSeconds`                  | Indicates how frequent kubectl will run the probe.                                         | `30 ` |
-| `livenessProbe.timeoutSeconds`                 | Timeout in seconds for executing liveness probe.                                           | `10 ` |
-| `livenessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after failed.      | `1 ` |
-| `livenessProbe.failureThreshold`               | When a probe fails, Kubernetes will try failureThreshold times before giving up.           | `3 ` |
+| `livenessProbe.initialDelaySeconds`            | Indicates how long kubectl wait before taking action.                                      |  60  |
+| `livenessProbe.periodSeconds`                  | Indicates how frequent kubectl will run the probe.                                         |  30  |
+| `livenessProbe.timeoutSeconds`                 | Timeout in seconds for executing liveness probe.                                           |  10  |
+| `livenessProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after failed.      |  1  |
+| `livenessProbe.failureThreshold`               | When a probe fails, Kubernetes will try failureThreshold times before giving up.           |  3  |
 | `service`                                      | Kubernetes service configuration.                                                          | ` ` |
 | `service.type`                                 | ServiceTypes allow you to specify what kind of Service you want.                           | `LoadBalancer` |
-| `service.type`                                 | ServiceTypes allow you to specify what kind of Service you want.                           | `LoadBalancer` |
+| `service.port`                                 | Port internal to Kubernetes                                    .                           | 8080 |
+| `service.nodeport`                             | NodePort gives you the freedom to set up your own load balancing solution.                 | 30000|
+| `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
+| `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
+| `resources`                                    | `psi-todo` CPU/Memory resource requests/limits                                             | `{}` |
+| `resources.limits`                             | `psi-todo` resource limits                                                                 | ` `  |
+| `resources.limits.cpu`                         | `psi-todo` CPU resource limits                                                             | ` `  |
+| `resources.limits.memory`                      | `psi-todo` Memory resource limits                                                          | ` `  |
+| `resources.requests`                           | `psi-todo` resource request configuration                                                  | ` `  |
+| `resources.requests.cpu`                       | `psi-todo` CPU resource request configuration                                              | ` `  |
+| `resources.requests.memory`                    | `psi-todo` memory resource request configuration                                           | ` `  |
+| `initContainers`                               | Init containers can contain utilities or setup scripts not present in an app image         | ` `  |
+| `initContainers.dbWait`                        | dbWait until mysql is not up                                                               | ` `  |
+| `initContainers.dbWait.image`                  | image for running init container                                                           | `busybox `  |
+| `initContainers.dbWait.tag`                    | image tag for running init container                                                       | `latest `  |
+| `initContainers.dbWait.imagePullPolicy`        | image pull policy for running init container                                               | `IfNotPresent `  |
+| `security`                                     | Spring security                                                                            | `  `  |
+| `security.basicAuth`                           | Spring security of type basicauth                                                          | `  `  |
+| `security.basicAuth.username`                  | Spring security of type basicauth username                                                 | `  `  |
+| `security.basicAuth.password`                  | Spring security of type basicauth password                                                 | `  `  |
+| `todoConfig`                                   | Config for todoApp                                                                         | `  `  |
+| `todoConfig.securityBasicAuthEnable`           | Enable/ Disable basic-auth                                                                 |`false`|
+
+
+
+
 
 
 
