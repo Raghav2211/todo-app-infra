@@ -44,19 +44,8 @@ The following table lists the configurable parameters of the PSI-TODO chart and 
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `image.repository`                                      | `psi-todo` image repository.                                                                    | `psi-todo`                                              |
-| `image.tag`                                   | `mysql` image tag.                                                                           | `1.0.0`                                             |
-| `image.pullPolicy`                                   | `mysql` image tag.                                                                           | `Never`                                             |
-| `livenessProbe.enabled`                     | Liveness probe enabled                                                                      | `true`                                                   |
-| `livenessProbe.initialDelaySeconds`          | Delay before liveness probe is initiated                                                     | 60                                                   |
-| `livenessProbe.periodSeconds`                | How often to perform the probe                                                               | 30                                                   |
-| `livenessProbe.timeoutSeconds`               | When the probe times out                                                                     | 10                                                    |
-| `livenessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed. | 1                                                    |
-| `livenessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.   | 3                                                    |
-| `initContainer.dbWait`                              |dbWait until mysql is not up                                                      | `nil`                                                |
-| `initContainer.dbWait.image`                        | image for dbwait                                                                  | busybox                                                |
-| `initContainer.dbWait.tag`                        | image tag for dbwait                                                                | latest                                                 |
-| `initContainer.dbWait.imagePullPolicy`        | image tag for dbwait pull policy                                                             | IfNotPresent                                              |
-| `resources`                                  | CPU/Memory resource requests/limits                                                          | ``                         |
-| `security.basicAuth.username`                    | Spring security                                                           | ``                                              |
-| `security.basicAuth.password`                    | Spring security                                                      | ``                                                  |
+| `replicaCount`                                 | Number of instance to run at any time                                                      | 1 |
+| `image`                                        | `mysql` image configuration.                                                               | ` ` |
+| `image.repository`                             | `mysql` image pull policy.                                                                 | `Never`|
+| `image.pullPolicy`                             | `mysql` image repository.                                                                  | `mysql`|
+| `image.tag`                                    | `mysql` image tag.                                                                         | `1.0.0`|
