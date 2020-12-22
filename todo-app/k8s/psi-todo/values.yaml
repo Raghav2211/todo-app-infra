@@ -1,18 +1,18 @@
 #Default values fo Todo app
-replicaCount: 1
+replica: 1
 image:
-  repository: psi-todo
+#  repository: psi-todo
   pullPolicy: Never
-  tag: "1.0.0"
+#  tag: "1.0.0"
 
 
-livenessProbe:
-  enabled: false
-  initialDelaySeconds: 60
-  periodSeconds: 30
-  timeoutSeconds: 10
-  successThreshold: 1
-  failureThreshold: 3
+livenessProbe: {}
+#  enabled: false
+#  initialDelaySeconds: 60
+#  periodSeconds: 30
+#  timeoutSeconds: 10
+#  successThreshold: 1
+#  failureThreshold: 3
 
 service:
   type: LoadBalancer
@@ -31,17 +31,17 @@ resources: {}
   #   memory: 128Mi
 
 initContainers:
-  dbWait: # dbWait until mysql is not up 
-    image: busybox 
-    tag: latest
-    imagePullPolicy: IfNotPresent  
+  dbWait: {} # dbWait until mysql is not up 
+#    image: busybox 
+#    tag: latest
+#    imagePullPolicy: IfNotPresent  
 
 # security :- Spring security 
-security:
-  basicAuth:
-    username: # Basic auth username
-    password: # Basic auth password
+security: {}
+#  basicAuth:
+#    username: # Basic auth username
+#    password: # Basic auth password
 
 # todoConfig :- Config for todoApp
-todoConfig:
+config:
   securityBasicAuthEnable: false # Enable/ Disable basic-auth    

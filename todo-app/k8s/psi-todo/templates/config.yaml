@@ -7,6 +7,6 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
 data:
-{{- range $key, $val := .Values.todoConfig }}
+{{- range $key, $val := .Values.Config }}
   {{ $key }}: {{ $val | quote }}
 {{- end }}

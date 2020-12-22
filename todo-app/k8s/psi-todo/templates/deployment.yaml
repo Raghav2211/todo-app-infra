@@ -4,7 +4,7 @@ metadata:
   name: {{ include "psi-todo.fullname" . }}
   labels: {{- include "psi-todo.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replica | default 1 }}
   selector:
     matchLabels:
       {{- include "psi-todo.selectorLabels" . | nindent 6 }}
@@ -30,7 +30,7 @@ spec:
 {{end}}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository | default .Chart.Name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -89,6 +89,6 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
       initContainers:
         - name: init-mysql-wait
-          image: {{ .Values.initContainers.dbWait.image }}:{{ .Values.initContainers.dbWait.tag }}
-          imagePullPolicy: {{ .Values.initContainers.dbWait.imagePullPolicy }}
-          command: ['sh', '-c', 'until nslookup mysql; do echo waiting for {{ default "mysql" .Values.mysqlRef }}; sleep 2; done;']      
+          image: "{{ .Values.initContainers.dbWait.image | default "busybox" }}:{{ .Values.initContainers.dbWait.tag | default "latest" }}"
+          imagePullPolicy: {{ .Values.initContainers.dbWait.imagePullPolicy | default "IfNotPresent" }}
+          command: ['sh', '-c', 'until nslookup {{ default "mysql" .Values.mysqlRef }}; do echo waiting for {{ default "mysql" .Values.mysqlRef }}; sleep 2; done;']      
