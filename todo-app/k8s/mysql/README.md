@@ -41,7 +41,7 @@ To uninstall/delete the `mysql` deployment:
 $ helm --dry-run uninstall mysql
 
 # Uninstall chart
-$ helm --dry-run uninstall mysql
+$ helm uninstall mysql
 ```
 
 ## Configuration
