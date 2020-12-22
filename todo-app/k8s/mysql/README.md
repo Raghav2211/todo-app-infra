@@ -59,20 +59,13 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `service.type`                                 | Kubernetes service type                                                                    | `ClusterIP`|
 | `service.port`                                 | Service Port to be exposed outside                                                         | 3306 |
 | `resources`                                    | `mysql` CPU/Memory resource requests/limits                                                | `{}` |
-| `resources.limits`                             | `mysql` resource limits                                                                    | ` `  |
-| `resources.limits.cpu`                         | `mysql` CPU resource limits                                                                | ` `  |
-| `resources.limits.memory`                      | `mysql` Memory resource limits                                                             | ` `  |
-| `resources.requests`                           | `mysql` resource request configuration                                                     | ` `  |
-| `resources.requests.cpu`                       | `mysql` CPU resource request configuration                                                 | ` `  |
-| `resources.requests.memory`                    | `mysql` memory resource request configuration                                              | ` `  |
 | `persistence`                                  | persistence is to recover data after pod kill                                              | `{}` |
-| `persistence.enabled`                          | persistence for enabled or not                                                             | ` `  |
-| `persistence.local`                            | persistence for local enabled or not                                                       | ` `  |
+| `persistence.enabled`                          | persistence is enabled or not                                                              | `false `  |
 | `persistence.storageClass`                     | Type of persistent volume claim                                                            | ` `  |
 | `persistence.accessMode`                       | ReadWriteOnce or ReadOnly                                                                  | ` `  |
 | `persistence.size`                             | Size of persistent volume claim                                                            | ` `  |
 | `persistence.hostPath`                         | HostPath of the volume to mount                                                            | ` `  |
-| `config`                                      | Configuration for mysql                                                                    | `{ database: psi }`  |
+| `config`                                       | Configuration for mysql                                                                    | `{ database: psi }`  |
 | `config.database`                              |  Database name                                                                             | `psi`|
 | `username`                                     |  Database user name                                                                        | ` `  |
 | `password`                                     |  Database password                                                                         | ` `  |
