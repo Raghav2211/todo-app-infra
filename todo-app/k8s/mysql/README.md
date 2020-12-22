@@ -12,19 +12,23 @@ This chart bootstraps a single node MySQL deployment on a [Kubernetes](http://ku
 
 ## Installing the Chart
 
-To install the chart with the release name `mysql` with secret file,Execute dry run command for verification , then the command :
+To install the chart with the release name `mysql` with respective environment secret file:
 
 ```bash
-$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml
+# Verify the configuration 
+$ helm install --dry-run mysql mysql -f mysql/env/<env>/secret.yaml
+
+# Install chart
 $ helm install mysql mysql -f mysql/env/<env>/secret.yaml
 ```
 
-The above command deploys MySQL on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
-
-To install the chart with the release name `mysql` with secret file and with overridden default properties,Execute dry run command for verification, then the command:
+To install the chart with the release name `mysql` with respective environment secret and configuration file:
 
 ```bash
-$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
+# Verify the configuration 
+$ helm install --dry-run mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
+
+# Install chart
 $ helm install mysql mysql -f myslq/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
 ```
 
@@ -35,8 +39,6 @@ To uninstall/delete the `mysql` deployment:
 ```bash
 $ helm delete --purge mysql
 ```
-
-The command removes all the Kubernetes components associated with the chart and deletes the release completely.
 
 ## Configuration
 
