@@ -29,7 +29,7 @@ To install the chart with the release name `mysql` with respective environment s
 $ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
 
 # Install chart
-$ helm install mysql mysql -f mysql/env/<env>/secret.yaml -f psi-todo/env/<env>/values.yaml
+$ helm install mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
