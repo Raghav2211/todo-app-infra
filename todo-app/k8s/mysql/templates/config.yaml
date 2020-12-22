@@ -8,6 +8,9 @@ metadata:
     release: "{{ .Release.Name }}"
 data:
   url: {{ template "mysql.fullname" . }}
-{{- range $key, $val := .Values.mysqlConfig }}
+{{- if not .Values.config.database }}
+{{- fail "Database name is required" }}  
+{{- end }}
+{{- range $key, $val := .Values.config }}
   {{ $key }}: {{ $val | quote }}
 {{- end }}

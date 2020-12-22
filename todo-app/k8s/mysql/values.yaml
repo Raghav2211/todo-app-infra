@@ -27,9 +27,9 @@ persistence: {}
   #size: 1Gi
   #hostPath: /mnt/data
 
-#mysqlConfig :- Configuration for mysql
+#config :- Configuration for mysql
 #required url & database
-mysqlConfig:
+config:
   database: psi
 
 
