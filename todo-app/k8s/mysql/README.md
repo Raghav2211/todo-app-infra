@@ -44,34 +44,36 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `replicaCount`                                 | Number of instance to run at any time                                                   | 1                                              |
-| `image`                                          | `mysql` image configuration.                                                          | ` `                                             |
-| `image.repository`                            | `mysql` image repository.                                                             | `mysql`                                    |
-| `image.tag`                                     | `mysql` image tag.                                                                    | `8.0.22`                                                |
-| `service`                                        | `mysql` service configuration                                                         | ` `
-| 
-| `service.type`                               | Kubernetes service type                                                                      | ClusterIP                                            |
-| `service.port`                     | Service Port to be exposed outside                                                                      | 3306                                                 |
-| `resources`                     | `mysql` CPU/Memory resource requests/limits                                                                    | `{}`                                                 |
-| `resources.limits`                     | `mysql` resource limits                                                                    | ` `                                                 | 
-| `resources.limits.cpu`                     | `mysql` CPU resource limits                                                                    | ` `                                                 |
-| `resources.limits.memory`                     | `mysql` Memory resource limits                                                                    | ` `                                                 |
-| `resources.requests`                         | `mysql` resource request configuration                                                                    | ` `                                                 |
-| `resources.requests.cpu`                    | `mysql` CPU resource request configuration                                                                    | ` `                                                 |
-| `resources.requests.memory`                | `mysql` memory resource request configuration                                                                    | ` `                                                 |
-| `persistence`                                  | persistence is to recover data after pod kill                                                                    | `{}`                                                 |
-| `persistence.local`                          | persistence for local enabled or not                                                                    | ` `                                                 |
-| `persistence.storageClass`                 | Type of persistent volume claim                                                                    | ` `                                                 |
-| `persistence.accessMode`                 | ReadWriteOnce or ReadOnly                                                                   | ` `                                                 |
-| `persistence.size`                 | Size of persistent volume claim                                                                  | ` `                                                 |
-| `persistence.hostPath`                 | HostPath of the volume to mount                                                                  | ` `                                                 |
-| `mysqlConfig`                 | Configuration for mysql                                                                  | ` `                                                 |
-| `mysqlConfig.database`     |  database name                                                                 | `psi`                                                 |
-| `mysqlUsername`     |  database user name                                                                 | ` `                                                 |
-| `mysqlPassword`     |  database password                                                                 | ` `                                                 |
-| `affinityNodes`     | affinityNodes is the nodes list in which pod will deploy                                                                 | `[]`                                                 |
+| `replicaCount`                                 | Number of instance to run at any time                                                      | 1 |
+| `image`                                        | `mysql` image configuration.                                                               | ` ` |
+| `image.repository`                             | `mysql` image repository.                                                                  | `mysql`|
+| `image.tag`                                    | `mysql` image tag.                                                                         | `8.0.22`|
+| `service`                                      | `mysql` service configuration                                                              | ` ` |
+| `service.type`                                 | Kubernetes service type                                                                    | `ClusterIP`|
+| `service.port`                                 | Service Port to be exposed outside                                                         | 3306 |
+| `resources`                                    | `mysql` CPU/Memory resource requests/limits                                                | `{}` |
+| `resources.limits`                             | `mysql` resource limits                                                                    | ` `  |
+| `resources.limits.cpu`                         | `mysql` CPU resource limits                                                                | ` `  |
+| `resources.limits.memory`                      | `mysql` Memory resource limits                                                             | ` `  |
+| `resources.requests`                           | `mysql` resource request configuration                                                     | ` `  |
+| `resources.requests.cpu`                       | `mysql` CPU resource request configuration                                                 | ` `  |
+| `resources.requests.memory`                    | `mysql` memory resource request configuration                                              | ` `  |
+| `persistence`                                  | persistence is to recover data after pod kill                                              | `{}` |
+| `persistence.enabled`                          | persistence for local enabled or not                                                       | ` `  |
+| `persistence.storageClass`                     | Type of persistent volume claim                                                            | ` `  |
+| `persistence.accessMode`                       | ReadWriteOnce or ReadOnly                                                                  | ` `  |
+| `persistence.size`                             | Size of persistent volume claim                                                            | ` `  |
+| `persistence.hostPath`                         | HostPath of the volume to mount                                                            | ` `  |
+| `mysqlConfig`                                  | Configuration for mysql                                                                    | ` `  |
+| `mysqlConfig.database`                         |  database name                                                                             | `psi`|
+| `mysqlUsername`                                |  database user name                                                                        | ` `  |
+| `mysqlPassword`                                |  database password                                                                         | ` `  |
+| `affinityNodes`                                | affinityNodes is the nodes list in which pod will deploy                                   | `[]` |
+
+
+
 ## Persistence
 
 Persistence configuration stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
 
-PersistentVolume will be created for local if `persistence.local` is set to true and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.local` should be set as false.
+PersistentVolume will be created for local if `persistence.enabled` is set to true and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set as false.
