@@ -1,4 +1,4 @@
-# Deploy Todo Application in K8s cluster using helm
+# Deploy Todo Application to K8s cluster using helm
 
 - Local Deployment
 
