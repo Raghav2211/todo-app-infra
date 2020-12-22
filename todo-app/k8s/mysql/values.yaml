@@ -33,8 +33,9 @@ config:
 
 
 # Database user name and password
-#username: psi
-#password: psi
+#username:
+#password:
+#rootPassword:
 
   
 # nodeAffinity policy

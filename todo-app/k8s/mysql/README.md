@@ -69,6 +69,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 | `config.database`                              |  Database name                                                                             | `psi`|
 | `username`                                     |  Database user name                                                                        | ` `  |
 | `password`                                     |  Database password                                                                         | ` `  |
+| `rootPassword`                                  |  Database root user password                                                              | ` `  |
 | `nodeAffinity`                                 | Assign Pods to Nodes using Node Affinity                                                   | `[]` |
 
 

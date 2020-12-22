@@ -35,11 +35,21 @@ spec:
               mountPath: /var/lib/mysql
           {{- end }}        
           env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ template "mysql.fullname" . }}-secret
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: password
+                  key: rootPassword
                   name: {{ template "mysql.fullname" . }}-secret
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: root-password
+                  name: {{ template "mysql.fullname" . }}-secret                  
             - name: MYSQL_DATABASE
               valueFrom:
                 configMapKeyRef:
