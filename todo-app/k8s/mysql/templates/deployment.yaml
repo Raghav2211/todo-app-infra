@@ -40,10 +40,10 @@ spec:
                 secretKeyRef:
                   key: username
                   name: {{ template "mysql.fullname" . }}-secret
-            - name: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: rootPassword
+                  key: password
                   name: {{ template "mysql.fullname" . }}-secret
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
