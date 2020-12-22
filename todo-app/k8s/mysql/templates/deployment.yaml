@@ -12,21 +12,13 @@ spec:
     metadata:
       labels: {{- include "mysql.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.nodeAffinity }}
       affinity:
+      {{- end }}                                     
+      {{- with .Values.nodeAffinity }}
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                 - key: kubernetes.io/hostname
-                   operator: In
-                   values:
-{{- if .Values.affinityNodes -}}                    
-                   {{- range .Values.affinityNodes }}
-                     - {{ . }}
-                   {{- end }}
-{{else}}
-                     - {{ default "minikube" }}
-{{end}}                                        
+{{ toYaml . | indent 10 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
