@@ -39,7 +39,11 @@ $ helm install psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/e
 To uninstall/delete the `psi-todo` deployment:
 
 ```bash
-$ helm delete psi-todo
+# Verify the configuration 
+$ helm --dry-run uninstall psi-todo
+
+# Uninstall chart
+$ helm uninstall psi-todo
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release completely.
