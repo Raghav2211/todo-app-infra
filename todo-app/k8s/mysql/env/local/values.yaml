@@ -8,6 +8,7 @@ nodeAffinity:
              - minikube
 
 persistence:
+  enabled: true
   local: true
   storageClass: local 
   accessMode: 

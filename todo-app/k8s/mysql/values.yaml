@@ -19,7 +19,8 @@ resources: {}
 
 #persistence is to recover data after pod kill
 persistence: {}
-  #local: false
+  #local: false 
+  #enabled: false
   #storageClass: local 
   #accessMode: 
   #  - ReadWriteOnce

@@ -29,9 +29,11 @@ spec:
           livenessProbe:
             tcpSocket:
               port: tcp
+          {{- if .Values.persistence.enabled }}              
           volumeMounts:
             - name: mysql-storage
-              mountPath: /var/lib/mysql    
+              mountPath: /var/lib/mysql
+          {{- end }}        
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -45,9 +47,9 @@ spec:
                   name: {{ template "mysql.fullname" . }}-config    
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.persistence.enabled }}      
       volumes:
         - name: mysql-storage
-        {{- if .Values.persistence.local }}
           persistentVolumeClaim:
             claimName: {{ template "mysql.fullname" . }}-claim
-        {{end}}    
+      {{end}}    

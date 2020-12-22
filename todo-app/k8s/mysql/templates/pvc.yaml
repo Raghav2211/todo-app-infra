@@ -1,4 +1,4 @@
-{{- if .Values.persistence }}
+{{- if .Values.persistence.enabled }}
 kind: PersistentVolume
 apiVersion: v1
 metadata:
@@ -17,22 +17,15 @@ spec:
       storage: {{ .Values.persistence.size }}
 {{- if .Values.persistence.local }}      
   hostPath:
-    path: {{ .Values.persistence.hostPath | required "Local path is required" | quote }}
-{{end}}    
+    path: {{ .Values.persistence.hostPath | required "Host path is required" | quote }}
+{{end}}
+  {{- if .Values.nodeAffinity }}    
   nodeAffinity:
+  {{- end }}
+  {{- with .Values.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution }}
     required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-{{- if .Values.affinityNodes -}}                                    
-              {{- range .Values.affinityNodes }}
-                  - {{ . }}
-              {{- end }}
-{{else}}
-                  - {{ default "minikube" }}              
-{{end}}                                   
+{{ toYaml . | indent 10 }}
+      {{- end }}                              
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
