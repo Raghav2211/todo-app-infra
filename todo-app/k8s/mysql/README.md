@@ -76,4 +76,4 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 Persistence configuration stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
 
-PersistentVolume will be created for local if `persistence.enabled` is set to true and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set as false.
+PersistentVolume will be created for local if `persistence.enabled` is set to `true` and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set as `false`.
