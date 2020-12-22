@@ -1,9 +1,9 @@
 #Default values fo mysql
-replicaCount: 1
+#replica: 1
 image:
-  repository: mysql
+#  repository: mysql
   pullPolicy: IfNotPresent
-  tag: "8.0.22"
+#  tag: "8.0.22"
 
 service:
   type: ClusterIP
@@ -19,7 +19,6 @@ resources: {}
 
 #persistence is to recover data after pod kill
 persistence: {}
-  #local: false 
   #enabled: false
   #storageClass: local 
   #accessMode: 

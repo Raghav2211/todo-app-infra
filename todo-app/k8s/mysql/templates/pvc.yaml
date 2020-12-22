@@ -14,11 +14,9 @@ spec:
         - {{ . }}
     {{end}}        
   capacity:
-      storage: {{ .Values.persistence.size }}
-{{- if .Values.persistence.local }}      
+      storage: {{ .Values.persistence.size }}   
   hostPath:
     path: {{ .Values.persistence.hostPath | required "Host path is required" | quote }}
-{{end}}
   {{- if .Values.nodeAffinity }}    
   nodeAffinity:
   {{- end }}

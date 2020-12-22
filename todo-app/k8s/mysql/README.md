@@ -50,7 +50,7 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `replicaCount`                                 | Number of instance to run at any time                                                      | 1 |
+| `replica`                                 | Number of instance to run at any time                                                      | 1 |
 | `image`                                        | `mysql` image configuration.                                                               | ` ` |
 | `image.repository`                             | `mysql` image repository.                                                                  | `mysql`|
 | `image.pullPolicy`                             | `mysql` image pull policy.                                                                 | `IfNotPresent`|

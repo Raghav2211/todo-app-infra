@@ -9,7 +9,6 @@ nodeAffinity:
 
 persistence:
   enabled: true
-  local: true
   storageClass: local 
   accessMode: 
     - ReadWriteOnce
