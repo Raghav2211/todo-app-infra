@@ -78,6 +78,6 @@ The following table lists the configurable parameters of the MySQL chart and the
 
 ## Persistence
 
-Persistence configuration stores the MySQL data and configurations at the `/var/lib/mysql` path of the container.
+A PersistentVolume (PV) is a piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes. It is a resource in the cluster just like a node is a cluster resource. PVs are volume plugins like Volumes, but have a lifecycle independent of any individual Pod that uses the PV, so even if the application pod gets down still the backend data will be retained and when applicatin pod will be up then , persisted data can be accessed.
 
 PersistentVolume will be created if `persistence.enabled` is set to `true` and if true then data will be  mounted into specified directory. In order to disable this functionality `persistence.enabled` should be set to `false`.
