@@ -45,10 +45,10 @@ The following table lists the configurable parameters of the MySQL chart and the
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `replicaCount`                                 | Number of instance to run at any time                                                   | 1                                              |
-| `image`                                   | `mysql` image configuration.                                                                          | ` `                                             |
-| `image.repository`                            | `mysql` image repository.                                                                         | mysql                                       |
-| `image.tag`                                  | `mysql` image tag.                                                              | `8.0.22`                                                |
-| `service`                              | `mysql` service configuration                            | ` `                                 |
+| `image`                                          | `mysql` image configuration.                                                          | ` `                                             |
+| `image.repository`                            | `mysql` image repository.                                                             | `mysql`                                    |
+| `image.tag`                                     | `mysql` image tag.                                                                    | `8.0.22`                                                |
+| `service`                                        | `mysql` service configuration                                                         | ` `
 | 
 | `service.type`                               | Kubernetes service type                                                                      | ClusterIP                                            |
 | `service.port`                     | Service Port to be exposed outside                                                                      | 3306                                                 |
