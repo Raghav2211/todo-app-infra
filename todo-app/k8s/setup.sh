@@ -28,7 +28,6 @@ enable_hyperv_win(){
   exit_if_fail;
 }
 create_internal_swtich(){
-  echo "Creating Virtual Switch of type Internal....."  
   chmod +x CreateInternalSwitch.ps1
   powershell.exe -ExecutionPolicy RemoteSigned -File './CreateInternalSwitch.ps1'
   exit_if_fail;
