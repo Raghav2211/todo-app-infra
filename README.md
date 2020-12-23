@@ -1,10 +1,17 @@
 ![Build](https://github.com/Raghav2211/psi-lab/workflows/Build/badge.svg)
 
 # PSI Lab
-Practical examples with k8s on local & AWS environment
+
+P: Stands for PaaS  
+S: Stands for SaaS  
+I: Stands for IaaS  
+
+This repo cook sample applications and follow best practices to deploy them in different environment. 
 
 #### TASK LIST ####
-- [X] Todo App deployment on Kubernetes using Helm
+- [X] Todo App deployment on local using docker-compose
+- [X] Todo App deployment on local using swarm
+- [X] Todo App deployment on local k8s using Helm
 - [ ] Todo App deployment on AWS, Azure, GCP & Heroku
 - [ ] Add Prometheus,Grafana & Tracing
 - [ ] Add CI/CD (github action)
