@@ -2,9 +2,9 @@
 
 # PSI Lab
 
-P: Stands for PaaS
-S: Stands for SaaS
-I: Stands for IaaS
+P: Stands for PaaS  
+S: Stands for SaaS  
+I: Stands for IaaS  
 
 This repo cook sample applications and follow best practises to deploy them in different environment. 
 
