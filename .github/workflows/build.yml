@@ -43,3 +43,10 @@ jobs:
       run: |
         sleep 120
         docker run --network container:psi-todo appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/actuator/health
+    - name: Failure Result
+      if: ${{ failure() }}
+      run: |
+        docker logs mysql
+        docker logs psi-todo
+
+      

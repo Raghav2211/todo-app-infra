@@ -83,8 +83,8 @@ The following table lists the configurable parameters of the TodoApp swarm clust
   `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
   `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
   `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                
-  `MYSQL_USER` | Username of new user to create | `root`        
-  `MYSQL_PASSWORD` | Password for the new user | `root`            
-  `MYSQL_DATABASE` | Name for new database to create | `psi`                
+  `MYSQL_USER` | Username of new user to create | ``        
+  `MYSQL_PASSWORD` | Password for the new user | ``            
+  `MYSQL_ROOT_PASSWORD` | Password for the root user | ``              
+  `MYSQL_DATABASE` | Name for new database to create | ``                
   `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
-  `MYSQL_DATA_DEST_PATH` | Mount directory path in mysql container | `/var/lib/mysql`       

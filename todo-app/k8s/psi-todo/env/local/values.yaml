@@ -1,2 +1,2 @@
-todoConfig:
+config:
   securityBasicAuthEnable: true

@@ -1,9 +1,9 @@
 #Default values fo mysql
-replicaCount: 1
+#replica: 1
 image:
-  repository: mysql
+#  repository: mysql
   pullPolicy: IfNotPresent
-  tag: "8.0.22"
+#  tag: "8.0.22"
 
 service:
   type: ClusterIP
@@ -19,18 +19,24 @@ resources: {}
 
 #persistence is to recover data after pod kill
 persistence: {}
-  #local: false
+  #enabled: false
   #storageClass: local 
   #accessMode: 
   #  - ReadWriteOnce
   #size: 1Gi
   #hostPath: /mnt/data
 
-#mysqlConfig :- Configuration for mysql
+#config :- Configuration for mysql
 #required url & database
-mysqlConfig:
+config:
   database: psi
 
-# affinityNodes is the nodes list in which pod will deploy
-# default - minikube
-affinityNodes: []
+
+# Database user name and password
+#username:
+#password:
+#rootPassword:
+
+  
+# nodeAffinity policy
+nodeAffinity: {}

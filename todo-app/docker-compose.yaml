@@ -3,8 +3,10 @@ services:
   psimysql:
     image: mysql:${MYSQL_IMAGE_TAG}
     environment:
+      MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   psitodoapp:
     image: psi-todo:${PSI_TODO_IMAGE_TAG:-latest}
     depends_on:
