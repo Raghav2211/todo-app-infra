@@ -1,7 +1,12 @@
 ![Build](https://github.com/Raghav2211/psi-lab/workflows/Build/badge.svg)
 
 # PSI Lab
-Practical examples with k8s on local & AWS environment
+
+P: Stands for PaaS
+S: Stands for SaaS
+I: Stands for IaaS
+
+This repo cook sample applications and follow best practises to deploy them in different environment. 
 
 #### TASK LIST ####
 - [X] Todo App deployment on Kubernetes using Helm
