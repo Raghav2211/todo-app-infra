@@ -42,6 +42,6 @@ security: {}
 #    username: # Basic auth username
 #    password: # Basic auth password
 
-# todoConfig :- Config for todoApp
+# config :- Config for todoApp
 config:
   securityBasicAuthEnable: false # Enable/ Disable basic-auth    

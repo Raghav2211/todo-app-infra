@@ -73,7 +73,7 @@ spec:
                 configMapKeyRef:
                   key: securityBasicAuthEnable
                   name: {{ include "psi-todo.fullname" . }}-config 
-            {{- if .Values.todoConfig.securityBasicAuthEnable }}                                               
+            {{- if .Values.config.securityBasicAuthEnable }}                                               
             - name: PSI_TODO_SECURITY_BASIC_AUTH_USERNAME
               valueFrom:
                 secretKeyRef:
