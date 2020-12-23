@@ -16,20 +16,20 @@ To install the chart with the release name `mysql` with respective environment s
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml
+$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secrets.yaml
 
 # Install chart
-$ helm install mysql mysql -f mysql/env/<env>/secret.yaml
+$ helm install mysql mysql -f mysql/env/<env>/secrets.yaml
 ```
 
 To install the chart with the release name `mysql` with respective environment secret and configuration file:
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
+$ helm install --dry-run --debug mysql mysql -f mysql/env/<env>/secrets.yaml -f mysql/env/<env>/values.yaml
 
 # Install chart
-$ helm install mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/values.yaml
+$ helm install mysql mysql -f mysql/env/<env>/secrets.yaml -f mysql/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart

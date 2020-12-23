@@ -11,7 +11,7 @@ This chart bootstraps a single node Todo App deployment on a [Kubernetes](http:/
 
 ## Installing the Chart
 
-To install the chart with the release name `psi-todo`,Execute dry run command for verification , then the command :
+To install the chart with the release name `psi-todo`:
 
 ```bash
 # Verify the configuration 
@@ -21,17 +21,14 @@ $ helm install --dry-run --debug psi-todo psi-todo
 $ helm install psi-todo psi-todo
 ```
 
-
-The above command deploys Todo App on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
-
-To install the chart with the release name `psi-todo` with secrets from secret env file and with overridden default properties,Execute dry run command for verification, then the command:
+To install the chart with the release name `psi-todo` with respective environment secret and configuration file:
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/env/<env>/values.yaml
+$ helm install --dry-run --debug psi-todo psi-todo -f psi-todo/env/<env>/secrets.yaml -f psi-todo/env/<env>/values.yaml
 
 # Install chart
-$ helm install psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/env/<env>/values.yaml
+$ helm install psi-todo psi-todo -f psi-todo/env/<env>/secrets.yaml -f psi-todo/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
