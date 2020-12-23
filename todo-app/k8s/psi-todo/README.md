@@ -39,10 +39,6 @@ $ helm install psi-todo psi-todo -f psi-todo/env/<env>/secret.yaml -f psi-todo/e
 To uninstall/delete the `psi-todo` deployment:
 
 ```bash
-# Verify the configuration 
-$ helm --dry-run uninstall psi-todo
-
-# Uninstall chart
 $ helm uninstall psi-todo
 ```
 

@@ -37,10 +37,6 @@ $ helm install mysql mysql -f mysql/env/<env>/secret.yaml -f mysql/env/<env>/val
 To uninstall/delete the `mysql` deployment:
 
 ```bash
-# Verify the configuration 
-$ helm --dry-run uninstall mysql
-
-# Uninstall chart
 $ helm uninstall mysql
 ```
 
