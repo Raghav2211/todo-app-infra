@@ -5,11 +5,11 @@ provider "aws" {
 module "vpc" {
   source = "../modules/network"
 
-  name   = var.name
+  name = var.name
 
-  env    = "lab"
+  env = "lab"
 
-  cidr   = var.cidr
+  cidr = var.cidr
 
   #  public_subnets = "${var.public_subnets}"
 }
