@@ -3,6 +3,8 @@ name: "Terraform Plan"
 # Trigger when a pull request is received
 on:
   pull_request:
+    paths: 
+      - '**.tf'    
 
 jobs:
   terraform-plan:
@@ -35,18 +37,15 @@ jobs:
       # Init pulls credentials from the .aws/credentials file by default
       - name: "Run - Terraform Init"
         run: |
-          cd lab
-          terraform init -input=false
+          terraform init -input=false lab
       
       - name: "Run - Terraform Format check"
         run: |
-          cd lab
-          terraform fmt -check
+          terraform fmt -check lab
       
       - name: "Run - Terraform Validate"
         run: |
-          cd lab
-          terraform validate
+          terraform validate lab
 
       # The id value is used for reference in the comment step via "steps.plan.outputs.stdout"
       # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
