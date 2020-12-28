@@ -11,6 +11,9 @@ module "vpc" {
   enable_nat_gateway = true
   single_nat_gateway = false
   one_nat_gateway_per_az = true
+  reuse_nat_ips =true                          # <= Skip creation of EIPs for the NAT Gateways
+  external_nat_ip_ids = aws_eip.nat.*.id       # <= IPs specified here as input to the module
+
 
   tags = {
     App         = var.name
@@ -19,3 +22,7 @@ module "vpc" {
 
 }
 
+resource "aws_eip" "nat" {
+  count = length(var.azs)
+  vpc = true
+}
