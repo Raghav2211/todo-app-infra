@@ -16,6 +16,7 @@ on:
       - 'todo-app/swarm/**'
       - 'todo-app/aws/**'
       - '**/README.md'
+      - '.github/**'
 
 jobs:
   build:
