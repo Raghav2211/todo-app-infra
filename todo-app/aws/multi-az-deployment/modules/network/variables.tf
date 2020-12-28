@@ -16,12 +16,6 @@ variable "azs" {
   default     = []
 }
 
-variable "private_subnets" {
-  description = "A list of private subnets inside the VPC"
-  type        = list
-  default     = []
-}
-
 variable "public_subnets" {
   description = "A list of public subnets inside the VPC"
   type        = list
@@ -30,6 +24,12 @@ variable "public_subnets" {
 
 variable "intra_subnets" {
   description = "A list of intra subnets inside the VPC which has no internet access"
+  type        = list
+  default     = []
+}
+
+variable "database_subnets" {
+  description = "A list of database subnets"
   type        = list
   default     = []
 }
