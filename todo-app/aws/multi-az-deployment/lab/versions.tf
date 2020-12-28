@@ -1,11 +1,7 @@
 terraform {
 
-  backend "remote" {
-    organization = "psi-lab"
-
-    workspaces {
-      name = "gh-actions-demo"
-    }
+  backend "local" {
+    path = "terraform.tfstate"
   }
 
   required_providers {
