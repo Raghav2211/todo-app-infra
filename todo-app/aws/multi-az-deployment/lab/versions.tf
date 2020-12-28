@@ -1,12 +1,10 @@
 terraform {
 
-  terraform {
-    backend "remote" {
-      organization = "psi-lab"
+  backend "remote" {
+    organization = "psi-lab"
 
-      workspaces {
-        name = "gh-actions-demo"
-      }
+    workspaces {
+      name = "gh-actions-demo"
     }
   }
 
