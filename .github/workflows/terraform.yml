@@ -3,6 +3,8 @@ name: "Terraform Plan"
 # Trigger when a pull request is received
 on:
   pull_request:
+    paths-ignore: 
+      - '**/README.md'
     paths: 
       - '**.tf'    
 
