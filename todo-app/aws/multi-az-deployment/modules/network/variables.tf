@@ -1,5 +1,14 @@
-variable "name" {
-  description = "Name to be used on all the resources as identifier"
+variable "app_id" {
+  description = "Application identifier"
+  default = "psi"
+}
+
+variable "app_name" {
+  description = "Application Name"
+}
+
+variable "app_version" {
+  description = "Application Version"
 }
 
 variable "env" {
@@ -22,8 +31,8 @@ variable "public_subnets" {
   default     = []
 }
 
-variable "intra_subnets" {
-  description = "A list of intra subnets inside the VPC which has no internet access"
+variable "private_subnets" {
+  description = "A list of private subnets inside the VPC"
   type        = list
   default     = []
 }

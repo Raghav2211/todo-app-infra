@@ -2,13 +2,13 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.64.0"
 
-  name = "${var.name}-${var.env}"
+  name = "${var.app_name}-${var.env}"
   cidr = var.cidr
   azs = var.azs
 
   # subnets
   public_subnets = var.public_subnets
-  intra_subnets  = var.intra_subnets
+  private_subnets = var.private_subnets
   database_subnets = var.database_subnets
 
   # gateways
@@ -16,22 +16,18 @@ module "vpc" {
   single_nat_gateway = false
   one_nat_gateway_per_az = true
 
-  # ip(s)
-  reuse_nat_ips =true                          # <= Skip creation of EIPs for the NAT Gateways
-  external_nat_ip_ids = aws_eip.nat.*.id       # <= IPs specified here as input to the module
-
   # database
   create_database_subnet_group = true
+  create_database_subnet_route_table = true
 
 
   tags = {
-    App         = var.name
+    AppId       = var.app_id    
+    App         = var.app_name
+    Version     = var.app_version
+    Role        = "infra"
     Environment = var.env
+    #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }
 
-}
-
-resource "aws_eip" "nat" {
-  count = length(var.azs)
-  vpc = true
 }
