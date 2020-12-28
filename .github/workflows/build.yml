@@ -8,6 +8,7 @@ on:
       - 'todo-app/swarm/**'
       - 'todo-app/aws/**'
       - '**/README.md'
+      - '.github/**'
   pull_request:
     branches: [ main ]
     paths-ignore: 
