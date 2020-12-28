@@ -37,26 +37,36 @@ jobs:
         run: |
           cd lab
           terraform init -input=false
+      
+      - name: "Run - Terraform Format check"
+        run: |
+          cd lab
+          terraform fmt -check
+      
+      - name: "Run - Terraform Validate"
+        run: |
+          cd lab
+          terraform validate
 
       # The id value is used for reference in the comment step via "steps.plan.outputs.stdout"
       # Note: Color is disabled to prevent messy characters from appearing in the pull request comment
-      - name: "Run - Terraform Plan"
-        id: plan
-        run: |
-          cd lab
-          terraform plan -input=false -no-color
+#       - name: "Run - Terraform Plan"
+#         id: plan
+#         run: |
+#           cd lab
+#           terraform plan -input=false -no-color
 
-      # Submit a comment with the plan output to the pull request
-      - name: "Run - Terraform Comment"
-        uses: actions/github-script@0.9.0
-        env:
-          STDOUT: "```${{ steps.plan.outputs.stdout }}```"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: process.env.STDOUT
-            })
+#       # Submit a comment with the plan output to the pull request
+#       - name: "Run - Terraform Comment"
+#         uses: actions/github-script@0.9.0
+#         env:
+#           STDOUT: "```${{ steps.plan.outputs.stdout }}```"
+#         with:
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           script: |
+#             github.issues.createComment({
+#               issue_number: context.issue.number,
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               body: process.env.STDOUT
+#             })
