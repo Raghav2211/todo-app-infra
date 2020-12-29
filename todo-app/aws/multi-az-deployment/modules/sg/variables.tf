@@ -1,0 +1,31 @@
+variable "app_id" {
+  description = "Application identifier"
+  default = "psi"
+}
+
+variable "app_name" {
+  description = "Application Name"
+}
+
+variable "app_version" {
+  description = "Application Version"
+}
+
+variable "env" {
+  description = "Environment identifier"
+}
+
+variable "vpc_id" {
+  type = string
+  description = "ID of vpc where security group will create "
+}
+
+variable "description" {
+  type = string
+  description = "Secuity group description"
+}
+
+variable "ingress_cidr" {
+  type = list
+  description = "Ingress CIDR blocks for the security group"
+}

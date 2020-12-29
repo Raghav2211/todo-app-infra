@@ -6,7 +6,7 @@ module "vpc" {
   source           = "../modules/network"
   app_name         = var.app_name
   app_version      = var.app_version
-  env              = "lab"
+  env              = var.env
   cidr             = var.cidr
   azs              = var.azs
   public_subnets   = var.public_subnets
