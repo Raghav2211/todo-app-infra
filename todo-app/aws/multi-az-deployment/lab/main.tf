@@ -31,7 +31,7 @@ module "vpc" {
 ###############################
 #       Security Groups       #
 ###############################
-module "bastion_ssh" {
+module "bastion_sg" {
   source       = "../modules/sg/ssh"
   app          = merge(local.app_vars, { suffix : "bastion" })
   vpc_id       = module.vpc.vpc_id
@@ -40,7 +40,7 @@ module "bastion_ssh" {
 
 }
 
-module "loadbalancer_http_80_443" {
+module "loadbalancer_sg" {
   source       = "../modules/sg/http-80-443"
   app          = merge(local.app_vars, { suffix : "lb" })
   vpc_id       = module.vpc.vpc_id
@@ -50,7 +50,7 @@ module "loadbalancer_http_80_443" {
 }
 
 
-module "app_http_8080_443_22" {
+module "app_sg" {
   source      = "../modules/sg/http-8080-443"
   app         = merge(local.app_vars, { suffix : "" })
   vpc_id      = module.vpc.vpc_id
@@ -58,7 +58,24 @@ module "app_http_8080_443_22" {
   ingress_with_sg_id = [
     {
       rule                     = "ssh-tcp"
-      source_security_group_id = module.bastion_ssh.sg_id
+      source_security_group_id = module.bastion_sg.sg_id
+    },
+    {
+      rule                     = "http-8080-tcp"
+      source_security_group_id = module.loadbalancer_sg.sg_id
+    }
+  ]
+
+}
+
+module "mysql_sg" {
+  source      = "../modules/sg/mysql"
+  app         = merge(local.app_vars, { suffix : "mysql" })
+  vpc_id      = module.vpc.vpc_id
+  ingress_with_sg_id = [
+    {
+      rule                     = "mysql-tcp"
+      source_security_group_id = module.app_sg.sg_id
     }
   ]
 
