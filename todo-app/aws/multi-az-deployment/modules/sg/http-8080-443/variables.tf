@@ -1,20 +1,13 @@
-variable "app_id" {
-  description = "Application identifier"
-  default     = "psi"
-}
-
-variable "app_vars" {
+variable "app" {
   type = object(
     {
-      name                   = string
-      version               = string
-      env           = string
+      id      = string
+      name    = string
+      version = string
+      env     = string
+      suffix  = string
     }
   )
-}
-
-variable "name_suffix" {
-  description = "Suffix for sg name"
 }
 
 variable "vpc_id" {

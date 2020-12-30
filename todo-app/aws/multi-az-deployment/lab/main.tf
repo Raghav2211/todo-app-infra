@@ -8,6 +8,7 @@ data "http" "myip" {
 
 locals {
   app_vars = {
+    id      = "psi"
     name    = var.app_name
     version = var.app_version
     env     = var.env
@@ -19,7 +20,7 @@ locals {
 ###############################
 module "vpc" {
   source           = "../modules/network"
-  app_vars         = local.app_vars
+  app              = merge(local.app_vars, { suffix : "" })
   cidr             = var.cidr
   azs              = var.azs
   public_subnets   = var.public_subnets
@@ -32,8 +33,7 @@ module "vpc" {
 ###############################
 module "bastion_ssh" {
   source       = "../modules/sg/ssh"
-  app_vars     = local.app_vars
-  name_suffix  = "bastion"
+  app          = merge(local.app_vars, { suffix : "bastion" })
   vpc_id       = module.vpc.vpc_id
   description  = "Bastion host security group"
   ingress_cidr = concat(var.sg_bastion_ingress_cidrs, ["${chomp(data.http.myip.body)}/32"])
@@ -42,8 +42,7 @@ module "bastion_ssh" {
 
 module "loadbalancer_http_80_443" {
   source       = "../modules/sg/http-80-443"
-  app_vars     = local.app_vars
-  name_suffix  = "lb"
+  app          = merge(local.app_vars, { suffix : "lb" })
   vpc_id       = module.vpc.vpc_id
   description  = "Load Balancer host security group"
   ingress_cidr = concat(var.sg_loadbalancer_ingress_cidrs, ["0.0.0.0/0"])
@@ -53,8 +52,7 @@ module "loadbalancer_http_80_443" {
 
 module "app_http_8080_443_22" {
   source      = "../modules/sg/http-8080-443"
-  app_vars    = local.app_vars
-  name_suffix = ""
+  app         = merge(local.app_vars, { suffix : "" })
   vpc_id      = module.vpc.vpc_id
   description = "Todo App security group"
   ingress_with_sg_id = [

@@ -1,14 +1,11 @@
-variable "app_id" {
-  description = "Application identifier"
-  default     = "psi"
-}
-
-variable "app_vars" {
+variable "app" {
   type = object(
     {
+      id      = string
       name    = string
       version = string
       env     = string
+      suffix  = string
     }
   )
 }
