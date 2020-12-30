@@ -1,6 +1,6 @@
 variable "app_id" {
   description = "Application identifier"
-  default = "psi"
+  default     = "psi"
 }
 
 variable "app_name" {

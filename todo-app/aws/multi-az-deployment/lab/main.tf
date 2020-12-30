@@ -47,3 +47,21 @@ module "loadbalancer_http_80_443" {
   ingress_cidr = concat(var.sg_loadbalancer_ingress_cidrs, ["0.0.0.0/0"])
 
 }
+
+
+module "app_http_8080_443_22" {
+  source      = "../modules/sg/http-8080-443"
+  app_name    = var.app_name
+  app_version = var.app_version
+  env         = var.env
+  name_suffix = ""
+  vpc_id      = module.vpc.vpc_id
+  description = "Todo App security group"
+  ingress_with_sg_id = [
+    {
+      rule                     = "ssh-tcp"
+      source_security_group_id = module.bastion_ssh.sg_id
+    }
+  ]
+
+}

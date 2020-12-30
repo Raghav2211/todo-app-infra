@@ -1,6 +1,6 @@
 variable "app_id" {
   description = "Application identifier"
-  default = "psi"
+  default     = "psi"
 }
 
 variable "app_name" {
@@ -16,20 +16,21 @@ variable "env" {
 }
 
 variable "name_suffix" {
-  description = "Suffix for sg name"  
+  description = "Suffix for sg name"
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "ID of vpc where security group will create "
 }
 
 variable "description" {
-  type = string
+  type        = string
   description = "Secuity group description"
 }
 
 variable "ingress_cidr" {
-  type = list
+  type        = list
   description = "Ingress CIDR blocks for the security group"
+  default     = []
 }

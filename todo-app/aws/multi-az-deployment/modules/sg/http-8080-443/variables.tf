@@ -32,10 +32,15 @@ variable "description" {
 variable "ingress_cidr" {
   type        = list
   description = "Ingress CIDR blocks for the security group"
+  default     = []
 }
 
 variable "http443enable" {
   type        = bool
   description = "Whether to enable https with http/80"
   default     = true
+}
+
+variable "ingress_with_sg_id" {
+  type = list(map(string))
 }
