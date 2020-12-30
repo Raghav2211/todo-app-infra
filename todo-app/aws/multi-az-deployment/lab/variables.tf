@@ -26,8 +26,12 @@ variable "private_subnets" {}
 
 variable "database_subnets" {}
 
-variable "sg_bastion_cidrs" {
+variable "sg_bastion_ingress_cidrs" {
   default = []
 
+}
+
+variable "sg_loadbalancer_ingress_cidrs" {
+  default = []
 }
 

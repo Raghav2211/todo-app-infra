@@ -25,14 +25,25 @@ module "vpc" {
 #       Security Groups       #
 ###############################
 module "bastion_ssh" {
-  source      = "../modules/sg"
-  app_name    = var.app_name
-  app_version = var.app_version
-  env         = var.env
-  # add bastion suffix
-  #name                = "${var.app_name}-${var.env}-bastion"
+  source       = "../modules/sg/ssh"
+  app_name     = var.app_name
+  app_version  = var.app_version
+  env          = var.env
+  name_suffix  = "bastion"
   vpc_id       = module.vpc.vpc_id
   description  = "Bastion host security group"
-  ingress_cidr = concat(var.sg_bastion_cidrs, ["${chomp(data.http.myip.body)}/32"])
+  ingress_cidr = concat(var.sg_bastion_ingress_cidrs, ["${chomp(data.http.myip.body)}/32"])
+
+}
+
+module "loadbalancer_http_80_443" {
+  source       = "../modules/sg/http-80-443"
+  app_name     = var.app_name
+  app_version  = var.app_version
+  env          = var.env
+  name_suffix  = "lb"
+  vpc_id       = module.vpc.vpc_id
+  description  = "Load Balancer host security group"
+  ingress_cidr = concat(var.sg_loadbalancer_ingress_cidrs, ["0.0.0.0/0"])
 
 }

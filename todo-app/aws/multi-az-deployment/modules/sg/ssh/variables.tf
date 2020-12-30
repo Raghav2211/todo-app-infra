@@ -15,6 +15,10 @@ variable "env" {
   description = "Environment identifier"
 }
 
+variable "name_suffix" {
+  description = "Suffix for sg name"  
+}
+
 variable "vpc_id" {
   type = string
   description = "ID of vpc where security group will create "
