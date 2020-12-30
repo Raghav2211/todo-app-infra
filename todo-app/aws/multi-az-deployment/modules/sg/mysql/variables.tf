@@ -18,7 +18,7 @@ variable "vpc_id" {
 variable "description" {
   type        = string
   description = "Secuity group description"
-  default = "Mysql security group"
+  default     = "Mysql security group"
 }
 
 variable "ingress_cidr" {

@@ -69,9 +69,9 @@ module "app_sg" {
 }
 
 module "mysql_sg" {
-  source      = "../modules/sg/mysql"
-  app         = merge(local.app_vars, { suffix : "mysql" })
-  vpc_id      = module.vpc.vpc_id
+  source = "../modules/sg/mysql"
+  app    = merge(local.app_vars, { suffix : "mysql" })
+  vpc_id = module.vpc.vpc_id
   ingress_with_sg_id = [
     {
       rule                     = "mysql-tcp"
