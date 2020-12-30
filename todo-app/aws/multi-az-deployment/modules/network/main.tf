@@ -2,7 +2,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.64.0"
 
-  name = "${var.app_name}-${var.env}"
+  name = "${var.app_vars.name}-${var.app_vars.env}"
   cidr = var.cidr
   azs  = var.azs
 
@@ -23,10 +23,10 @@ module "vpc" {
 
   tags = {
     AppId       = var.app_id
-    App         = var.app_name
-    Version     = var.app_version
+    App         = var.app_vars.name
+    Version     = var.app_vars.version
     Role        = "infra"
-    Environment = var.env
+    Environment = var.app_vars.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }
 

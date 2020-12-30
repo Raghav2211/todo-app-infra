@@ -3,16 +3,14 @@ variable "app_id" {
   default     = "psi"
 }
 
-variable "app_name" {
-  description = "Application Name"
-}
-
-variable "app_version" {
-  description = "Application Version"
-}
-
-variable "env" {
-  description = "Environment identifier"
+variable "app_vars" {
+  type = object(
+    {
+      name    = string
+      version = string
+      env     = string
+    }
+  )
 }
 
 variable "name_suffix" {

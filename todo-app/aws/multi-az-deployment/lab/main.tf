@@ -6,14 +6,20 @@ data "http" "myip" {
   url = "http://ipv4.icanhazip.com"
 }
 
+locals {
+  app_vars = {
+    name    = var.app_name
+    version = var.app_version
+    env     = var.env
+  }
+}
+
 ###############################
 #             VPC             #
 ###############################
 module "vpc" {
   source           = "../modules/network"
-  app_name         = var.app_name
-  app_version      = var.app_version
-  env              = var.env
+  app_vars         = local.app_vars
   cidr             = var.cidr
   azs              = var.azs
   public_subnets   = var.public_subnets
@@ -26,9 +32,7 @@ module "vpc" {
 ###############################
 module "bastion_ssh" {
   source       = "../modules/sg/ssh"
-  app_name     = var.app_name
-  app_version  = var.app_version
-  env          = var.env
+  app_vars     = local.app_vars
   name_suffix  = "bastion"
   vpc_id       = module.vpc.vpc_id
   description  = "Bastion host security group"
@@ -38,9 +42,7 @@ module "bastion_ssh" {
 
 module "loadbalancer_http_80_443" {
   source       = "../modules/sg/http-80-443"
-  app_name     = var.app_name
-  app_version  = var.app_version
-  env          = var.env
+  app_vars     = local.app_vars
   name_suffix  = "lb"
   vpc_id       = module.vpc.vpc_id
   description  = "Load Balancer host security group"
@@ -51,9 +53,7 @@ module "loadbalancer_http_80_443" {
 
 module "app_http_8080_443_22" {
   source      = "../modules/sg/http-8080-443"
-  app_name    = var.app_name
-  app_version = var.app_version
-  env         = var.env
+  app_vars    = local.app_vars
   name_suffix = ""
   vpc_id      = module.vpc.vpc_id
   description = "Todo App security group"
