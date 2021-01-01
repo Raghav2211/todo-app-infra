@@ -11,9 +11,6 @@ locals {
   }
 }
 
-data "terraform_remote_state" "vpc" {
-  backend = "local"
-}
 
 ###############################
 #             VPC             #
@@ -34,7 +31,8 @@ module "vpc" {
 module "bastion" {
   source       = "../modules/bastion"
   app          = merge(local.app_vars, { suffix : "bastion" })
-  #vpc_id       = module.vpc.vpc_id
+  vpc_id       = module.vpc.vpc_id
+  public_subnets = module.vpc.public_subnets
   #description  = "Bastion host security group"
   #ingress_cidr = concat(var.sg_bastion_ingress_cidrs, ["${chomp(data.http.myip.body)}/32"])
 
