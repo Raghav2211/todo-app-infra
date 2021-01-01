@@ -9,10 +9,16 @@ variable "app" {
   )
 }
 
-variable "description" {
+variable "sg_lb_description" {
   type        = string
-  description = "Bastion security group"
-  default     = "Bastion security group"
+  description = "Load Balancer host security group"
+  default     = "Load Balancer host security group"
+}
+
+variable "sg_app_description" {
+  type        = string
+  description = "App security group"
+  default     = "App security group"
 }
 
 variable "vpc_id" {
@@ -30,4 +36,9 @@ variable "http443enable" {
   type        = bool
   description = "Whether to enable https"
   default     = true
+}
+
+variable "bastion_sg_id" {
+  type        = string
+  description = "Bastion security group id"
 }
