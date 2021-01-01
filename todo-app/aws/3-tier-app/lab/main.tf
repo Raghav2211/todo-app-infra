@@ -11,13 +11,9 @@ locals {
   }
 }
 
-
-###############################
-#             VPC             #
-###############################
-module "vpc" {
+module "todo_vpc" {
   source           = "../modules/network"
-  app              = merge(local.app_vars, { suffix : "" })
+  app              = local.app_vars
   cidr             = var.cidr
   azs              = var.azs
   public_subnets   = var.public_subnets
@@ -25,25 +21,20 @@ module "vpc" {
   database_subnets = var.database_subnets
 }
 
-###############################
-#         BastionHost         #
-###############################
-module "bastion" {
+module "todo_bastion" {
   source         = "../modules/bastion"
-  app            = merge(local.app_vars, { suffix : "bastion" })
-  vpc_id         = module.vpc.vpc_id
-  public_subnets = module.vpc.public_subnets
+  app            = local.app_vars
+  vpc_id         = module.todo_vpc.vpc_id
+  public_subnets = module.todo_vpc.public_subnets
 
 }
 
-# module "loadbalancer_sg" {
-#   source       = "../modules/sg/http-80-443"
-#   app          = merge(local.app_vars, { suffix : "lb" })
-#   vpc_id       = module.vpc.vpc_id
-#   description  = "Load Balancer host security group"
-#   ingress_cidr = concat(var.sg_loadbalancer_ingress_cidrs, ["0.0.0.0/0"])
-
-# }
+module "todo_app" {
+  source      = "../modules/app"
+  app         = local.app_vars
+  vpc_id      = module.todo_vpc.vpc_id
+  description = "Load Balancer host security group"
+}
 
 
 # module "app_sg" {

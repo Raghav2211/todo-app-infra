@@ -5,7 +5,6 @@ variable "app" {
       name    = string
       version = string
       env     = string
-      suffix  = string
     }
   )
 }

@@ -2,9 +2,9 @@
 #   value = module.vpc.vpc_id
 # }
 
-output "public_subnets" {
-  value = module.vpc.public_subnets
-}
+# output "public_subnets" {
+#   value = module.todo_vpc.public_subnets
+# }
 
 # # output "bastion_sg_id" {
 # #   description = "The ID of the bastion security group"

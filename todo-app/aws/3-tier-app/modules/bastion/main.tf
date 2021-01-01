@@ -31,7 +31,7 @@ data "template_file" "lab_user_ssh_data" {
 }
 
 locals {
-  name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}${var.app.name}${var.app.suffix != "" ? "-${var.app.suffix}" : ""}"
+  name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}${var.app.name}-bastion"
   ami         = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
   tags = {
     AppId       = var.app.id
@@ -43,7 +43,7 @@ locals {
   }
 }
 
-module "sg_ssh" {
+module "sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/ssh"
   version                = "3.17.0"
   name                   = "security-group-${local.name_suffix}"
@@ -56,7 +56,7 @@ module "sg_ssh" {
   tags = local.tags
 }
 
-module "ec2_cluster" {
+module "ec2" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "2.16.0"
 
@@ -66,7 +66,7 @@ module "ec2_cluster" {
   ami           = local.ami
   instance_type = var.instance_type
   #monitoring             = true
-  vpc_security_group_ids      = list(module.sg_ssh.this_security_group_id)
+  vpc_security_group_ids      = list(module.sg.this_security_group_id)
   subnet_ids                  = var.public_subnets
   associate_public_ip_address = true
   user_data                   = length(var.ssh_users) > 1 ? join("\n", data.template_file.lab_user_ssh_data.*.rendered) : null
