@@ -5,7 +5,6 @@ variable "app" {
       name    = string
       version = string
       env     = string
-      suffix  = string
     }
   )
 }
@@ -18,10 +17,9 @@ variable "vpc_id" {
 variable "description" {
   type        = string
   description = "Secuity group description"
+  default     = "Mysql security group"
 }
 
-variable "ingress_cidr" {
-  type        = list
-  description = "Ingress CIDR blocks for the security group"
-  default     = []
+variable "app_sg_ids" {
+  type = list(string)
 }

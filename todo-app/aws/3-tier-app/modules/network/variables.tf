@@ -5,13 +5,14 @@ variable "app" {
       name    = string
       version = string
       env     = string
-      suffix  = string
     }
   )
 }
 
 variable "cidr" {
+  type        = string
   description = "The CIDR block for the VPC"
+  default     = "10.0.0.0/16"
 }
 
 variable "azs" {
@@ -36,4 +37,22 @@ variable "database_subnets" {
   description = "A list of database subnets"
   type        = list
   default     = []
+}
+
+variable "enable_nat_gateway_per_subnet" {
+  type        = bool
+  description = "Enable Nat Gateway per subnet"
+  default     = false
+}
+
+variable "enable_nat_gateway_single" {
+  type        = bool
+  description = "Enable single Nat Gateway"
+  default     = false
+}
+
+variable "enable_nat_gateway_per_az" {
+  type        = bool
+  description = "Enable Nat Gateway per availability zone"
+  default     = false
 }
