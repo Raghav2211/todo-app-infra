@@ -21,7 +21,7 @@ variable "public_subnets" {
 variable "description" {
   type        = string
   description = "Bastion host security group"
-  default = "Bastion host security group"
+  default     = "Bastion host security group"
 }
 
 variable "ingress_cidr" {
@@ -31,11 +31,11 @@ variable "ingress_cidr" {
 }
 
 variable "ami" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "instance_type" {
-  type = string
+  type    = string
   default = "t2.micro"
 }

@@ -22,19 +22,17 @@ module "vpc" {
   azs              = var.azs
   public_subnets   = var.public_subnets
   private_subnets  = var.private_subnets
-  database_subnets = var.database_subnets 
+  database_subnets = var.database_subnets
 }
 
 ###############################
-#       Security Groups       #
+#         BastionHost         #
 ###############################
 module "bastion" {
-  source       = "../modules/bastion"
-  app          = merge(local.app_vars, { suffix : "bastion" })
-  vpc_id       = module.vpc.vpc_id
+  source         = "../modules/bastion"
+  app            = merge(local.app_vars, { suffix : "bastion" })
+  vpc_id         = module.vpc.vpc_id
   public_subnets = module.vpc.public_subnets
-  #description  = "Bastion host security group"
-  #ingress_cidr = concat(var.sg_bastion_ingress_cidrs, ["${chomp(data.http.myip.body)}/32"])
 
 }
 
