@@ -29,6 +29,13 @@ module "todo_bastion" {
 
 }
 
+module "todo_mysql" {
+  source     = "../modules/database/mysql"
+  app        = local.app_vars
+  vpc_id     = module.todo_vpc.vpc_id
+  app_sg_ids = list(module.todo_app.sg_app_id)
+}
+
 module "todo_app" {
   source        = "../modules/app"
   app           = local.app_vars
@@ -36,15 +43,3 @@ module "todo_app" {
   bastion_sg_id = module.todo_bastion.sg_id
 }
 
-# module "mysql_sg" {
-#   source = "../modules/sg/mysql"
-#   app    = merge(local.app_vars, { suffix : "mysql" })
-#   vpc_id = module.vpc.vpc_id
-#   ingress_with_sg_id = [
-#     {
-#       rule                     = "mysql-tcp"
-#       source_security_group_id = module.app_sg.sg_id
-#     }
-#   ]
-
-# }
