@@ -1,7 +1,8 @@
 data "aws_region" "current" {}
 
 data "http" "myip" {
-  url = "http://ipv4.icanhazip.com"
+  count = var.env_cidr_block ? 1 : 0
+  url   = "http://ipv4.icanhazip.com"
 }
 
 data "aws_ami" "ubuntu" {
@@ -22,9 +23,10 @@ data "aws_ami" "ubuntu" {
 
 data "template_file" "lab_user_ssh_data" {
   template = file("${path.module}/userdata/user.tpl")
+  count    = length(var.ssh_users)
   vars = {
-    username   = "user"
-    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+bITpNqlrx/bkrPrMGtg3pEk9ZAAzANdu/u9oGXELR+HkqVlyvdTl60meDcdj6SSTkAbg+AlIsrSjonK12wz+5JJ1EbZkItPYOWSI6whoF4oxH6J672Hjr275IjpAdbR81BYA1oYrpYXb8M9S92Z/0/yyXjrpnURYZZ1SyD7er6ziXRgsHGZu4DnBFvxhBUzjfuqxJEDQvTiwGLESubN0yFHCgntKIuontti1lxFpMi/dHON8Ov7xTmcj7WzxAM3eZzN1w8kI3wVh0HIv0SBfi1zUwkPgDbiDjgKwAZqRQTVJS2+ZAU72STtNPMWY5htTx1zpWX5xBpHUsSfriqIt raghav@rspls-MacBook-Pro.local"
+    username   = var.ssh_users[count.index]["name"]
+    public_key = var.ssh_users[count.index]["public_key"]
   }
 }
 
@@ -47,7 +49,7 @@ module "sg_ssh" {
   name                   = "security-group-${local.name_suffix}"
   vpc_id                 = var.vpc_id
   description            = var.description
-  ingress_cidr_blocks    = concat(var.ingress_cidr, ["${chomp(data.http.myip.body)}/32"])
+  ingress_cidr_blocks    = concat(var.ingress_cidrs, var.env_cidr_block ? ["${chomp(data.http.myip[0].body)}/32"] : [])
   use_name_prefix        = false
   auto_ingress_with_self = []
 
@@ -67,7 +69,7 @@ module "ec2_cluster" {
   vpc_security_group_ids      = list(module.sg_ssh.this_security_group_id)
   subnet_ids                  = var.public_subnets
   associate_public_ip_address = true
-  user_data                   = data.template_file.lab_user_ssh_data.rendered
+  user_data                   = length(var.ssh_users) > 1 ? join("\n", data.template_file.lab_user_ssh_data.*.rendered) : null
 
   tags = local.tags
 }

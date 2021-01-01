@@ -10,32 +10,47 @@ variable "app" {
   )
 }
 
-variable "vpc_id" {
-  type = string
-}
-variable "public_subnets" {
-  type = list
-}
-
-
 variable "description" {
   type        = string
-  description = "Bastion host security group"
-  default     = "Bastion host security group"
+  description = "Bastion security group"
+  default     = "Bastion security group"
 }
 
-variable "ingress_cidr" {
+variable "vpc_id" {
+  type        = string
+  description = "ID of vpc where bastion resource(s) will create"
+}
+variable "public_subnets" {
   type        = list
-  description = "Ingress CIDR blocks for the security group"
+  description = "List of VPC Subnet IDs to launch bastion host"
+}
+
+variable "ingress_cidrs" {
+  type        = list
+  description = "Ingress CIDR(s) blocks for the bastion security group"
   default     = []
 }
 
+variable "env_cidr_block" {
+  type        = bool
+  description = "Add current deployment enviornment cidr block"
+  default     = true
+}
+
 variable "ami" {
-  type    = string
-  default = ""
+  type        = string
+  description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04"
+  default     = ""
 }
 
 variable "instance_type" {
-  type    = string
-  default = "t2.micro"
+  type        = string
+  description = "Type of instance, Default is t2.micro"
+  default     = "t2.micro"
+}
+
+variable "ssh_users" {
+  type        = list(map(string))
+  description = "Bastion host ssh user details"
+  default     = []
 }
