@@ -35,3 +35,9 @@ variable "sg_loadbalancer_ingress_cidrs" {
   default = []
 }
 
+
+variable "mysql_user" {}
+
+
+variable "mysql_password" {}
+

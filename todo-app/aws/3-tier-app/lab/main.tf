@@ -34,6 +34,9 @@ module "todo_mysql" {
   app        = local.app_vars
   vpc_id     = module.todo_vpc.vpc_id
   app_sg_ids = list(module.todo_app.sg_app_id)
+
+  master_user     = var.mysql_user
+  master_password = var.mysql_password
 }
 
 module "todo_app" {
