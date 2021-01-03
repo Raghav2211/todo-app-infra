@@ -11,7 +11,7 @@ locals {
 }
 
 module "vpc" {
-  source           = "../modules/network"
+  source           = "../../modules/network"
   app              = local.app_vars
   cidr             = var.cidr
   azs              = var.azs

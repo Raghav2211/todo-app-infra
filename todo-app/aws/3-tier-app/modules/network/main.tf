@@ -1,13 +1,13 @@
 # Declare the data source
 data "aws_region" "current" {}
 
-data "aws_availability_zones" "available" {
-  state = "available"
-  filter {
-    name   = "opt-in-status"
-    values = ["opt-in-not-required"]
-  }
-}
+# data "aws_availability_zones" "available" {
+#   state = "available"
+#   filter {
+#     name   = "opt-in-status"
+#     values = ["opt-in-not-required"]
+#   }
+# }
 
 locals {
   enable_nat_gateway_per_subnet = var.enable_nat_gateway_per_subnet || var.enable_nat_gateway_single || var.enable_nat_gateway_per_az
