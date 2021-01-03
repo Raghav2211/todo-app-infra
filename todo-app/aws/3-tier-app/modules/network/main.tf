@@ -19,7 +19,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.64.0"
 
-  name = "vpc-${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}${var.app.name}"
+  name = "vpc-${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   cidr = var.cidr
   azs  = var.azs
 
@@ -34,13 +34,11 @@ module "vpc" {
   one_nat_gateway_per_az = local.enable_nat_gateway_per_az
 
   # database
-  create_database_subnet_group       = length(var.database_subnets) > 1
   create_database_subnet_route_table = length(var.database_subnets) > 1
 
 
   tags = {
     AppId       = var.app.id
-    App         = var.app.name
     Version     = var.app.version
     Role        = "infra"
     Environment = var.app.env

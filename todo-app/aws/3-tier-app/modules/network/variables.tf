@@ -2,7 +2,6 @@ variable "app" {
   type = object(
     {
       id      = string
-      name    = string
       version = string
       env     = string
     }
