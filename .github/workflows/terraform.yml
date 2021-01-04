@@ -43,7 +43,9 @@ jobs:
       
       - name: "Run - Terraform Format check"
         run: |
-          terraform fmt -check lab
+          terraform fmt -check lab/vpc
+          terraform fmt -check lab/security
+          terraform fmt -check lab/services/bastion                    
       
       - name: "Run - Terraform Validate"
         run: |
