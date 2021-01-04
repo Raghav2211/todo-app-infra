@@ -41,6 +41,6 @@ variable "port" {
 }
 
 variable "subnet_group" {
-  default = ""
+  default     = ""
   description = "Database subnet group"
 }

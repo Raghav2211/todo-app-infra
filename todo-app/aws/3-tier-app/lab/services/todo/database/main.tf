@@ -21,9 +21,9 @@ data "aws_security_group" "selected" {
 }
 
 locals {
-  app_name = "todo"
-  name_suffix   = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
-  database_name = var.database_name != "" ? var.database_name : local.app_name
+  app_name              = "todo"
+  name_suffix           = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
+  database_name         = var.database_name != "" ? var.database_name : local.app_name
   database_subnet_group = var.subnet_group != "" ? var.subnet_group : "vpc-${local.name_suffix}"
   tags = {
     AppId       = var.app.id
