@@ -2,7 +2,6 @@ variable "app" {
   type = object(
     {
       id      = string
-      name    = string
       version = string
       env     = string
     }
@@ -37,6 +36,12 @@ variable "database_subnets" {
   description = "A list of database subnets"
   type        = list
   default     = []
+}
+
+variable "create_database_subnet_group" {
+  description = "Whether database subnet group is created"
+  type        = bool
+  default     = false
 }
 
 variable "enable_nat_gateway_per_subnet" {

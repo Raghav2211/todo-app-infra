@@ -33,7 +33,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-         # terraform_version: 0.13.0
+         terraform_version: 0.13.5
          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       # Init pulls credentials from the .aws/credentials file by default
@@ -43,7 +43,9 @@ jobs:
       
       - name: "Run - Terraform Format check"
         run: |
-          terraform fmt -check lab
+          terraform fmt -check lab/vpc
+          terraform fmt -check lab/security
+          terraform fmt -check lab/services/bastion                    
       
       - name: "Run - Terraform Validate"
         run: |
