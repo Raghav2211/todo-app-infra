@@ -28,7 +28,7 @@ variable "todo_app_description" {
   default     = "Todo App security group"
 }
 
-variable "rds_description" {
+variable "mysql_description" {
   type        = string
   description = "Secuity group description"
   default     = "RDS security group"

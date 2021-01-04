@@ -85,12 +85,12 @@ module "todo_app_sg" {
   })
 }
 
-module "infra_rds_sg" {
+module "mysql_sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/mysql"
   version                = "3.17.0"
   name                   = "security-group-${local.name_suffix}-mysql"
   vpc_id                 = data.aws_vpc.selected.id
-  description            = var.rds_description
+  description            = var.mysql_description
   use_name_prefix        = false
   auto_ingress_with_self = []
   auto_ingress_rules     = []
@@ -103,6 +103,6 @@ module "infra_rds_sg" {
   number_of_computed_ingress_with_source_security_group_id = 1
 
   tags = merge(local.tags, {
-    App = "infra-rds"
+    App = "infra-mysql"
   })
 }
