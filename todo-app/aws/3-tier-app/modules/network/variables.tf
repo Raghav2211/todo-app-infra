@@ -38,6 +38,12 @@ variable "database_subnets" {
   default     = []
 }
 
+variable "create_database_subnet_group" {
+  description = "Whether database subnet group is created"
+  type        = bool
+  default     = false
+}
+
 variable "enable_nat_gateway_per_subnet" {
   type        = bool
   description = "Enable Nat Gateway per subnet"

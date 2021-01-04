@@ -33,6 +33,7 @@ module "vpc" {
   single_nat_gateway     = local.single_nat_gateway
   one_nat_gateway_per_az = local.enable_nat_gateway_per_az
 
+  create_database_subnet_group = var.create_database_subnet_group
   # database
   create_database_subnet_route_table = length(var.database_subnets) > 1
 
@@ -43,6 +44,18 @@ module "vpc" {
     Role        = "infra"
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
+  }
+
+  public_subnet_tags = {
+    Tier = "public"
+  }
+
+  private_subnet_tags = {
+    Tier = "private"
+  }
+
+  database_subnet_tags = {
+    Tier = "db"
   }
 
 }

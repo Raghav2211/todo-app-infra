@@ -7,10 +7,9 @@ data "aws_region" "current" {}
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
-    values = ["vpc-${local.name_suffix}-${var.app.id}"]
+    values = ["vpc-${local.name_suffix}"]
   }
 }
-
 
 data "http" "myip" {
   count = var.env_cidr_block ? 1 : 0
@@ -18,7 +17,7 @@ data "http" "myip" {
 }
 
 locals {
-  name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}"
+  name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   tags = {
     AppId       = var.app.id
     Version     = var.app.version
