@@ -16,18 +16,18 @@ data "aws_security_group" "selected" {
 
   filter {
     name   = "group-name"
-    values = ["security-group-${local.name_suffix}-todo-mysql"]
+    values = ["security-group-${local.name_suffix}-mysql"]
   }
 }
 
 locals {
   app_name              = "todo"
   name_suffix           = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
-  database_name         = var.database_name != "" ? var.database_name : local.app_name
+  database_name         = var.database_name != "" ? var.database_name : var.app.id
   database_subnet_group = var.subnet_group != "" ? var.subnet_group : "vpc-${local.name_suffix}"
   tags = {
     AppId       = var.app.id
-    App         = "${local.app_name}-mysql"
+    App         = "mysql"
     Version     = var.app.version
     Role        = "db"
     Environment = var.app.env
@@ -39,7 +39,7 @@ module "todo_db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "2.20.0"
 
-  identifier = "db-${local.name_suffix}-${local.app_name}-mysql"
+  identifier = "rds-${local.name_suffix}-mysql"
 
   engine            = "mysql"
   engine_version    = "8.0.21"

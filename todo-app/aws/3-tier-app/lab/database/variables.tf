@@ -10,7 +10,6 @@ variable "app" {
   )
 }
 
-# rds(mysql) varaibles
 variable "instance_type" {
   type    = string
   default = "db.t2.micro"
@@ -28,13 +27,12 @@ variable "database_name" {
 
 variable "master_user" {
   type = string
-  #sensitive = true
 }
 
 variable "master_password" {
   type = string
-  #sensitive = true
 }
+
 variable "port" {
   type    = string
   default = "3306"
