@@ -33,11 +33,6 @@ variable "master_password" {
   type = string
 }
 
-variable "port" {
-  type    = string
-  default = "3306"
-}
-
 variable "subnet_group" {
   default     = ""
   description = "Database subnet group"

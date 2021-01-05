@@ -1,19 +1,13 @@
 variable "region" {}
 
-variable "app_id" {
-  default = "psi"
-}
-
-# variable "app_name" {
-#   default = "todo"
-# }
-
-variable "app_version" {
-  default = "1.0.0"
-}
-
-variable "env" {
-  description = "Envionment"
+variable "app" {
+  type = object(
+    {
+      id      = string
+      version = string
+      env     = string
+    }
+  )
 }
 
 variable "cidr" {}

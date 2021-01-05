@@ -52,7 +52,7 @@ module "todo_db" {
   name     = local.database_name
   username = var.master_user
   password = var.master_password
-  port     = var.port
+  port     = "3306"
 
   vpc_security_group_ids = list(data.aws_security_group.selected.id)
   create_db_subnet_group = false
