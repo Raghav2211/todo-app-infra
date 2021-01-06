@@ -8,7 +8,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confd
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y -qq install curl git openjdk-11-jdk maven apt-transport-https ca-certificates
 
-# Setup sudo to allow no-password sudo for "psi" group and adding "todo" user
+# Setup sudo to allow no-password sudo for "$USER_GROUP" group and adding "$USER" user
 sudo groupadd -r $USER_GROUP
 sudo useradd -m -s /bin/bash $USER
 sudo usermod -a -G $USER_GROUP $USER
@@ -23,7 +23,7 @@ sudo chmod 600 /home/$USER/.ssh/authorized_keys
 sudo chown -R $USER /home/$USER/.ssh
 sudo usermod --shell /bin/bash $USER
 
-# Create GOPATH for Terraform user & download the webapp from github
+# Create JAVA_HOME for $USER & download the todo-app from github
 
 sudo -H -i -u $USER -- env bash << EOF
 whoami
