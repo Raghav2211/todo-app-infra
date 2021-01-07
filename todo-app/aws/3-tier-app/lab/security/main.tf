@@ -103,6 +103,6 @@ module "mysql_sg" {
   number_of_computed_ingress_with_source_security_group_id = 1
 
   tags = merge(local.tags, {
-    App = "infra-mysql"
+    App = "mysql"
   })
 }
