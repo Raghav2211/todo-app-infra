@@ -12,7 +12,7 @@ data "aws_security_group" "selected" {
 
   filter {
     name   = "group-name"
-    values = ["security-group-${local.name_suffix}-mysql"]
+    values = ["security-group-${local.name_suffix}-${local.app_name}"]
   }
 }
 
@@ -23,7 +23,7 @@ locals {
   database_subnet_group = var.subnet_group != "" ? var.subnet_group : "vpc-${local.name_suffix}"
   tags = {
     AppId       = var.app.id
-    App         = "mysql"
+    App         = local.app_name
     Version     = var.app.version
     Role        = "db"
     Environment = var.app.env
@@ -35,9 +35,9 @@ module "mysql" {
   source  = "terraform-aws-modules/rds/aws"
   version = "2.20.0"
 
-  identifier = "rds-${local.name_suffix}-mysql"
+  identifier = "rds-${local.name_suffix}-${local.app_name}"
 
-  engine            = "mysql"
+  engine            = local.app_name
   engine_version    = "8.0.21"
   instance_class    = var.instance_type
   allocated_storage = var.storage_size_in_gib

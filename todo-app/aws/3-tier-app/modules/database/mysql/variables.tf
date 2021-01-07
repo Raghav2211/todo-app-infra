@@ -23,6 +23,7 @@ variable "database_name" {
 }
 
 variable "create_database_name_as_appid"{
+  description = "Specifies if data base name is same as appid"
   type    = bool
   default = true
 }
