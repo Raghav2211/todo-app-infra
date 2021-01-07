@@ -20,12 +20,34 @@ data "aws_security_group" "selected" {
   }
 }
 
+data "aws_security_group" "app" {
+  vpc_id = data.aws_vpc.selected.id
+
+  filter {
+    name   = "group-name"
+    values = ["security-group-${local.name_suffix}-${var.app.name}-app"]
+  }
+}
+
 data "aws_subnet_ids" "public_subnets" {
   vpc_id = data.aws_vpc.selected.id
 
   filter {
     name   = "tag:Tier"
     values = ["public"]
+  }
+}
+
+data "template_file" "app_data" {
+  template = file("${path.module}/templates/app-deployment.tpl")
+  vars = var.app_variables
+}
+data "aws_subnet_ids" "private_subnets" {
+  vpc_id = data.aws_vpc.selected.id
+
+  filter {
+    name   = "tag:Tier"
+    values = ["private"]
   }
 }
 
@@ -83,4 +105,50 @@ module "alb" {
   tags = merge(local.tags, {
     App = "alb"
   })
+}
+
+
+
+
+
+
+module "asg" {
+  source  = "terraform-aws-modules/autoscaling/aws"
+  version = "3.8.0"
+
+  name = "ec2-${local.name_suffix}-${var.app.name}-app"
+
+  # Launch configuration
+  lc_name = "lc-${local.name_suffix}-${var.app.name}-app"
+
+  image_id        = var.image_id
+  instance_type   = var.instance_type
+  security_groups = list(data.aws_security_group.app.id)
+  user_data = data.template_file.app_data.rendered
+
+
+
+  # Auto scaling group
+  asg_name                  = "asg-${local.name_suffix}-${var.app.name}-app"
+  vpc_zone_identifier       = data.aws_subnet_ids.private_subnets.ids
+  health_check_type         = "EC2"
+  min_size                  = 0
+  max_size                  = 1
+  desired_capacity          = 1
+  wait_for_capacity_timeout = 0
+
+  tags = [
+    {
+      key                 = "Environment"
+      value               = "dev"
+      propagate_at_launch = true
+    },
+    {
+      key                 = "Project"
+      value               = "megasecret"
+      propagate_at_launch = true
+    },
+  ]
+
+  tags_as_map = local.tags
 }

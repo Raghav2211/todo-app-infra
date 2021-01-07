@@ -4,7 +4,8 @@
       "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
       "aws_region": "{{env `AWS_REGION`}}",
       "ssh_user" : "{{env `SSH_USER`}}",
-      "ssh_user_group" : "{{env `SSH_USER_GROUP`}}"
+      "ssh_user_group" : "{{env `SSH_USER_GROUP`}}",
+      "app_version" : "{{env `APP_VERSION`}}"
   },
   "builders": [
       {
@@ -25,12 +26,12 @@
           },
           "instance_type": "t2.micro",
           "ssh_username": "ubuntu",
-          "ami_description": "Todo 1.0.0 Image",
-          "ami_name": "todo-1.0.0-amd64-hvm-ebs-{{isotime timestamp}}",
+          "ami_description": "Todo App {{env `app_version`}} Image",
+          "ami_name": "todo-app-{{env `app_version`}}-amd64-hvm-ebs-{{isotime timestamp}}",
           "tags": {
             "OS_Version": "Ubuntu",
-            "Release": "1.0.0",
-            "Name": "Todo-1.0.0",
+            "Release": "{{env `app_version`}}",
+            "Name": "TodoApp",
             "Region": "{{user `aws_region`}}"
           }
       }
@@ -46,7 +47,8 @@
         "script": "scripts/todo-installer.sh",
         "environment_vars": [
             "USER_GROUP={{user `ssh_user_group`}}",
-            "USER={{user `ssh_user`}}"
+            "USER={{user `ssh_user`}}",
+            "APP_VERSION={{user `app_version`}}"
         ]
     }
 ]

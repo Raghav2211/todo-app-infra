@@ -32,5 +32,8 @@ cd /home/$USER
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
 git clone https://github.com/Raghav2211/psi-lab.git
+cd psi-lab/todo-app
+mvn clean package
+sudo cp target/psi-todo-${APP_VERSION}.jar /opt/app.jar
 EOF
 
