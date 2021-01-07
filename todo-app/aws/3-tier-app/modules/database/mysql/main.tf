@@ -74,9 +74,9 @@ module "mysql" {
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
-  
+
   # DB instance creation
-  availability_zone           = var.availability_zone
-  multi_az                    = var.multi_az
-  max_allocated_storage       = var.max_allocated_storage
+  availability_zone     = var.availability_zone
+  multi_az              = var.multi_az
+  max_allocated_storage = var.max_allocated_storage
 }

@@ -9,7 +9,7 @@ variable "app" {
 }
 
 variable "instance_type" {
-  type    = string
+  type = string
 }
 
 variable "storage_size_in_gib" {
@@ -22,10 +22,10 @@ variable "database_name" {
   default = ""
 }
 
-variable "create_database_name_as_appid"{
+variable "create_database_name_as_appid" {
   description = "Specifies if data base name is same as appid"
-  type    = bool
-  default = true
+  type        = bool
+  default     = true
 }
 
 variable "master_user" {
