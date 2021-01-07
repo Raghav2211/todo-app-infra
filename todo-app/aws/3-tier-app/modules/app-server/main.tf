@@ -45,47 +45,35 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 5.10.0"
 
-  name = "alb-${local.name_suffix}-${var.app.name}"
+  name = "alb-${local.name_suffix}-${var.app.name}-app"
 
   vpc_id          = data.aws_vpc.selected.id
   subnets         = data.aws_subnet_ids.public_subnets.ids
   security_groups = list(data.aws_security_group.selected.id)
 
-  access_logs = {
-    bucket = "my-alb-logs"
-  }
-
   target_groups = [
     {
-      name             = "tg-${local.name_suffix}-${var.app.name}"
-      backend_protocol = "HTTP"
-      backend_port     = 8080
-      target_type      = "instance"
+      name                          = "tg-${local.name_suffix}-${var.app.name}-app"
+      backend_protocol              = "HTTP"
+      backend_port                  = var.app_port
+      target_type                   = "instance"
+      load_balancing_algorithm_type = var.load_balance_algo
       health_check = {
-        enabled             = true
-        healthy_threshold   = 2
-        unhealthy_threshold = 2
-        interval            = 120
-        timeout             = 5
+        enabled             = lookup(var.app_health, "enabled", true)
+        healthy_threshold   = lookup(var.app_health, "healthy_threshold", 2)
+        unhealthy_threshold = lookup(var.app_health, "unhealthy_threshold", 2)
+        interval            = lookup(var.app_health, "interval", 120)
+        timeout             = lookup(var.app_health, "timeout", 5)
       }
       tags = {
-        App = "tg-http-8080-${var.app.name}"
+        App = "tg-http-${var.app_port}-${var.app.name}-app"
       }
     }
   ]
 
-  # https_listeners = [
-  #   {
-  #     port               = 443
-  #     protocol           = "HTTPS"
-  #     certificate_arn    = "arn:aws:iam::123456789012:server-certificate/test_cert-123456789012"
-  #     target_group_index = 0
-  #   }
-  # ]
-
   http_tcp_listeners = [
     {
-      port               = 80
+      port               = var.http_listener_port
       protocol           = "HTTP"
       target_group_index = 0
     }
@@ -94,8 +82,4 @@ module "alb" {
   tags = merge(local.tags, {
     App = "alb"
   })
-
-  target_group_tags = {
-    App = "tg-${var.app.name}"
-  }
 }
