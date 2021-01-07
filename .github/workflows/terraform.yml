@@ -45,7 +45,8 @@ jobs:
         run: |
           terraform fmt -check lab/vpc
           terraform fmt -check lab/security
-          terraform fmt -check lab/services/bastion                    
+          terraform fmt -check lab/bastion
+          terraform fmt -check lab/database
       
       - name: "Run - Terraform Validate"
         run: |
