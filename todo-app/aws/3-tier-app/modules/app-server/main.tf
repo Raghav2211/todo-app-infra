@@ -60,6 +60,7 @@ module "alb" {
       load_balancing_algorithm_type = var.load_balance_algo
       health_check = {
         enabled             = lookup(var.app_health, "enabled", true)
+        path                = lookup(var.app_health, "path", "/")
         healthy_threshold   = lookup(var.app_health, "healthy_threshold", 2)
         unhealthy_threshold = lookup(var.app_health, "unhealthy_threshold", 2)
         interval            = lookup(var.app_health, "interval", 120)

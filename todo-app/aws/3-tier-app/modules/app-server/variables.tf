@@ -14,12 +14,12 @@ variable "app" {
 variable "app_port" {
   type        = number
   description = "Port on which application will listen"
-  default     = 80
+  default     = 8080
 }
 
 variable "http_listener_port" {
   type        = number
-  description = "value"
+  description = "Load balancer listener port"
   default     = 80
 }
 
@@ -30,6 +30,7 @@ variable "load_balance_algo" {
 }
 
 variable "app_health" {
-  type    = map
-  default = {}
+  type        = map
+  description = "Application Health check configuration"
+  default     = {}
 }
