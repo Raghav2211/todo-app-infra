@@ -5,7 +5,7 @@ variable "app" {
       version = string
       env     = string
     }
-  )  
+  )
 }
 
 variable "ami" {
