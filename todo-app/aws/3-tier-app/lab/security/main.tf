@@ -46,7 +46,7 @@ module "bastion_sg" {
 module "todo_app_load_balancer_sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/http-80"
   version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-todo-lb"
+  name                   = "security-group-${local.name_suffix}-todo-app-lb"
   vpc_id                 = data.aws_vpc.selected.id
   description            = var.todo_lb_description
   ingress_cidr_blocks    = var.todo_app_lb_ingress_cidrs
@@ -55,7 +55,7 @@ module "todo_app_load_balancer_sg" {
   auto_ingress_rules     = concat(["http-80-tcp"], var.todo_app_lb_https_ingress ? ["https-443-tcp"] : [])
 
   tags = merge(local.tags, {
-    App = "todoapp"
+    App = "todo-app-lb"
   })
 }
 
@@ -81,16 +81,16 @@ module "todo_app_sg" {
   number_of_computed_ingress_with_source_security_group_id = 2
 
   tags = merge(local.tags, {
-    App = "todoapp"
+    App = "todo-app"
   })
 }
 
-module "todo_mysql_sg" {
+module "mysql_sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/mysql"
   version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-todo-mysql"
+  name                   = "security-group-${local.name_suffix}-mysql"
   vpc_id                 = data.aws_vpc.selected.id
-  description            = var.todo_mysql_description
+  description            = var.mysql_description
   use_name_prefix        = false
   auto_ingress_with_self = []
   auto_ingress_rules     = []
@@ -103,6 +103,6 @@ module "todo_mysql_sg" {
   number_of_computed_ingress_with_source_security_group_id = 1
 
   tags = merge(local.tags, {
-    App = "todoapp"
+    App = "mysql"
   })
 }
