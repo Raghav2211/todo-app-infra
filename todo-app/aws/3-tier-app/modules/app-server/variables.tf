@@ -1,5 +1,3 @@
-variable "region" {}
-
 variable "app" {
   type = object(
     {
@@ -49,11 +47,10 @@ variable "image_id" {
 variable "instance_type" {
   type        = string
   description = "App instance type"
-  default     = ""
 }
 
 
 variable "app_variables" {
-  type = map
+  type    = map
   default = {}
 }

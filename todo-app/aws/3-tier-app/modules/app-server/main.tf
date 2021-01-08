@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 data "aws_region" "current" {}
 
 data "aws_vpc" "selected" {
@@ -40,7 +36,7 @@ data "aws_subnet_ids" "public_subnets" {
 
 data "template_file" "app_data" {
   template = file("${path.module}/templates/app-deployment.tpl")
-  vars = var.app_variables
+  vars     = var.app_variables
 }
 data "aws_subnet_ids" "private_subnets" {
   vpc_id = data.aws_vpc.selected.id
@@ -107,11 +103,6 @@ module "alb" {
   })
 }
 
-
-
-
-
-
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "3.8.0"
@@ -124,7 +115,7 @@ module "asg" {
   image_id        = var.image_id
   instance_type   = var.instance_type
   security_groups = list(data.aws_security_group.app.id)
-  user_data = data.template_file.app_data.rendered
+  user_data       = data.template_file.app_data.rendered
 
 
 
