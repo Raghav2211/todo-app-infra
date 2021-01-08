@@ -35,8 +35,8 @@ data "aws_subnet_ids" "public_subnets" {
 }
 
 data "template_file" "app_data" {
-  template = file("${path.module}/templates/app-deployment.tpl")
-  vars     = var.app_variables
+  template = file(var.app_installer_tpl_path)
+  vars     = var.app_env_vars
 }
 data "aws_subnet_ids" "private_subnets" {
   vpc_id = data.aws_vpc.selected.id

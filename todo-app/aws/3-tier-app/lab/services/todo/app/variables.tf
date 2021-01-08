@@ -16,4 +16,4 @@ variable "image_id" {}
 variable "instance_type" {}
 
 
-variable "app_variables" {}
+variable "app_env_vars" {}

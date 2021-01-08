@@ -7,5 +7,6 @@ module "todo_app" {
   app           = var.app
   image_id      = var.image_id
   instance_type = var.instance_type
-  app_variables = var.app_variables
+  app_installer_tpl_path = "${path.module}/templates/deployment.tpl"
+  app_env_vars = var.app_env_vars
 }

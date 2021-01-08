@@ -50,7 +50,13 @@ variable "instance_type" {
 }
 
 
-variable "app_variables" {
+variable "app_installer_tpl_path" {
+  type = string
+  description = "File path to use app deployment"
+}
+
+variable "app_env_vars" {
   type    = map
   default = {}
+  description = "App deployment enviornment variables"
 }
