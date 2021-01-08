@@ -26,11 +26,11 @@
           },
           "instance_type": "t2.micro",
           "ssh_username": "ubuntu",
-          "ami_description": "Todo App {{env `app_version`}} Image",
-          "ami_name": "todo-app-{{env `app_version`}}-amd64-hvm-ebs-{{isotime timestamp}}",
+          "ami_description": "Todo App {{user `app_version`}} Image",
+          "ami_name": "todo-app-{{user `app_version`}}-amd64-hvm-ebs-{{isotime timestamp}}",
           "tags": {
             "OS_Version": "Ubuntu",
-            "Release": "{{env `app_version`}}",
+            "Release": "{{user `app_version`}}",
             "Name": "TodoApp",
             "Region": "{{user `aws_region`}}"
           }
