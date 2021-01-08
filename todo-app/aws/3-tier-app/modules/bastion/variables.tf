@@ -5,12 +5,7 @@ variable "app" {
       version = string
       env     = string
     }
-  )
-  default = {
-    id      = "psi"
-    version = "1.0.0"
-    env     = "lab"
-  }
+  )  
 }
 
 variable "ami" {
