@@ -12,7 +12,7 @@ data "aws_security_group" "selected" {
 
   filter {
     name   = "group-name"
-    values = ["security-group-${local.name_suffix}-${var.app.name}-lb"]
+    values = ["security-group-${local.name_suffix}-${var.app.name}-app-lb"]
   }
 }
 
