@@ -43,10 +43,15 @@ jobs:
       
       - name: "Run - Terraform Format check"
         run: |
-          terraform fmt -check lab/vpc
-          terraform fmt -check lab/security
-          terraform fmt -check lab/services/bastion                    
-      
+          find . \( -path './lab/.terraform' \) -prune -o -type f -name '*.tf' | while read f
+          do 
+            terraform fmt -check $f
+              if [ $? -ne 0 ]
+              then
+                  exit 1;
+              fi
+          done
+                
       - name: "Run - Terraform Validate"
         run: |
           terraform validate lab

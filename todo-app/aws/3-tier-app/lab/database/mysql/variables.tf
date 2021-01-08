@@ -10,12 +10,10 @@ variable "app" {
   )
 }
 
-variable "cidr" {}
+variable "instance_type" {}
 
-variable "azs" {}
+variable "master_user" {}
 
-variable "public_subnets" {}
+variable "master_password" {}
 
-variable "private_subnets" {}
-
-variable "database_subnets" {}
+variable "multi_az" {}
