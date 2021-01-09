@@ -6,4 +6,4 @@ export MYSQL_USER='${MYSQL_USER}'
 export MYSQL_PASSWORD='${MYSQL_PASSWORD}'
 
 # bootstrap todo app
-java -jar /opt/app.jar
+java -server -Dfile.encoding=utf-8 -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom -Duser.timezone=UTC -jar /opt/app.jar
