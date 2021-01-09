@@ -47,6 +47,21 @@ data "aws_subnet_ids" "private_subnets" {
   }
 }
 
+data "aws_instances" "app" {
+  instance_tags = {
+    AppName     = var.app.name
+    Version     = var.app.version
+    Environment = var.app.env
+  }
+
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+
+  instance_state_names = ["running", "pending"]
+}
+
 locals {
   name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   tags = {
@@ -127,19 +142,13 @@ module "asg" {
   max_size                  = 1
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
-
-  tags = [
-    {
-      key                 = "Environment"
-      value               = "dev"
-      propagate_at_launch = true
-    },
-    {
-      key                 = "Project"
-      value               = "megasecret"
-      propagate_at_launch = true
-    },
-  ]
+  target_group_arns         = module.alb.target_group_arns
 
   tags_as_map = local.tags
+}
+
+resource "aws_alb_target_group_attachment" "app" {
+  count            = length(data.aws_instances.app.ids)
+  target_group_arn = module.alb.target_group_arns[0]
+  target_id        = data.aws_instances.app.ids[count.index]
 }
