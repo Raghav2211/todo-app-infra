@@ -2,8 +2,8 @@ provider "aws" {
   region = var.region
 }
 
-module "mysql" {
+module "bastion" {
   source    = "../../modules/bastion"
-  ssh_users = var.ssh_users
   app       = var.app
+  ssh_users = var.ssh_users
 }
