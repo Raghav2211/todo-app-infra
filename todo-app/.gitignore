@@ -35,7 +35,8 @@ MANIFEST.MF
 /build/
 /bin/
 
-
+#Remove all public keys 
+*.pub
 
 
 # Local .terraform directories
