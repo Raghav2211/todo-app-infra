@@ -1,15 +1,8 @@
 # Declare the data source
 data "aws_region" "current" {}
 
-# data "aws_availability_zones" "available" {
-#   state = "available"
-#   filter {
-#     name   = "opt-in-status"
-#     values = ["opt-in-not-required"]
-#   }
-# }
-
 locals {
+  name_suffix                   = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   enable_nat_gateway_per_subnet = var.enable_nat_gateway_per_subnet || var.enable_nat_gateway_single || var.enable_nat_gateway_per_az
   single_nat_gateway            = var.enable_nat_gateway_per_subnet ? false : var.enable_nat_gateway_single
   enable_nat_gateway_per_az     = var.enable_nat_gateway_per_subnet ? false : (var.enable_nat_gateway_per_az && var.enable_nat_gateway_single ? ! var.enable_nat_gateway_per_az : var.enable_nat_gateway_per_az)
@@ -19,7 +12,7 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "2.64.0"
 
-  name = "vpc-${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
+  name = "vpc-${local.name_suffix}"
   cidr = var.cidr
   azs  = var.azs
 
@@ -58,4 +51,23 @@ module "vpc" {
     Tier = "db"
   }
 
+  igw_tags = {
+    Name = "igw-${local.name_suffix}"
+  }
+
+  public_route_table_tags = {
+    Name = "rtb-${local.name_suffix}-public"
+  }
+
+  private_route_table_tags = {
+    Name = "rtb-${local.name_suffix}-private"
+  }
+
+  database_route_table_tags = {
+    Name = "rtb-${local.name_suffix}-db"
+  }
+
+  database_subnet_group_tags = {
+    Name = "default-subnet-grp-${local.name_suffix}"
+  }
 }
