@@ -23,6 +23,8 @@ sudo chmod 600 /home/$USER/.ssh/authorized_keys
 sudo chown -R $USER /home/$USER/.ssh
 sudo usermod --shell /bin/bash $USER
 
+
+
 # Create JAVA_HOME for $USER & download the todo-app from github
 
 sudo -H -i -u $USER -- env bash << EOF
@@ -34,6 +36,10 @@ export PATH=$PATH:$JAVA_HOME/bin
 git clone https://github.com/Raghav2211/psi-lab.git
 cd psi-lab/todo-app
 mvn clean package
-sudo cp target/psi-todo-${APP_VERSION}.jar /opt/app.jar
+sudo mkdir /opt/todo
+sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
+sudo cp scripts/todo-bootstrap.sh /opt/todo/bootstrap.sh
+sudo chmod 744 /opt/todo/bootstrap.sh
+sudo cp scripts/todo.service /etc/systemd/system/todo.service
 EOF
 
