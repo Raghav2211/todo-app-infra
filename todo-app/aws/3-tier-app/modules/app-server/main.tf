@@ -16,15 +16,6 @@ data "aws_security_group" "selected" {
   }
 }
 
-data "aws_security_group" "app" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "group-name"
-    values = ["security-group-${local.name_suffix}-${var.app.name}-app"]
-  }
-}
-
 data "aws_subnet_ids" "public_subnets" {
   vpc_id = data.aws_vpc.selected.id
 
@@ -38,32 +29,21 @@ data "template_file" "app_data" {
   template = file(var.app_installer_tpl_path)
   vars     = var.app_env_vars
 }
-data "aws_subnet_ids" "private_subnets" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "tag:Tier"
-    values = ["private"]
-  }
-}
-
-data "aws_instances" "app" {
-  instance_tags = {
-    AppName     = var.app.name
-    Version     = var.app.version
-    Environment = var.app.env
-  }
-
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.selected.id]
-  }
-
-  instance_state_names = ["running", "pending"]
-}
 
 locals {
   name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
+  app_sg_filters = [
+    {
+      name   = "group-name"
+      values = ["security-group-${local.name_suffix}-${var.app.name}-app"]
+    },
+  ]
+  app_subnet_filters = [
+    {
+      name   = "tag:Tier"
+      values = ["private"]
+    },
+  ]
   tags = {
     AppId       = var.app.id
     AppName     = var.app.name
@@ -72,6 +52,17 @@ locals {
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }
+}
+
+module "ec2_app" {
+  source                 = "../ec2"
+  app                    = var.app
+  ami                    = var.image_id
+  instance_count         = lookup(var.scaling_capacity, "desired")
+  instance_type          = var.instance_type
+  security_group_filters = local.app_sg_filters
+  subnet_filters         = local.app_subnet_filters
+  user_data              = data.template_file.app_data.rendered
 }
 
 module "alb" {
@@ -125,22 +116,19 @@ module "asg" {
   name = "ec2-${local.name_suffix}-${var.app.name}-app"
 
   # Launch configuration
-  lc_name = "lc-${local.name_suffix}-${var.app.name}-app"
-
+  lc_name         = "lc-${local.name_suffix}-${var.app.name}-app"
   image_id        = var.image_id
   instance_type   = var.instance_type
-  security_groups = list(data.aws_security_group.app.id)
+  security_groups = module.ec2_app.sg_ids
   user_data       = data.template_file.app_data.rendered
-
-
 
   # Auto scaling group
   asg_name                  = "asg-${local.name_suffix}-${var.app.name}-app"
-  vpc_zone_identifier       = data.aws_subnet_ids.private_subnets.ids
+  vpc_zone_identifier       = module.ec2_app.subnets_ids
   health_check_type         = "EC2"
-  min_size                  = 0
-  max_size                  = 1
-  desired_capacity          = 1
+  min_size                  = lookup(var.scaling_capacity, "min")
+  max_size                  = lookup(var.scaling_capacity, "max")
+  desired_capacity          = lookup(var.scaling_capacity, "desired")
   wait_for_capacity_timeout = 0
   target_group_arns         = module.alb.target_group_arns
 
@@ -148,7 +136,7 @@ module "asg" {
 }
 
 resource "aws_alb_target_group_attachment" "app" {
-  count            = length(data.aws_instances.app.ids)
+  count            = length(module.ec2_app.ids)
   target_group_arn = module.alb.target_group_arns[0]
-  target_id        = data.aws_instances.app.ids[count.index]
+  target_id        = module.ec2_app.ids[count.index]
 }
