@@ -28,31 +28,6 @@ data "aws_subnet_ids" "ec2" {
   }
 }
 
-data "aws_ami" "ubuntu" {
-  count       = var.ami == "" ? 1 : 0
-  most_recent = true
-  owners      = ["099720109477"] # Canonical
-
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-# data "template_file" "lab_user_ssh_data" {
-#   template = file("${path.module}/userdata/user.tpl")
-#   count    = length(var.ssh_users)
-#   vars = {
-#     username   = var.ssh_users[count.index]["username"]
-#     public_key = var.ssh_users[count.index]["public_key"]
-#   }
-# }
-
 locals {
   name_suffix    = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   instance_count = var.instance_count != null && var.instance_count > 0 ? var.instance_count : length(data.aws_subnet_ids.ec2.ids)
@@ -82,7 +57,7 @@ module "ec2" {
   vpc_security_group_ids      = local.sg_ids
   subnet_ids                  = data.aws_subnet_ids.ec2.ids
   associate_public_ip_address = var.associate_public_ip_address
-  # user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
+  user_data                   = var.user_data
 
   tags = local.tags
 }

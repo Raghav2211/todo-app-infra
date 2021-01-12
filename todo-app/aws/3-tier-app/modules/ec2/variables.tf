@@ -20,7 +20,7 @@ variable "ami" {
 
 variable "instance_type" {
   type        = string
-  description = "Type of instance, Default is t2.micro"
+  description = "Type of instance, Default is t2.micro."
   default     = "t2.micro"
 }
 
@@ -35,21 +35,17 @@ variable "associate_public_ip_address" {
 }
 
 variable "security_group_filters" {
-  type    = list(map(string))
+  type    = list(map(list(string)))
   default = []
 }
 
 variable "subnet_filters" {
-  type    = list(map(string))
+  type    = list(map(list(string)))
   default = []
 }
 
-# Validation on admin as user
-variable "ssh_users" {
-  type        = list(map(string))
-  description = "Bastion host ssh user details"
-  validation {
-    condition     = length(var.ssh_users) >= 1
-    error_message = "Atleast one bastion cluster ssh user needs to be passed."
-  }
+variable "user_data" {
+  description = "The user data to provide when launching the instance."
+  type        = string
+  default     = null
 }
