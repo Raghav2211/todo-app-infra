@@ -30,12 +30,14 @@ locals {
   ami         = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
   sg_filters = [
     {
-      group-name = ["security-group-${local.name_suffix}-bastion"]
+      name   = "group-name"
+      values = ["security-group-${local.name_suffix}-bastion"]
     },
   ]
   subnet_filters = [
     {
-      "tag:Tier" = ["public"]
+      name   = "tag:Tier"
+      values = ["public"]
     },
   ]
 }

@@ -35,7 +35,7 @@ locals {
     name   = "vpc-id"
     values = [data.aws_vpc.selected.id]
   }]) : []
-  sg_ids = local.sg_filters.length == 0 ? [] : data.aws_security_groups.ec2.ids
+  sg_ids = length(local.sg_filters) == 0 ? [] : data.aws_security_groups.ec2.ids
   tags = {
     AppId       = var.app.id
     App         = var.app.name

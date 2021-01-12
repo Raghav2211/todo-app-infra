@@ -35,12 +35,18 @@ variable "associate_public_ip_address" {
 }
 
 variable "security_group_filters" {
-  type    = list(map(list(string)))
+  type = list(object({
+    name   = string
+    values = list(string)
+  }))
   default = []
 }
 
 variable "subnet_filters" {
-  type    = list(map(list(string)))
+  type = list(object({
+    name   = string
+    values = list(string)
+  }))
   default = []
 }
 
