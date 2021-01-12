@@ -2,6 +2,7 @@ variable "app" {
   type = object(
     {
       id      = string
+      name    = string
       version = string
       env     = string
     }
@@ -23,8 +24,22 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
+variable "instance_count" {
+  type    = number
+  default = 0
+}
+
+variable "associate_public_ip_address" {
+  type    = bool
+  default = false
+}
 
 variable "security_group_filters" {
+  type    = list(map(string))
+  default = []
+}
+
+variable "subnet_filters" {
   type    = list(map(string))
   default = []
 }

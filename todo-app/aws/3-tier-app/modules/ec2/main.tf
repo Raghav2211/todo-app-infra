@@ -8,23 +8,22 @@ data "aws_vpc" "selected" {
 }
 
 data "aws_security_groups" "ec2" {
-  dynamic "sg_filter" {
-    for_each = var.sg_filters
-    filter {
-      name   = sg_filter.value.name
-      values = sg_filter.value.values
+  dynamic "filter" {
+    for_each = local.sg_filters
+    content {
+      name   = filter.value.name
+      values = filter.value.values
     }
   }
 }
 
 data "aws_subnet_ids" "ec2" {
   vpc_id = data.aws_vpc.selected.id
-
-  dynamic "subnet_filter" {
+  dynamic "filter" {
     for_each = var.subnet_filters
-    filter {
-      name   = subnet_filter.value.name
-      values = subnet_filter.value.values
+    content {
+      name   = filter.value.name
+      values = filter.value.values
     }
   }
 }
@@ -45,19 +44,19 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "template_file" "lab_user_ssh_data" {
-  template = file("${path.module}/userdata/user.tpl")
-  count    = length(var.ssh_users)
-  vars = {
-    username   = var.ssh_users[count.index]["username"]
-    public_key = var.ssh_users[count.index]["public_key"]
-  }
-}
+# data "template_file" "lab_user_ssh_data" {
+#   template = file("${path.module}/userdata/user.tpl")
+#   count    = length(var.ssh_users)
+#   vars = {
+#     username   = var.ssh_users[count.index]["username"]
+#     public_key = var.ssh_users[count.index]["public_key"]
+#   }
+# }
 
 locals {
   name_suffix    = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   instance_count = var.instance_count != null && var.instance_count > 0 ? var.instance_count : length(data.aws_subnet_ids.ec2.ids)
-  sg_filters = var.security_group_filters.length > 0 ? concat(var.security_group_filters, [{
+  sg_filters = length(var.security_group_filters) > 0 ? concat(var.security_group_filters, [{
     name   = "vpc-id"
     values = [data.aws_vpc.selected.id]
   }]) : []
@@ -83,7 +82,7 @@ module "ec2" {
   vpc_security_group_ids      = local.sg_ids
   subnet_ids                  = data.aws_subnet_ids.ec2.ids
   associate_public_ip_address = var.associate_public_ip_address
-  user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
+  # user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
 
   tags = local.tags
 }
