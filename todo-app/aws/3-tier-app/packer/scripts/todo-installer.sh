@@ -38,8 +38,12 @@ cd psi-lab/todo-app
 mvn clean package
 sudo mkdir /opt/todo
 sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
-sudo cp scripts/todo-bootstrap.sh /opt/todo/bootstrap.sh
+sudo cp /tmp/todo-bootstrap.sh /opt/todo/bootstrap.sh
 sudo chmod 744 /opt/todo/bootstrap.sh
-sudo cp scripts/todo.service /etc/systemd/system/todo.service
+sudo cp /tmp/todo.service /etc/systemd/system/todo.service
+sudo mkdir /etc/systemd/system/todo.service.d
+sudo chown -R $USER /etc/systemd/system/todo.service.d
+sudo echo 'Environment="USER=$USER"' > /etc/systemd/system/todo.service.d/local.conf
+sudo cat /etc/systemd/system/todo.service.d/local.conf
 EOF
 

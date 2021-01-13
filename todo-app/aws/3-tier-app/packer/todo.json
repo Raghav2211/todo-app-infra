@@ -39,8 +39,8 @@
   "provisioners": [
     {
         "type": "file",
-        "source": "todo.pub",
-        "destination": "/tmp/todo.pub"
+        "sources": "todo.pub,scripts/todo-bootstrap.sh,scripts/todo.service",
+        "destination": "/tmp/"
       },
     {
         "type": "shell",
