@@ -1,10 +1,15 @@
 #!/bin/bash -x
 
 # Export mysql environment variables
-export MYSQL_HOST='${MYSQL_HOST}'
-export MYSQL_DB_NAME='${MYSQL_DB_NAME}'
-export MYSQL_USER='${MYSQL_USER}'
-export MYSQL_PASSWORD='${MYSQL_PASSWORD}'
+# export MYSQL_HOST='${MYSQL_HOST}'
+# export MYSQL_DB_NAME='${MYSQL_DB_NAME}'
+# export MYSQL_USER='${MYSQL_USER}'
+# export MYSQL_PASSWORD='${MYSQL_PASSWORD}'
+systemctl set-environment MYSQL_HOST=${MYSQL_HOST}
+systemctl set-environment MYSQL_DB_NAME=${MYSQL_DB_NAME}
+systemctl set-environment MYSQL_USER=${MYSQL_USER}
+systemctl set-environment MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
 
 # bootstrap todo app
 sudo systemctl daemon-reload
