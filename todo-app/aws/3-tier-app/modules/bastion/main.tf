@@ -1,30 +1,5 @@
 data "aws_region" "current" {}
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = ["vpc-${local.name_suffix}"]
-  }
-}
-
-data "aws_security_group" "selected" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "group-name"
-    values = ["security-group-${local.name_suffix}-bastion"]
-  }
-}
-
-data "aws_subnet_ids" "public_subnets" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "tag:Tier"
-    values = ["public"]
-  }
-}
-
 data "aws_ami" "ubuntu" {
   count       = var.ami == "" ? 1 : 0
   most_recent = true
@@ -53,30 +28,27 @@ data "template_file" "lab_user_ssh_data" {
 locals {
   name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   ami         = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
-  tags = {
-    AppId       = var.app.id
-    App         = "bastion"
-    Version     = var.app.version
-    Role        = "infra"
-    Environment = var.app.env
-    #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
-  }
+  sg_filters = [
+    {
+      name   = "group-name"
+      values = ["security-group-${local.name_suffix}-bastion"]
+    },
+  ]
+  subnet_filters = [
+    {
+      name   = "tag:Tier"
+      values = ["public"]
+    },
+  ]
 }
 
 module "ec2_bastion" {
-  source  = "terraform-aws-modules/ec2-instance/aws"
-  version = "2.16.0"
-
-  name           = "ec2-${local.name_suffix}-bastion"
-  instance_count = length(data.aws_subnet_ids.public_subnets.ids)
-
-  ami           = local.ami
-  instance_type = var.instance_type
-  #monitoring             = true
-  vpc_security_group_ids      = list(data.aws_security_group.selected.id)
-  subnet_ids                  = data.aws_subnet_ids.public_subnets.ids
+  source                      = "../ec2"
+  app                         = merge(var.app, { name = "bastion", role = "infra" })
+  ami                         = local.ami
+  instance_type               = var.instance_type
   associate_public_ip_address = true
+  security_group_filters      = local.sg_filters
+  subnet_filters              = local.subnet_filters
   user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
-
-  tags = local.tags
 }

@@ -50,6 +50,15 @@ variable "instance_type" {
 }
 
 
+variable "scaling_capacity" {
+  type = map(string)
+  default = {
+    min     = 1
+    desired = 2
+    max     = 3
+  }
+}
+
 variable "app_installer_tpl_path" {
   type        = string
   description = "File path to use app deployment"
