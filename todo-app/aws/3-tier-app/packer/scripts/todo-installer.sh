@@ -35,7 +35,7 @@ export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
 git clone https://github.com/Raghav2211/psi-lab.git
 cd psi-lab/todo-app
-mvn clean package
+mvn clean package -DskipTests
 sudo mkdir /opt/todo
 sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
 sudo cp /tmp/todo-bootstrap.sh /opt/todo/bootstrap.sh
@@ -44,6 +44,5 @@ sudo cp /tmp/todo.service /etc/systemd/system/todo.service
 sudo mkdir /etc/systemd/system/todo.service.d
 sudo chown -R $USER /etc/systemd/system/todo.service.d
 sudo echo 'Environment="USER=$USER"' > /etc/systemd/system/todo.service.d/local.conf
-sudo cat /etc/systemd/system/todo.service.d/local.conf
 EOF
 
