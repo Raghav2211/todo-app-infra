@@ -1,6 +1,7 @@
 [Unit]
 Description=Todo Application as a Service
 [Service]
+EnvironmentFile=/etc/systemd/system/todo/todo.conf
 User=$USER
 #path to the executable bash script which executes todo app
 ExecStart=/bin/bash /opt/todo/bootstrap.sh

@@ -41,8 +41,8 @@ sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
 sudo cp /tmp/todo-bootstrap.sh /opt/todo/bootstrap.sh
 sudo chmod 744 /opt/todo/bootstrap.sh
 sudo cp /tmp/todo.service /etc/systemd/system/todo.service
-sudo mkdir /etc/systemd/system/todo.service.d
-sudo chown -R $USER /etc/systemd/system/todo.service.d
-sudo echo 'Environment="USER=$USER"' > /etc/systemd/system/todo.service.d/local.conf
+sudo mkdir /etc/systemd/system/todo
+sudo chown -R $USER /etc/systemd/system/todo
+sudo echo 'USER=$USER' > /etc/systemd/system/todo/todo.conf
 EOF
 
