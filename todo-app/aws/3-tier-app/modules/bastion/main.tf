@@ -44,7 +44,7 @@ locals {
 
 module "ec2_bastion" {
   source                      = "../ec2"
-  app                         = merge(var.app, { name = "bastion" })
+  app                         = merge(var.app, { name = "bastion", role = "infra" })
   ami                         = local.ami
   instance_type               = var.instance_type
   associate_public_ip_address = true

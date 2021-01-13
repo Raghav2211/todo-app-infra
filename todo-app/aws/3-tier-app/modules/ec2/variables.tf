@@ -3,6 +3,7 @@ variable "app" {
     {
       id      = string
       name    = string
+      role    = string
       version = string
       env     = string
     }

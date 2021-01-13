@@ -41,7 +41,7 @@ locals {
     AppId       = var.app.id
     App         = var.app.name
     Version     = var.app.version
-    Role        = "infra"
+    Role        = var.app.role
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }

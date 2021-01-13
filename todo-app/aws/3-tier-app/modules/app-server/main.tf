@@ -46,7 +46,7 @@ locals {
   ]
   tags = {
     AppId       = var.app.id
-    AppName     = var.app.name
+    App         = var.app.name
     Version     = var.app.version
     Role        = "app"
     Environment = var.app.env
@@ -56,7 +56,7 @@ locals {
 
 module "ec2_app" {
   source                 = "../ec2"
-  app                    = var.app
+  app                    = merge(var.app, { role = local.tags["Role"] })
   ami                    = var.image_id
   instance_count         = lookup(var.scaling_capacity, "desired")
   instance_type          = var.instance_type
