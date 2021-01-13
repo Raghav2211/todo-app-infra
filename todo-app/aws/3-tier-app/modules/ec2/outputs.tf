@@ -3,7 +3,7 @@ output "ids" {
 }
 
 output "sg_ids" {
-  value = module.ec2.vpc_security_group_ids
+  value = distinct(flatten(module.ec2.vpc_security_group_ids))
 }
 
 output "subnets_ids" {

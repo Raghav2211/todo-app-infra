@@ -8,6 +8,7 @@ data "aws_vpc" "selected" {
 }
 
 data "aws_security_groups" "ec2" {
+  count = length(local.sg_filters) > 0 ? 1 : 0
   dynamic "filter" {
     for_each = local.sg_filters
     content {
@@ -35,7 +36,7 @@ locals {
     name   = "vpc-id"
     values = [data.aws_vpc.selected.id]
   }]) : []
-  sg_ids = length(local.sg_filters) == 0 ? [] : data.aws_security_groups.ec2.ids
+  sg_ids = length(local.sg_filters) == 0 ? [] : data.aws_security_groups.ec2[0].ids
   tags = {
     AppId       = var.app.id
     App         = var.app.name
