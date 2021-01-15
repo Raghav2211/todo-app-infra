@@ -17,33 +17,32 @@ module "vpc" {
   source = "../../network/example"
 }
 
-# Add security group
-module "bastion_sg" {
-  source                 = "terraform-aws-modules/security-group/aws//modules/ssh"
+#Add security group
+module "mysql_sg" {
+  source                 = "terraform-aws-modules/security-group/aws//modules/mysql"
   version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-bastion"
+  name                   = "security-group-${local.name_suffix}-mysql"
   vpc_id                 = module.vpc.vpc_id
-  description            = "Bastion security group"
-  ingress_cidr_blocks    = ["0.0.0.0/0"]
+  description            = "Test mysql database connection"
   use_name_prefix        = false
   auto_ingress_with_self = []
+ # auto_ingress_rules     = []
+  ingress_cidr_blocks    = ["0.0.0.0/0"]
+
   tags = merge(local.tags, {
-    App = "bastion"
+    App = "mysql"
   })
 }
 
-module "bastion" {
+module "mysql" {
   source = "../"
   app = {
     id      = "psi"
-    name    = "todo"
     version = "1.0.0"
     env     = "lab"
   }
-  ssh_users = [
-    {
-      username   = "bastionuser"
-      public_key = "######################[PLACE-YOUR-SSH-PUBLIC-KEY-HERE]######################"
-    }
-  ]
+  instance_type   = "db.t2.micro"
+  master_user     = "masteruser"
+  master_password = "masterpassword"
+  multi_az        = false
 }
