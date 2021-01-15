@@ -1,11 +1,13 @@
-# Deploying SpringBoot Application with RDS(MySql) on AWS EC2 using terraform
+# Deploying Todo Application with RDS(MySql) on AWS EC2 using terraform
 
 ![SpringBoot-RDS-MySql-EC2](todo_phase_1.png)
 
 1. This is an example showing how to deploy a SpringBoot application integrated with RDS(MySql) on to multiple AZs.
-2. Here Application  and DataBase are deployed in different private subnet which are not directly accessible to outside world.
-3. Bastion and Nat Gateway are on public subnet which will provide access through ssh to connect to application(EC2) or database (RDS) box for troubleshooting.
-4. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
+2. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
+3. Bastion is on  public subnet which will provide access through ssh to connect to application(EC2) or database (RDS)  for troubleshooting.
+4. Nat Gateway provides access to internet to the private subnets.
+5. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
+6. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs). The load balancer also needs at least 2 public subnets in different AZs.
 
 ## Steps to deploy application ##
 
@@ -29,20 +31,6 @@
     
 ```
   
-- Run below command to install dependencies for VPC terraform script
-
-```bash 
-     
-  terraform init -var-file=vpc/terraform.tfvars vpc 
-  
-```
-- Run below command to verify the plan for VPC terraform script
-
-``` bash 
-     
-  terraform plan -var-file=vpc/terraform.tfvars vpc 
-  
-```
 - Run below command to create VPC on AWS
 
 ``` bash 
@@ -51,39 +39,11 @@
   
 ```
 
-- Run below command to install dependencies for Security group terraform script
-
-``` bash 
-     
-  terraform destroy -var-file=security/terraform.tfvars security 
-  
-```
-- Run below command to verify plan for security terraform script
-
-``` bash 
-     
-  terraform plan -var-file=security/terraform.tfvars security 
-  
-```
 - Run below command to create security group 
 
 ``` bash 
      
   terraform apply -var-file=security/terraform.tfvars security 
-  
-```
-- Run below command to install dependencies for database terraform script
-
-``` bash 
-     
-  terraform init -var-file=database/mysql/terraform.tfvars database/mysql
-  
-```
-- Run below command to verify plan for database terraform script
-
-``` bash 
-     
-  terraform plan -var-file=database/mysql/terraform.tfvars database/mysql
   
 ```
 - Run below command to create database
@@ -109,32 +69,16 @@
   export AWS_REGION="us-west-2"       
 ```
   
-- Run below command to validate AMI image creation using packer
 
-``` bash
- packer validate todo.json
-```
-- Run below command to create AMI image of the SpringBoot Application using packer and upload to AWS EBS
+- Run below command to create AMI image of the Todo Application using packer and upload to AWS EBS
 
 ``` bash
   
  packer build todo.json
      
 ```
-- Run below command to install dependencies for deploying above created AMI on to EC2
 
-```bash
-  terraform init -var-file=services/todo/app/terraform.tfvars services/todo/app
-  
-```
-- Run below command to verify plan for deploying above created AMI on to EC2
-
-```bash
-
-  terraform plan -var-file=services/todo/app/terraform.tfvars services/todo/app
-  
-```
-- Run below command to  deploy above created AMI on to EC2
+- Run below command to  deploy Todo App AMI on to EC2
 
 ```bash
 
@@ -176,31 +120,24 @@
    terraform apply -var-file=bastion/terraform.tfvars bastion
 
 ```
-- Now log on to AWS Console and click on services
-- Then click on EC2.
-- Then click on EC2 instance with having bastion in name.
-- Then copy the public ip of bastion EC2
 - Run below command 
 
 ```bash
-  ssh -i <private key file(todo)> -A todo@<public ip copied in above step>
-  ssh -i <private key file(todo)> -A todo@<public ip of application ec2 instance>
+  ssh -i <private-key-file(todo)> -A todo@<bastion-public-ip>
+  ssh -i <private-key-file(todo)> -A todo@<todo-app-private-ip>
   sudo systemctl status todo
   
 ```
 
 
 
-## What you'll need
+## AWS Resources used for Todo Application
 
-- Terraform
-- Packer
-- AWS Config CLI
-- AWS EBS
-- AWS EC2
-- AWS RDS
-- AWS VPC
-- AWS IGW
-- AWS ALB
-- AWS ASG
-- AWS NAT
+- AWS EBS (Elastic Block Storage)
+- AWS EC2 (Elastic Compute Cloud)
+- AWS RDS (Relational Database Service)
+- AWS VPC (Virtual Private Cloud)
+- AWS IGW (Internet Gate Way)
+- AWS ALB (Application Load Balancer)
+- AWS ASG (Auto Scaling Group)
+- AWS NAT (Network Address Translation)
