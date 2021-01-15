@@ -2,12 +2,13 @@
 
 ![Todo-RDS-MySql-EC2](todo_phase_1.png)
 
-1. This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
-2. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
-3. Bastion is on  public subnet which will provide access through ssh to connect to application(EC2) or database (RDS)  for troubleshooting.
-4. Nat Gateway provides access to internet to the private subnets.
-5. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
-6. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs). The load balancer also needs at least 2 public subnets in different AZs.
+1. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
+2. Bastion is on  public subnet which will provide access through ssh to connect to application(EC2) or database (RDS)  for troubleshooting.
+3. Nat Gateway provides access to internet to the private subnets.
+4. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
+5. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs). The load balancer also needs at least 2 public subnets in different AZs.
+
+**About:** This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
 
 ## Steps to deploy application ##
 
