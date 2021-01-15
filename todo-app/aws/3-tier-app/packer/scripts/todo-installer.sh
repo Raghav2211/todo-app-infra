@@ -8,29 +8,29 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confd
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y -qq install curl git openjdk-11-jdk maven apt-transport-https ca-certificates
 
-# Setup sudo to allow no-password sudo for "$USER_GROUP" group and adding "$USER" user
-sudo groupadd -r $USER_GROUP
-sudo useradd -m -s /bin/bash $USER
-sudo usermod -a -G $USER_GROUP $USER
+# Setup sudo to allow no-password sudo for "psi" group and adding "todo" user
+sudo groupadd -r psi
+sudo useradd -m -s /bin/bash todo
+sudo usermod -a -G psi todo
 sudo cp /etc/sudoers /etc/sudoers.orig
-echo "$USER  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$USER
+echo "todo  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/todo
 
 # Installing SSH key
-sudo mkdir -p /home/$USER/.ssh
-sudo chmod 700 /home/$USER/.ssh
-sudo cp /tmp/todo.pub /home/$USER/.ssh/authorized_keys
-sudo chmod 600 /home/$USER/.ssh/authorized_keys
-sudo chown -R $USER /home/$USER/.ssh
-sudo usermod --shell /bin/bash $USER
+sudo mkdir -p /home/todo/.ssh
+sudo chmod 700 /home/todo/.ssh
+sudo cp /tmp/todo.pub /home/todo/.ssh/authorized_keys
+sudo chmod 600 /home/todo/.ssh/authorized_keys
+sudo chown -R todo /home/todo/.ssh
+sudo usermod --shell /bin/bash todo
 
 
 
-# Create JAVA_HOME for $USER & download the todo-app from github
+# Create JAVA_HOME for todo & download the todo-app from github
 
-sudo -H -i -u $USER -- env bash << EOF
+sudo -H -i -u todo -- env bash << EOF
 whoami
-echo ~$USER
-cd /home/$USER
+echo ~todo
+cd /home/todo
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
 git clone https://github.com/Raghav2211/psi-lab.git
@@ -41,8 +41,5 @@ sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
 sudo cp /tmp/todo-bootstrap.sh /opt/todo/bootstrap.sh
 sudo chmod 744 /opt/todo/bootstrap.sh
 sudo cp /tmp/todo.service /etc/systemd/system/todo.service
-sudo mkdir /etc/systemd/system/todo
-sudo chown -R $USER /etc/systemd/system/todo
-sudo echo 'USER=$USER' > /etc/systemd/system/todo/todo.conf
 EOF
 
