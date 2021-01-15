@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 module "bastion" {
   source    = "../../modules/bastion"
   app       = var.app

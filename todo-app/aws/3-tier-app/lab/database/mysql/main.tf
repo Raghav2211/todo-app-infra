@@ -1,6 +1,3 @@
-provider "aws" {
-  region = var.region
-}
 module "mysql" {
   source          = "../../../modules/database/mysql"
   app             = var.app

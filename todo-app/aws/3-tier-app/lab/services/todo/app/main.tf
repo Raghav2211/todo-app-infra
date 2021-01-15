@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 module "todo_app" {
   source                 = "../../../../modules/app-server"
   app                    = var.app
