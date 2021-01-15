@@ -1,8 +1,8 @@
-# Deploying Todo Application with RDS(MySql) on AWS EC2 using terraform
+# Deploy Todo Application with RDS(MySql) on AWS EC2
 
-![SpringBoot-RDS-MySql-EC2](todo_phase_1.png)
+![Todo-RDS-MySql-EC2](todo_phase_1.png)
 
-1. This is an example showing how to deploy a SpringBoot application integrated with RDS(MySql) on to multiple AZs.
+1. This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
 2. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
 3. Bastion is on  public subnet which will provide access through ssh to connect to application(EC2) or database (RDS)  for troubleshooting.
 4. Nat Gateway provides access to internet to the private subnets.
