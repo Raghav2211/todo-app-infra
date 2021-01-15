@@ -37,12 +37,12 @@
   "provisioners": [
     {
         "type": "file",
-        "sources": "todo.pub,services/todo-bootstrap.sh,services/todo.service",
+        "sources": "todo.pub,services/bootstrap.sh,services/app.service",
         "destination": "/tmp/"
       },
     {
         "type": "shell",
-        "script": "scripts/todo-installer.sh",
+        "script": "scripts/installer.sh",
         "environment_vars": [
             "APP_VERSION={{user `app_version`}}"
         ]

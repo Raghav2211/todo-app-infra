@@ -38,8 +38,10 @@ cd psi-lab/todo-app
 mvn clean package -DskipTests
 sudo mkdir /opt/todo
 sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
-sudo cp /tmp/todo-bootstrap.sh /opt/todo/bootstrap.sh
+sudo cp /tmp/bootstrap.sh /opt/todo/bootstrap.sh
 sudo chmod 744 /opt/todo/bootstrap.sh
-sudo cp /tmp/todo.service /etc/systemd/system/todo.service
+sudo cp /tmp/app.service /etc/systemd/system/todo.service
+cd ../..
+rm -r psi-lab
 EOF
 
