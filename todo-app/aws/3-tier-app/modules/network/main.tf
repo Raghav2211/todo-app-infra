@@ -24,7 +24,7 @@ module "vpc" {
   one_nat_gateway_per_az             = local.enable_nat_gateway_per_az
   create_database_subnet_group       = local.database_subnet_group
   create_database_subnet_route_table = length(var.database_subnets) > 1
-
+  instance_tenancy                   = var.instance_tenancy
 
   tags = {
     AppId       = var.app.id

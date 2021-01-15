@@ -67,3 +67,12 @@ variable "enable_nat_gateway_per_az" {
   description = "Enable Nat Gateway per availability zone"
   default     = false
 }
+
+variable "instance_tenancy" {
+  description = "Tenancy option for instances launched into the VPC"
+  default     = "default"
+  validation {
+    condition     = contains(["default", "dedicated", "host"], var.instance_tenancy)
+    error_message = "Instnace tenancy either default or (dedicated or host)."
+  }
+}
