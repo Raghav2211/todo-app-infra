@@ -1,9 +1,13 @@
 #!/bin/bash -x
 
-export MYSQL_HOST='${MYSQL_HOST}'
-export MYSQL_DB_NAME='${MYSQL_DB_NAME}'
-export MYSQL_USER='${MYSQL_USER}'
-export MYSQL_PASSWORD='${MYSQL_PASSWORD}'
+# Export mysql environment variables
+systemctl set-environment MYSQL_HOST=${MYSQL_HOST}
+systemctl set-environment MYSQL_DB_NAME=${MYSQL_DB_NAME}
+systemctl set-environment MYSQL_USER=${MYSQL_USER}
+systemctl set-environment MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
 
 # bootstrap todo app
-java -server -Dfile.encoding=utf-8 -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom -Duser.timezone=UTC -jar /opt/app.jar
+sudo systemctl daemon-reload
+sudo systemctl enable todo.service
+sudo systemctl start todo

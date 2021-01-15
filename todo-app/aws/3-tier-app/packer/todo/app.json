@@ -3,8 +3,6 @@
       "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
       "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
       "aws_region": "{{env `AWS_REGION`}}",
-      "ssh_user" : "{{env `SSH_USER`}}",
-      "ssh_user_group" : "{{env `SSH_USER_GROUP`}}",
       "app_version" : "{{env `APP_VERSION`}}"
   },
   "builders": [
@@ -39,15 +37,13 @@
   "provisioners": [
     {
         "type": "file",
-        "source": "todo.pub",
-        "destination": "/tmp/todo.pub"
+        "sources": "todo.pub,services/bootstrap.sh,services/app.service",
+        "destination": "/tmp/"
       },
     {
         "type": "shell",
-        "script": "scripts/todo-installer.sh",
+        "script": "scripts/installer.sh",
         "environment_vars": [
-            "USER_GROUP={{user `ssh_user_group`}}",
-            "USER={{user `ssh_user`}}",
             "APP_VERSION={{user `app_version`}}"
         ]
     }
