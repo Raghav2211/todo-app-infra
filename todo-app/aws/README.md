@@ -140,7 +140,7 @@
 - AWS EC2 (Elastic Compute Cloud)
 - AWS RDS (Relational Database Service)
 - AWS VPC (Virtual Private Cloud)
-- AWS IGW (Internet Gate Way)
+- AWS IGW (Internet GateWay)
 - AWS ALB (Application Load Balancer)
 - AWS ASG (Auto Scaling Group)
 - AWS NAT (Network Address Translation)
