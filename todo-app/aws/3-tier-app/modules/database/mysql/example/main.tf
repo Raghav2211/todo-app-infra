@@ -26,8 +26,8 @@ module "mysql_sg" {
   description            = "Test mysql database connection"
   use_name_prefix        = false
   auto_ingress_with_self = []
- # auto_ingress_rules     = []
-  ingress_cidr_blocks    = ["0.0.0.0/0"]
+  # auto_ingress_rules     = []
+  ingress_cidr_blocks = ["0.0.0.0/0"]
 
   tags = merge(local.tags, {
     App = "mysql"
