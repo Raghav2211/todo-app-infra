@@ -38,6 +38,12 @@ variable "database_subnets" {
   default     = []
 }
 
+variable "create_internet_gateway" {
+  description = "Whether to enable internet gateway if public subnets is available"
+  type        = bool
+  default     = true
+}
+
 variable "create_database_subnet_group" {
   description = "Whether database subnet group is created"
   type        = bool

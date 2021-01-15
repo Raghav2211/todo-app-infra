@@ -52,6 +52,7 @@ variable "instance_type" {
 
 variable "scaling_capacity" {
   type = map(string)
+  description = "Scaling paramter for EC2 Auto scaling group"
   default = {
     min     = 1
     desired = 2
