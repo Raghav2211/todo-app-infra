@@ -58,7 +58,7 @@ locals {
     Version     = var.app.version
     Role        = "app"
     Environment = var.app.env
-    #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
+    CreateAt    = formatdate("YYYYMMDDhh", timestamp())
   }
 }
 
