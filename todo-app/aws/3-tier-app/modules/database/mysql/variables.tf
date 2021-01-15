@@ -10,13 +10,13 @@ variable "app" {
 
 variable "instance_type" {
   description = "RDS(Mysql) instance type"
-  type = string
+  type        = string
 }
 
 variable "storage_size_in_gib" {
   description = "The allocated storage in gigabytes"
-  type    = number
-  default = 5
+  type        = number
+  default     = 5
 }
 
 variable "database_name" {
@@ -31,12 +31,12 @@ variable "create_database_name_as_appid" {
 }
 
 variable "master_user" {
-  type = string
+  type        = string
   description = "Mysql master user"
 }
 
 variable "master_password" {
-  type = string
+  type        = string
   description = "Mysql master password"
   validation {
     condition     = length(var.master_password) >= 8
