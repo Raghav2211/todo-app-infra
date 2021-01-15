@@ -144,3 +144,5 @@
 - AWS ALB (Application Load Balancer)
 - AWS ASG (Auto Scaling Group)
 - AWS NAT (Network Address Translation)
+- AWS SG  (Security Group)
+- AWS AMI (Amazon Machine Image)
