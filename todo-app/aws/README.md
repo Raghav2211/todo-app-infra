@@ -33,18 +33,18 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 - Create AMI
  
 ``` bash
-    # Go to packer 
-    $ cd 3-tier-app/packer/todo
+  # Go to packer 
+  $ cd 3-tier-app/packer/todo
     
-    # Create ssh key for ssh in todo cluster
-    $ ssh-keygen -t rsa -C "<email-address>" -f todo
+  # Create ssh key for ssh in todo cluster
+  $ ssh-keygen -t rsa -C "<email-address>" -f todo
     
-    # export variables for packer
-    $ export APP_VERSION="<todo-app-version>"
-    $ export AWS_REGION="<region>"
+  # export variables for packer
+  $ export APP_VERSION="<todo-app-version>"
+  $ export AWS_REGION="<region>"
     
-    # Build AMI       
-    $ packer build todo.json
+  # Build AMI       
+  $ packer build todo.json
     
 ```
 
@@ -52,7 +52,8 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 
 ```bash 
   
-  $ cd <env>
+  # Go to environment folder in which you want to deploy cluster
+  $ cd ../../<env>
   
   # Create VPC
   $ terraform apply -var-file=vpc/terraform.tfvars vpc 
@@ -83,12 +84,20 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 - Create Bastion host & SSH Todo App EC2 instance(s)
 
 ```bash
-
-   $ terraform apply -var-file=bastion/terraform.tfvars bastion
-   $ ssh-add -k <todo_pem_file>
-   $ ssh -i <bastion_pem_file> -A <bastion_user>@<basion_public_ip>
-   $ ssh todo@<todo_private_ip>
-   $ sudo systemctl status todo
+  # Deploy bastion host
+  $ terraform apply -var-file=bastion/terraform.tfvars bastion
+   
+  # Add todo private key to key chain
+  $ ssh-add -k <todo_pem_file>
+   
+  # Access the Bastion Host
+  $ ssh -i <bastion_pem_file> -A <bastion_user>@<basion_public_ip>
+   
+  # Access the private instance
+  $ ssh todo@<todo_private_ip>
+   
+  # Get status
+  $ sudo systemctl status todo
 
 ```
 
