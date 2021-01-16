@@ -43,7 +43,7 @@ locals {
     Version     = var.app.version
     Role        = var.app.role
     Environment = var.app.env
-    CreateAt    = formatdate("YYYYMMDDhh", timestamp())
+    LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
 }
 

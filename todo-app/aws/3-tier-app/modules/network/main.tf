@@ -31,7 +31,7 @@ module "vpc" {
     Version     = var.app.version
     Role        = "infra"
     Environment = var.app.env
-    CreateAt    = formatdate("YYYYMMDDhh", timestamp())
+    LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
 
   public_subnet_tags = {
