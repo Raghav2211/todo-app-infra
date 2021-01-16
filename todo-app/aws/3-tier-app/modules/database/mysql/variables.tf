@@ -9,12 +9,14 @@ variable "app" {
 }
 
 variable "instance_type" {
-  type = string
+  description = "RDS(Mysql) instance type"
+  type        = string
 }
 
 variable "storage_size_in_gib" {
-  type    = number
-  default = 5
+  description = "The allocated storage in gigabytes"
+  type        = number
+  default     = 5
 }
 
 variable "database_name" {
@@ -29,11 +31,13 @@ variable "create_database_name_as_appid" {
 }
 
 variable "master_user" {
-  type = string
+  type        = string
+  description = "Mysql master user"
 }
 
 variable "master_password" {
-  type = string
+  type        = string
+  description = "Mysql master password"
   validation {
     condition     = length(var.master_password) >= 8
     error_message = "Master password should not be of length less than 8 charactors."
@@ -42,7 +46,7 @@ variable "master_password" {
 
 variable "subnet_group" {
   default     = ""
-  description = "Database subnet group"
+  description = "Database subnet group, if not provided it'll use default subnet group"
 }
 
 
