@@ -1,7 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
 module "vpc" {
   source                       = "../../modules/network"
   app                          = var.app

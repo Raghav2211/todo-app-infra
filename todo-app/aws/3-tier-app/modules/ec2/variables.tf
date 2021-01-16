@@ -31,11 +31,13 @@ variable "instance_count" {
 }
 
 variable "associate_public_ip_address" {
-  type    = bool
-  default = false
+  description = "Enable public IP address on ec2 instance(s)"
+  type        = bool
+  default     = false
 }
 
 variable "security_group_filters" {
+  description = "Security group filters to find security groups for ec2 instance(s)"
   type = list(object({
     name   = string
     values = list(string)
@@ -44,6 +46,7 @@ variable "security_group_filters" {
 }
 
 variable "subnet_filters" {
+  description = "Subnet filters to find subnet for ec2 instance(s)"
   type = list(object({
     name   = string
     values = list(string)
