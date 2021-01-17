@@ -10,7 +10,7 @@ import (
 func TestBasicNetworkModuleExample(t *testing.T) {
 	region := "us-west-2"
 	varFiles := make([]string, 1, 1)
-	varFiles[0] = "test/basic_network_example.tfvars"
+	varFiles[0] = "test/complete_network_example.tfvars"
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../",
