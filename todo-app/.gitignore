@@ -38,6 +38,7 @@ MANIFEST.MF
 #Remove all public keys 
 *.pub
 
+/**/.idea/*
 
 # Local .terraform directories
 **/.terraform/*
