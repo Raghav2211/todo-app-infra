@@ -1,7 +1,6 @@
 package test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
@@ -12,6 +11,7 @@ import (
 
 func TestIntCompleteNetworkModule(t *testing.T) {
 	region := "us-west-2"
+	vpcName := "vpc-us-west-2-l-psi"
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../example/complete-network/",
@@ -19,21 +19,37 @@ func TestIntCompleteNetworkModule(t *testing.T) {
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 	vpcID := terraform.Output(t, terraformOptions, "vpc_id")
-	// subnets := aws.GetSubnetsForVpc(t, vpcID, region)
-	// require.Equal(t, 6, len(subnets))
 
 	//validate VPC
 	vpc := aws.GetVpcById(t, vpcID, region)
-	require.Equal(t, "vpc-us-west-2-l-psi", vpc.Name)
+	require.Equal(t, vpcName, vpc.Name) // assert vpc name
 
-	// validate public subnet
-	publicSubnets := terraform.Output(t, terraformOptions, "public_subnets")
+	// validate public subnets
+	publicSubnets := terraform.OutputList(t, terraformOptions, "public_subnets")
+	for _, subnet := range publicSubnets {
+		aws.IsPublicSubnet(t, subnet, region) // check subnet is public or not
+	}
+	require.Equal(t, 2, len(publicSubnets)) // assert length
 
-	// for _, subnet := range publicSubnets {
-	// 	aws.IsPublicSubnet(t, subnet, region)
-	// }
+	//validate private subnets
+	privateSubnets := terraform.OutputList(t, terraformOptions, "private_subnets")
+	require.Equal(t, 2, len(privateSubnets)) // assert length
 
-	fmt.Println("{} ", publicSubnets)
+	//validate database subnets
+	databaseSubnets := terraform.OutputList(t, terraformOptions, "database_subnets")
+	require.Equal(t, 2, len(databaseSubnets)) // assert length
+
+	// //validate Internet gateway
+	internetGatewayID := terraform.Output(t, terraformOptions, "igw_id")
+	require.NotNil(t, internetGatewayID) // assert no nil
+
+	// validate Database Subnet group
+	databaseSubnetGroup := terraform.Output(t, terraformOptions, "database_subnet_group")
+	require.Equal(t, vpcName, databaseSubnetGroup) // assert subnet group name
+
+	// validate Nat gateway
+	natGatewayIds := terraform.OutputList(t, terraformOptions, "natgw_ids")
+	require.Equal(t, 1, len(natGatewayIds)) // assert subnet group name
 
 	// Run perpetual diff
 	perpetualPlan := terraform.InitAndPlan(t, terraformOptions)
