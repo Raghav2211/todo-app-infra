@@ -33,10 +33,16 @@ func TestIntCompleteNetworkModule(t *testing.T) {
 
 	//validate private subnets
 	privateSubnets := terraform.OutputList(t, terraformOptions, "private_subnets")
+	for _, subnet := range privateSubnets {
+		assert.False(t, aws.IsPublicSubnet(t, subnet, region))
+	}
 	require.Equal(t, 2, len(privateSubnets)) // assert length
 
 	//validate database subnets
 	databaseSubnets := terraform.OutputList(t, terraformOptions, "database_subnets")
+	for _, subnet := range databaseSubnets {
+		assert.False(t, aws.IsPublicSubnet(t, subnet, region))
+	}
 	require.Equal(t, 2, len(databaseSubnets)) // assert length
 
 	// //validate Internet gateway
