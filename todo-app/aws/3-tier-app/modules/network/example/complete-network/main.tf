@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "../"
+  source = "../../"
   app = {
     id      = "psi"
     version = "1.0.0"
