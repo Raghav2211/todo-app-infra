@@ -103,83 +103,93 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 
 ## Folder layout 
 ```
- 
-├── lab
-│   ├── bastion
-│   │   ├── main.tf
-│   │   ├── terraform.tfvars
-│   │   ├── variables.tf
-│   │   └── versions.tf
-│   ├── database
-│   │   ├── mysql
-│   │   │   ├── main.tf
-│   │   │   ├── terraform.tfvars
-│   │   │   ├── variables.tf
-│   │   │   └── versions.tf
-│   │   └── terraform.tfvars
-│   ├── lab.tfvars
-│   ├── main.tf
-│   ├── security
-│   │   ├── main.tf
-│   │   ├── terraform.tfvars
-│   │   ├── variables.tf
-│   │   └── versions.tf
-│   ├── services
-│   │   └── todo
-│   │       └── app
-│   │           ├── main.tf
-│   │           ├── templates
-│   │           │   └── deployment.tpl
-│   │           ├── terraform.tfvars
-│   │           └── variables.tf
-│   ├── versions.tf
-│   └── vpc
-│       ├── main.tf
-│       ├── terraform.tfvars
-│       ├── variables.tf
-│       └── versions.tf
-├── modules
-│   ├── app-server
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── version.tf
-│   ├── bastion
-│   │   ├── example
-│   │   │   └── main.tf
-│   │   ├── main.tf
-│   │   ├── userdata
-│   │   │   └── user.tpl
-│   │   └── variables.tf
-│   ├── database
-│   │   └── mysql
-│   │       ├── example
-│   │       │   ├── main.tf
-│   │       │   └── outputs.tf
-│   │       ├── main.tf
-│   │       ├── variables.tf
-│   │       └── version.tf
-│   ├── ec2
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
-│   └── network
-│       ├── example
-│       │   ├── main.tf
-│       │   └── outputs.tf
-│       ├── main.tf
-│       ├── outputs.tf
-│       ├── variables.tf
-│       └── version.tf
-└── packer
-    └── todo
-        ├── app.json
-        ├── scripts
-        │   └── installer.sh
-        ├── services
-        │   ├── app.service
-        │   └── bootstrap.sh
-        ├── todo
-        └── todo.pub
+.
+|-- lab
+|   |-- bastion
+|   |   |-- main.tf
+|   |   |-- terraform.tfstate
+|   |   |-- terraform.tfstate.backup
+|   |   |-- terraform.tfvars
+|   |   |-- variables.tf
+|   |   `-- versions.tf
+|   |-- database
+|   |   |-- mysql
+|   |   |   |-- main.tf
+|   |   |   |-- terraform.tfstate
+|   |   |   |-- terraform.tfstate.backup
+|   |   |   |-- terraform.tfvars
+|   |   |   |-- variables.tf
+|   |   |   `-- versions.tf
+|   |   |-- terraform.tfstate
+|   |   `-- terraform.tfstate.backup
+|   |-- main.tf
+|   |-- security
+|   |   |-- main.tf
+|   |   |-- terraform.tfstate
+|   |   |-- terraform.tfstate.backup
+|   |   |-- terraform.tfvars
+|   |   |-- variables.tf
+|   |   `-- versions.tf
+|   |-- services
+|   |   `-- todo
+|   |       `-- app
+|   |           |-- main.tf
+|   |           |-- templates
+|   |           |   `-- deployment.tpl
+|   |           |-- terraform.tfvars
+|   |           `-- variables.tf
+|   |-- terraform.tfstate
+|   |-- terraform.tfstate.backup
+|   |-- terraform.tfvars
+|   |-- versions.tf
+|   `-- vpc
+|       |-- main.tf
+|       |-- terraform.tfstate
+|       |-- terraform.tfstate.backup
+|       |-- terraform.tfvars
+|       |-- variables.tf
+|       |-- versions.tf
+|       `-- vpc.tfvars
+|-- modules
+|   |-- app-server
+|   |   |-- main.tf
+|   |   |-- variables.tf
+|   |   `-- version.tf
+|   |-- bastion
+|   |   |-- example
+|   |   |   `-- main.tf
+|   |   |-- main.tf
+|   |   |-- userdata
+|   |   |   `-- user.tpl
+|   |   `-- variables.tf
+|   |-- database
+|   |   `-- mysql
+|   |       |-- example
+|   |       |   |-- main.tf
+|   |       |   `-- outputs.tf
+|   |       |-- main.tf
+|   |       |-- variables.tf
+|   |       `-- version.tf
+|   |-- ec2
+|   |   |-- main.tf
+|   |   |-- outputs.tf
+|   |   `-- variables.tf
+|   `-- network
+|       |-- example
+|       |   |-- main.tf
+|       |   `-- outputs.tf
+|       |-- main.tf
+|       |-- outputs.tf
+|       |-- variables.tf
+|       `-- version.tf
+`-- packer
+    `-- todo
+        |-- app.json
+        |-- scripts
+        |   `-- installer.sh
+        `-- services
+            |-- app.service
+            `-- bootstrap.sh
 ```
 
 
