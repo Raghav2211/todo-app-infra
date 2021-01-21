@@ -38,8 +38,8 @@ locals {
   single_nat_gateway            = local.enable_nat_gateway_per_subnet && var.enable_nat_gateway_single
   enable_nat_gateway_per_az     = local.enable_nat_gateway_per_subnet && (var.enable_nat_gateway_per_az && var.enable_nat_gateway_single ? ! var.enable_nat_gateway_per_az : var.enable_nat_gateway_per_az)
   database_subnet_group         = var.create_database_subnet_group ? length(var.database_subnets) > 1 : ! var.create_database_subnet_group
-  ami         = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
-  instance_count = var.instance_count != null && var.instance_count > 0 ? var.instance_count : length(module.vpc.public_subnets)
+  ami                           = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
+  instance_count                = var.instance_count != null && var.instance_count > 0 ? var.instance_count : length(module.vpc.public_subnets)
   tags = {
     AppId       = var.app.id
     Version     = var.app.version
@@ -123,5 +123,5 @@ module "ec2_bastion" {
   subnet_ids                  = module.vpc.public_subnets
   associate_public_ip_address = true
   user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
-  tags = local.tags
+  tags                        = local.tags
 }
