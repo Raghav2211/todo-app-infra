@@ -14,16 +14,8 @@ provider "kubernetes" {
   version                = "~> 1.11"
 }
 
-data "aws_availability_zones" "available" {
-}
-
 locals {
-  cluster_name = "test-eks-${random_string.suffix.result}"
-}
-
-resource "random_string" "suffix" {
-  length  = 8
-  special = false
+  cluster_name = "test-eks"
 }
 
 resource "aws_security_group" "worker_group_mgmt_one" {
@@ -37,21 +29,6 @@ resource "aws_security_group" "worker_group_mgmt_one" {
 
     cidr_blocks = [
       "10.0.0.0/8",
-    ]
-  }
-}
-
-resource "aws_security_group" "worker_group_mgmt_two" {
-  name_prefix = "worker_group_mgmt_two"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "192.168.0.0/16",
     ]
   }
 }
@@ -73,7 +50,7 @@ resource "aws_security_group" "all_worker_mgmt" {
   }
 }
 
-module "eks-vpc" {
+module "vpc" {
   source                       = "../network/"
   app                          = var.app
   cidr                         = "10.0.0.0/16"
@@ -116,17 +93,10 @@ module "eks" {
       asg_desired_capacity          = 2
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
     },
-    {
-      name                          = "worker-group-2"
-      instance_type                 = "t2.medium"
-      additional_userdata           = "echo foo bar"
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_two.id]
-      asg_desired_capacity          = 1
-    },
   ]
 
   worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
-  map_roles                            = var.map_roles
-  map_users                            = var.map_users
-  map_accounts                         = var.map_accounts
+  #map_roles                            = var.map_roles
+  #map_users                            = var.map_users
+  #map_accounts                         = var.map_accounts
 }
