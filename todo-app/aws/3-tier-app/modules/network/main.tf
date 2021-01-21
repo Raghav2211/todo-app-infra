@@ -31,7 +31,6 @@ data "template_file" "lab_user_ssh_data" {
   }
 }
 
-
 locals {
   name_suffix                   = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   enable_nat_gateway_per_subnet = var.enable_nat_gateway_per_subnet || var.enable_nat_gateway_single || var.enable_nat_gateway_per_az
