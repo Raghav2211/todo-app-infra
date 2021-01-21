@@ -76,3 +76,13 @@ variable "instance_tenancy" {
     error_message = "Instnace tenancy either default or (dedicated or host)."
   }
 }
+
+variable "public_subnet_tags" {
+  type        = map(string)
+  description = "Additional tags for public subnet"
+}
+
+variable "private_subnet_tags" {
+  type        = map(string)
+  description = "Additional tags for private subnet"
+}

@@ -34,13 +34,13 @@ module "vpc" {
     LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
 
-  public_subnet_tags = {
+  public_subnet_tags = merge(var.public_subnet_tags, {
     Tier = "public"
-  }
+  })
 
-  private_subnet_tags = {
+  private_subnet_tags = merge(var.private_subnet_tags, {
     Tier = "private"
-  }
+  })
 
   database_subnet_tags = {
     Tier = "db"
