@@ -19,3 +19,6 @@ variable "public_subnets" {}
 variable "private_subnets" {}
 
 variable "database_subnets" {}
+
+# Validation on admin as user
+variable "ssh_users" {}
