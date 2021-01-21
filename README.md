@@ -12,7 +12,8 @@ This repo cook sample applications and follow best practices to deploy them in d
 - [X] Todo App deployment on local using docker-compose
 - [X] Todo App deployment on local using swarm
 - [X] Todo App deployment on local k8s using Helm
-- [ ] Todo App deployment on AWS, Azure, GCP & Heroku
+- [X] Todo App deployment on AWS on EC2
+- [ ] Todo App deployment on AWS using eks
 - [ ] Add Prometheus,Grafana & Tracing
 - [ ] Add CI/CD (github action)
 - [ ] Add Microsevice stack 
