@@ -80,9 +80,11 @@ variable "instance_tenancy" {
 variable "public_subnet_tags" {
   type        = map(string)
   description = "Additional tags for public subnet"
+  default     = {}
 }
 
 variable "private_subnet_tags" {
   type        = map(string)
   description = "Additional tags for private subnet"
+  default     = {}
 }
