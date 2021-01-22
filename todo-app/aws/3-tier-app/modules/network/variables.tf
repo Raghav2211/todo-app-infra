@@ -34,11 +34,11 @@ variable "bastion_ingress_cidrs" {
 variable "bastion_image_id" {
   type        = string
   description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04"
-  default     = ""
-  # validation {
-  #   condition     = can(regex("^ami-", var.ami))
-  #   error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
-  # }
+  default     = null
+  validation {
+    condition     = var.bastion_image_id != null ? can(regex("^ami-", var.ami)) : true
+    error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
+  }
 }
 
 variable "instance_type" {
