@@ -46,14 +46,11 @@ variable "bastion_instance_type" {
   description = "Type of instance, Default is t2.micro"
   default     = "t2.micro"
 }
-# Validation on admin as user
+
 variable "bastion_ssh_users" {
   type        = list(map(string))
   description = "Bastion host ssh user details"
-  validation {
-    condition     = length(var.bastion_ssh_users) >= 1
-    error_message = "Atleast one bastion cluster ssh user needs to be passed."
-  }
+  default     = []
 }
 
 variable "public_subnets" {
@@ -119,6 +116,7 @@ variable "env_cidr_block" {
 }
 
 variable "bastion_instance_count" {
-  type    = number
-  default = null
+  type        = number
+  description = "Bastion ec2 instance count, Default is length of public subnets"
+  default     = null
 }

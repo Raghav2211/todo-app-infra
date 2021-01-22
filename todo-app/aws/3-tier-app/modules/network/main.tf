@@ -24,7 +24,7 @@ data "aws_ami" "ubuntu" {
 
 data "template_file" "lab_user_ssh_data" {
   template = file("${path.module}/userdata/user.tpl")
-  count    = local.enable_bastion_host ? length(var.bastion_ssh_users) : 0
+  count    = local.enable_bastion_host ? length(coalescelist(var.bastion_ssh_users)) : 0
   vars = {
     username   = var.bastion_ssh_users[count.index]["username"]
     public_key = var.bastion_ssh_users[count.index]["public_key"]
