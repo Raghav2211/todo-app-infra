@@ -119,9 +119,9 @@ variable "env_cidr_block" {
 }
 
 
-variable "instance_count" {
+variable "bastion_instance_count" {
   type    = number
-  default = 0
+  default = null
 }
 
 variable "associate_public_ip_address" {
