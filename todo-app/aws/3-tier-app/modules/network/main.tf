@@ -7,7 +7,7 @@ data "http" "myip" {
 }
 
 data "aws_ami" "ubuntu" {
-  count       = var.bastion_image_id == null ? 1 : 0
+  count       = local.enable_bastion_host && var.bastion_image_id == null ? 1 : 0
   most_recent = true
   owners      = ["099720109477"] # Canonical
 
@@ -24,7 +24,7 @@ data "aws_ami" "ubuntu" {
 
 data "template_file" "lab_user_ssh_data" {
   template = file("${path.module}/userdata/user.tpl")
-  count    = length(var.bastion_ssh_users)
+  count    = local.enable_bastion_host ? length(var.bastion_ssh_users) : 0
   vars = {
     username   = var.bastion_ssh_users[count.index]["username"]
     public_key = var.bastion_ssh_users[count.index]["public_key"]
@@ -37,8 +37,10 @@ locals {
   single_nat_gateway            = local.enable_nat_gateway_per_subnet && var.enable_nat_gateway_single
   enable_nat_gateway_per_az     = local.enable_nat_gateway_per_subnet && (var.enable_nat_gateway_per_az && var.enable_nat_gateway_single ? ! var.enable_nat_gateway_per_az : var.enable_nat_gateway_per_az)
   database_subnet_group         = var.create_database_subnet_group ? length(var.database_subnets) > 1 : ! var.create_database_subnet_group
+  public_subnets_size           = length(module.vpc.public_subnets)
+  enable_bastion_host           = local.public_subnets_size > 0
   ami                           = var.bastion_image_id != null ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id
-  instance_count                = var.bastion_instance_count != null && var.bastion_instance_count > 0 ? var.bastion_instance_count : length(module.vpc.public_subnets)
+  instance_count                = local.enable_bastion_host && var.bastion_instance_count != null && var.bastion_instance_count > 0 ? var.bastion_instance_count : local.public_subnets_size
   tags = {
     AppId       = var.app.id
     Version     = var.app.version
@@ -99,6 +101,7 @@ module "vpc" {
 }
 module "sg_bastion" {
   source                 = "terraform-aws-modules/security-group/aws//modules/ssh"
+  create                 = local.enable_bastion_host
   version                = "3.17.0"
   name                   = "security-group-${local.name_suffix}-bastion"
   vpc_id                 = module.vpc.vpc_id
