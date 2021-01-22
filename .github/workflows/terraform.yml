@@ -32,7 +32,10 @@ jobs:
       # Init pulls credentials from the .aws/credentials file by default
       - name: "Run - Terraform Init"
         run: |
-          terraform init -input=false lab
+          terraform init -input=false lab/vpc
+          terraform init -input=false lab/security
+          terraform init -input=false lab/database/mysql
+          terraform init -input=false lab/service/todo/app
       
       - name: "Run - Terraform Format check"
         run: |
