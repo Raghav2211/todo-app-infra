@@ -47,11 +47,11 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 # Validation on admin as user
-variable "ssh_users" {
+variable "bastion_ssh_users" {
   type        = list(map(string))
   description = "Bastion host ssh user details"
   validation {
-    condition     = length(var.ssh_users) >= 1
+    condition     = length(var.bastion_ssh_users) >= 1
     error_message = "Atleast one bastion cluster ssh user needs to be passed."
   }
 }

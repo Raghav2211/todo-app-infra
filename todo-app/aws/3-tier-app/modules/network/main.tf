@@ -24,10 +24,10 @@ data "aws_ami" "ubuntu" {
 
 data "template_file" "lab_user_ssh_data" {
   template = file("${path.module}/userdata/user.tpl")
-  count    = length(var.ssh_users)
+  count    = length(var.bastion_ssh_users)
   vars = {
-    username   = var.ssh_users[count.index]["username"]
-    public_key = var.ssh_users[count.index]["public_key"]
+    username   = var.bastion_ssh_users[count.index]["username"]
+    public_key = var.bastion_ssh_users[count.index]["public_key"]
   }
 }
 

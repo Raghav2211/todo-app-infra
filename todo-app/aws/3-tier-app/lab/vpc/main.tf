@@ -7,5 +7,5 @@ module "vpc" {
   private_subnets              = var.private_subnets
   database_subnets             = var.database_subnets
   create_database_subnet_group = true
-  ssh_users                    = var.ssh_users
+  bastion_ssh_users            = var.bastion_ssh_users
 }
