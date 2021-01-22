@@ -117,7 +117,7 @@ module "ec2_bastion" {
   name                        = "ec2-${local.name_suffix}-bastion"
   instance_count              = local.instance_count
   ami                         = local.ami
-  instance_type               = var.instance_type
+  instance_type               = var.bastion_instance_type
   vpc_security_group_ids      = list(module.sg_bastion.this_security_group_id)
   subnet_ids                  = module.vpc.public_subnets
   associate_public_ip_address = true

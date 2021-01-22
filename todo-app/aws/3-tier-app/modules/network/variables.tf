@@ -41,7 +41,7 @@ variable "bastion_image_id" {
   }
 }
 
-variable "instance_type" {
+variable "bastion_instance_type" {
   type        = string
   description = "Type of instance, Default is t2.micro"
   default     = "t2.micro"
