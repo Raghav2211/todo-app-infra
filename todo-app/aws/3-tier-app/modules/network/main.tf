@@ -7,7 +7,7 @@ data "http" "myip" {
 }
 
 data "aws_ami" "ubuntu" {
-  count       = var.ami == "" ? 1 : 0
+  count       = var.bastion_image_id == "" ? 1 : 0
   most_recent = true
   owners      = ["099720109477"] # Canonical
 
@@ -37,7 +37,7 @@ locals {
   single_nat_gateway            = local.enable_nat_gateway_per_subnet && var.enable_nat_gateway_single
   enable_nat_gateway_per_az     = local.enable_nat_gateway_per_subnet && (var.enable_nat_gateway_per_az && var.enable_nat_gateway_single ? ! var.enable_nat_gateway_per_az : var.enable_nat_gateway_per_az)
   database_subnet_group         = var.create_database_subnet_group ? length(var.database_subnets) > 1 : ! var.create_database_subnet_group
-  ami                           = var.ami != "" ? var.ami : data.aws_ami.ubuntu[0].image_id
+  ami                           = var.bastion_image_id != "" ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id
   instance_count                = var.bastion_instance_count != null && var.bastion_instance_count > 0 ? var.bastion_instance_count : length(module.vpc.public_subnets)
   tags = {
     AppId       = var.app.id

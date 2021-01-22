@@ -31,7 +31,7 @@ variable "bastion_ingress_cidrs" {
   description = "Ingress CIDR(s) blocks for the bastion security group"
   default     = []
 }
-variable "ami" {
+variable "bastion_image_id" {
   type        = string
   description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04"
   default     = ""
