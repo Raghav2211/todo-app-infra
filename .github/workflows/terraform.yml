@@ -39,7 +39,7 @@ jobs:
       
       - name: "Run - Terraform Format check"
         run: |
-          find . \( -path './lab/.terraform' \) -prune -o -type f -name '*.tf' | while read f
+          find . \( -path '.terraform'  \) -prune -o -type f -name '*.tf' | while read f
           do 
             terraform fmt -check $f
               if [ $? -ne 0 ]
