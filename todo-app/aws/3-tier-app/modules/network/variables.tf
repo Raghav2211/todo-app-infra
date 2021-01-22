@@ -36,7 +36,7 @@ variable "bastion_image_id" {
   description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04"
   default     = null
   validation {
-    condition     = var.bastion_image_id != null ? can(regex("^ami-", var.ami)) : true
+    condition     = var.bastion_image_id != null ? can(regex("^ami-", var.bastion_image_id)) : true
     error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
   }
 }
@@ -118,38 +118,7 @@ variable "env_cidr_block" {
   default     = true
 }
 
-
 variable "bastion_instance_count" {
   type    = number
   default = null
-}
-
-variable "associate_public_ip_address" {
-  description = "Enable public IP address on ec2 instance(s)"
-  type        = bool
-  default     = false
-}
-
-variable "security_group_filters" {
-  description = "Security group filters to find security groups for ec2 instance(s)"
-  type = list(object({
-    name   = string
-    values = list(string)
-  }))
-  default = []
-}
-
-variable "subnet_filters" {
-  description = "Subnet filters to find subnet for ec2 instance(s)"
-  type = list(object({
-    name   = string
-    values = list(string)
-  }))
-  default = []
-}
-
-variable "user_data" {
-  description = "The user data to provide when launching the instance."
-  type        = string
-  default     = null
 }
