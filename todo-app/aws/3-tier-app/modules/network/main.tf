@@ -39,7 +39,7 @@ locals {
   database_subnet_group         = var.create_database_subnet_group ? length(var.database_subnets) > 1 : ! var.create_database_subnet_group
   public_subnets_size           = length(module.vpc.public_subnets)
   enable_bastion_host           = local.public_subnets_size > 0
-  ami                           = var.bastion_image_id != null ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id
+  ami                           = local.enable_bastion_host ? var.bastion_image_id != null ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id : ""
   instance_count                = local.enable_bastion_host && var.bastion_instance_count != null ? var.bastion_instance_count > 0 ? var.bastion_instance_count : local.public_subnets_size : local.public_subnets_size
   tags = {
     AppId       = var.app.id
