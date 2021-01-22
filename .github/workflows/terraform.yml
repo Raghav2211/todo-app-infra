@@ -41,6 +41,8 @@ jobs:
           done
                 
       - name: "Terraform Init & Validate"
+        env:
+          AWS_DEFAULT_REGION: us-west-2 
         run: |
           terraform init lab/vpc 
           terraform validate lab/vpc
