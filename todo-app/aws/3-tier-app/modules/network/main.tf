@@ -41,6 +41,9 @@ locals {
   enable_bastion_host           = local.public_subnets_size > 0
   ami                           = local.enable_bastion_host ? var.bastion_image_id != null ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id : ""
   instance_count                = local.enable_bastion_host && var.bastion_instance_count != null ? var.bastion_instance_count > 0 ? var.bastion_instance_count : local.public_subnets_size : local.public_subnets_size
+  bastion_tags = {
+    App = "bastion"
+  }
   tags = {
     AppId       = var.app.id
     Version     = var.app.version
@@ -110,10 +113,7 @@ module "sg_bastion" {
   ingress_cidr_blocks    = concat(var.bastion_ingress_cidrs, var.env_cidr_block ? ["${chomp(data.http.myip[0].body)}/32"] : [])
   use_name_prefix        = false
   auto_ingress_with_self = []
-
-  tags = merge(local.tags, {
-    App = "bastion"
-  })
+  tags                   = merge(local.tags, bastion_tags)
 }
 
 module "ec2_bastion" {
@@ -127,5 +127,5 @@ module "ec2_bastion" {
   subnet_ids                  = module.vpc.public_subnets
   associate_public_ip_address = true
   user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
-  tags                        = local.tags
+  tags                        = merge(local.tags, bastion_tags)
 }
