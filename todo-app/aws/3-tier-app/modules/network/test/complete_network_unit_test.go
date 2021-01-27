@@ -14,5 +14,5 @@ func TestUnitCompleteNetworkModule(t *testing.T) {
 	})
 	defer terraform.Destroy(t, terraformOptions)
 	output := terraform.InitAndPlan(t, terraformOptions)
-	assert.Contains(t, output, "22 to add, 0 to change, 0 to destroy")
+	assert.Contains(t, output, "27 to add, 0 to change, 0 to destroy")
 }
