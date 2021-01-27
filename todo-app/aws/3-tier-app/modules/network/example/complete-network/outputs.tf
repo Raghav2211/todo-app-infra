@@ -25,3 +25,7 @@ output "database_subnet_group" {
 output "natgw_ids" {
   value = module.vpc.natgw_ids
 }
+
+output "bastion_public_ips" {
+  value = module.vpc.bastion_public_ips
+}

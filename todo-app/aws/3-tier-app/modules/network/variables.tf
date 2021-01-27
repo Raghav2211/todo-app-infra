@@ -20,6 +20,39 @@ variable "azs" {
   default     = []
 }
 
+variable "bastion_description" {
+  type        = string
+  description = "Bastion security group"
+  default     = "Bastion security group"
+}
+
+variable "bastion_ingress_cidrs" {
+  type        = list
+  description = "Ingress CIDR(s) blocks for the bastion security group"
+  default     = []
+}
+variable "bastion_image_id" {
+  type        = string
+  description = "The AMI to use for the instance. By default it is the AMI provided by Amazon with Ubuntu 20.04"
+  default     = null
+  validation {
+    condition     = var.bastion_image_id != null ? can(regex("^ami-", var.bastion_image_id)) : true
+    error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
+  }
+}
+
+variable "bastion_instance_type" {
+  type        = string
+  description = "Type of instance, Default is t2.micro"
+  default     = "t2.micro"
+}
+
+variable "bastion_ssh_users" {
+  type        = list(map(string))
+  description = "Bastion host ssh user details"
+  default     = []
+}
+
 variable "public_subnets" {
   description = "A list of public subnets inside the VPC"
   type        = list
@@ -75,4 +108,15 @@ variable "instance_tenancy" {
     condition     = contains(["default", "dedicated", "host"], var.instance_tenancy)
     error_message = "Instnace tenancy either default or (dedicated or host)."
   }
+}
+variable "env_cidr_block" {
+  type        = bool
+  description = "Add current deployment enviornment cidr block"
+  default     = true
+}
+
+variable "bastion_instance_count" {
+  type        = number
+  description = "Bastion ec2 instance count, Default is length of public subnets"
+  default     = null
 }

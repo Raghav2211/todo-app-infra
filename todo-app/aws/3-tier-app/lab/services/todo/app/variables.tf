@@ -14,3 +14,5 @@ variable "app" {
 variable "instance_type" {}
 
 variable "app_env_vars" {}
+
+variable "account_id" {}
