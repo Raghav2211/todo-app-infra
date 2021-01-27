@@ -99,6 +99,7 @@ module "vpc" {
     Name = "default-subnet-grp-${local.name_suffix}"
   }
 }
+
 module "sg_bastion" {
   source                 = "terraform-aws-modules/security-group/aws//modules/ssh"
   create                 = local.enable_bastion_host
@@ -114,6 +115,7 @@ module "sg_bastion" {
     App = "bastion"
   })
 }
+
 module "ec2_bastion" {
   source                      = "terraform-aws-modules/ec2-instance/aws"
   version                     = "2.16.0"

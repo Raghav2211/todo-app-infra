@@ -1,21 +1,47 @@
 package test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/gruntwork-io/terratest/modules/retry"
+	"github.com/gruntwork-io/terratest/modules/ssh"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
+const (
+	region      = "us-west-2"
+	vpcName     = "vpc-us-west-2-l-psi"
+	keyPairname = "todo-bastion"
+)
+
+// M is an alias for map[string]interface{}
+type LOM map[string]interface{}
+
 func TestIntCompleteNetworkModule(t *testing.T) {
-	region := "us-west-2"
-	vpcName := "vpc-us-west-2-l-psi"
+	keyPair := createAwsKeyPair(t)
+	var bastionSSHUsers []LOM
+	publicKeyStr := []string{"<<EOF", strings.Replace(keyPair.PublicKey, "\n", "", -1), "EOF"}
+	bastionSSHUsers = append(bastionSSHUsers, map[string]interface{}{
+		"username":   "todoapp",
+		"public_key": strings.Join(publicKeyStr, " "),
+	})
+
+	fmt.Println(" public key str {} ", strings.Join(publicKeyStr, "\n"))
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../example/complete-network/",
+		Vars: map[string]interface{}{
+			"bastion_ssh_users": bastionSSHUsers,
+		},
 	})
+
+	defer aws.DeleteEC2KeyPair(t, keyPair)
 	defer terraform.Destroy(t, terraformOptions)
 	terraform.InitAndApply(t, terraformOptions)
 	vpcID := terraform.Output(t, terraformOptions, "vpc_id")
@@ -59,5 +85,75 @@ func TestIntCompleteNetworkModule(t *testing.T) {
 
 	// Run perpetual diff
 	perpetualPlan := terraform.InitAndPlan(t, terraformOptions)
-	assert.Contains(t, perpetualPlan, "0 to add, 14 to change, 0 to destroy")
+	assert.Contains(t, perpetualPlan, "No changes. Infrastructure is up-to-date")
+
+	// bastion_public_ips := terraform.OutputList(t, terraformOptions, "bastion_public_ips")
+	// for _, ip := range bastion_public_ips {
+	// 	fmt.Println("{}", ip)
+	// 	test_structure.LoadEc2KeyPair()
+	// }
+
+}
+
+func createAwsKeyPair(t *testing.T) *aws.Ec2Keypair {
+	keyPair := aws.CreateAndImportEC2KeyPair(t, region, keyPairname)
+	return keyPair
+}
+
+func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
+	// Run `terraform output` to get the value of an output variable
+	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
+
+	// We're going to try to SSH to the instance IP, using the Key Pair we created earlier, and the user "ubuntu",
+	// as we know the Instance is running an Ubuntu AMI that has such a user
+	publicHost := ssh.Host{
+		Hostname:    publicInstanceIP,
+		SshKeyPair:  keyPair.KeyPair,
+		SshUserName: "ubuntu",
+	}
+
+	// It can take a minute or so for the Instance to boot up, so retry a few times
+	maxRetries := 30
+	timeBetweenRetries := 5 * time.Second
+	description := fmt.Sprintf("SSH to public host %s", publicInstanceIP)
+
+	// Run a simple echo command on the server
+	expectedText := "Hello, World"
+	command := fmt.Sprintf("echo -n '%s'", expectedText)
+
+	// Verify that we can SSH to the Instance and run commands
+	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
+		actualText, err := ssh.CheckSshCommandE(t, publicHost, command)
+
+		if err != nil {
+			return "", err
+		}
+
+		if strings.TrimSpace(actualText) != expectedText {
+			return "", fmt.Errorf("Expected SSH command to return '%s' but got '%s'", expectedText, actualText)
+		}
+
+		return "", nil
+	})
+
+	// Run a command on the server that results in an error,
+	expectedText = "Hello, World"
+	command = fmt.Sprintf("echo -n '%s' && exit 1", expectedText)
+	description = fmt.Sprintf("SSH to public host %s with error command", publicInstanceIP)
+
+	// Verify that we can SSH to the Instance, run the command and see the output
+	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
+
+		actualText, err := ssh.CheckSshCommandE(t, publicHost, command)
+
+		if err == nil {
+			return "", fmt.Errorf("Expected SSH command to return an error but got none")
+		}
+
+		if strings.TrimSpace(actualText) != expectedText {
+			return "", fmt.Errorf("Expected SSH command to return '%s' but got '%s'", expectedText, actualText)
+		}
+
+		return "", nil
+	})
 }

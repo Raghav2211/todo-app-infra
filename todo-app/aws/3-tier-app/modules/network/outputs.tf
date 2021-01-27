@@ -33,3 +33,7 @@ output "natgw_ids" {
   description = "List of IDs of Nat gateway"
   value       = module.vpc.natgw_ids
 }
+
+output "bastion_public_ips" {
+  value = module.ec2_bastion.public_ip
+}
