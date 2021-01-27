@@ -113,7 +113,7 @@ module "sg_bastion" {
   ingress_cidr_blocks    = concat(var.bastion_ingress_cidrs, var.env_cidr_block ? ["${chomp(data.http.myip[0].body)}/32"] : [])
   use_name_prefix        = false
   auto_ingress_with_self = []
-  tags                   = merge(local.tags, bastion_tags)
+  tags                   = merge(local.tags, local.bastion_tags)
 }
 
 module "ec2_bastion" {
@@ -127,5 +127,5 @@ module "ec2_bastion" {
   subnet_ids                  = module.vpc.public_subnets
   associate_public_ip_address = true
   user_data                   = join("\n", data.template_file.lab_user_ssh_data.*.rendered)
-  tags                        = merge(local.tags, bastion_tags)
+  tags                        = merge(local.tags, local.bastion_tags)
 }
