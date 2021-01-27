@@ -26,13 +26,10 @@ type LOM map[string]interface{}
 func TestIntCompleteNetworkModule(t *testing.T) {
 	keyPair := createAwsKeyPair(t)
 	var bastionSSHUsers []LOM
-	publicKeyStr := []string{"<<EOF", strings.Replace(keyPair.PublicKey, "\n", "", -1), "EOF"}
 	bastionSSHUsers = append(bastionSSHUsers, map[string]interface{}{
 		"username":   "todoapp",
-		"public_key": strings.Join(publicKeyStr, " "),
+		"public_key": strings.Replace(keyPair.PublicKey, "\n", "", -1),
 	})
-
-	fmt.Println(" public key str {} ", strings.Join(publicKeyStr, "\n"))
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		TerraformDir: "../example/complete-network/",
@@ -84,14 +81,13 @@ func TestIntCompleteNetworkModule(t *testing.T) {
 	require.Equal(t, 1, len(natGatewayIds)) // assert subnet group name
 
 	// Run perpetual diff
-	perpetualPlan := terraform.InitAndPlan(t, terraformOptions)
-	assert.Contains(t, perpetualPlan, "No changes. Infrastructure is up-to-date")
+	// perpetualPlan := terraform.InitAndPlan(t, terraformOptions)
+	// assert.Contains(t, perpetualPlan, "No changes. Infrastructure is up-to-date")
 
-	// bastion_public_ips := terraform.OutputList(t, terraformOptions, "bastion_public_ips")
-	// for _, ip := range bastion_public_ips {
-	// 	fmt.Println("{}", ip)
-	// 	test_structure.LoadEc2KeyPair()
-	// }
+	bastionPublicIPs := terraform.OutputList(t, terraformOptions, "bastion_public_ips")
+	for _, ip := range bastionPublicIPs {
+		testSSHToBastion(t, terraformOptions, keyPair, "todoapp", ip)
+	}
 
 }
 
@@ -100,22 +96,16 @@ func createAwsKeyPair(t *testing.T) *aws.Ec2Keypair {
 	return keyPair
 }
 
-func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
-	// Run `terraform output` to get the value of an output variable
-	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
+func testSSHToBastion(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair, sshuserName string, bastionPublicIP string) {
 
-	// We're going to try to SSH to the instance IP, using the Key Pair we created earlier, and the user "ubuntu",
-	// as we know the Instance is running an Ubuntu AMI that has such a user
 	publicHost := ssh.Host{
-		Hostname:    publicInstanceIP,
+		Hostname:    bastionPublicIP,
 		SshKeyPair:  keyPair.KeyPair,
-		SshUserName: "ubuntu",
+		SshUserName: sshuserName,
 	}
-
-	// It can take a minute or so for the Instance to boot up, so retry a few times
 	maxRetries := 30
 	timeBetweenRetries := 5 * time.Second
-	description := fmt.Sprintf("SSH to public host %s", publicInstanceIP)
+	description := fmt.Sprintf("SSH to public host %s%%s", sshuserName, bastionPublicIP)
 
 	// Run a simple echo command on the server
 	expectedText := "Hello, World"
@@ -127,27 +117,6 @@ func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyP
 
 		if err != nil {
 			return "", err
-		}
-
-		if strings.TrimSpace(actualText) != expectedText {
-			return "", fmt.Errorf("Expected SSH command to return '%s' but got '%s'", expectedText, actualText)
-		}
-
-		return "", nil
-	})
-
-	// Run a command on the server that results in an error,
-	expectedText = "Hello, World"
-	command = fmt.Sprintf("echo -n '%s' && exit 1", expectedText)
-	description = fmt.Sprintf("SSH to public host %s with error command", publicInstanceIP)
-
-	// Verify that we can SSH to the Instance, run the command and see the output
-	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
-
-		actualText, err := ssh.CheckSshCommandE(t, publicHost, command)
-
-		if err == nil {
-			return "", fmt.Errorf("Expected SSH command to return an error but got none")
 		}
 
 		if strings.TrimSpace(actualText) != expectedText {
