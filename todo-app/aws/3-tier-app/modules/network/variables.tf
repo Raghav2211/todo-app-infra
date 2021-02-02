@@ -20,6 +20,12 @@ variable "azs" {
   default     = []
 }
 
+variable "enable_bastion_host" {
+  type        = bool
+  description = "Whether to add bastion host"
+  default     = false
+}
+
 variable "bastion_description" {
   type        = string
   description = "Bastion security group"
