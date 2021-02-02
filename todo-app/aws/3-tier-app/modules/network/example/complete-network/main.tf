@@ -17,4 +17,5 @@ module "vpc" {
   create_internet_gateway      = true
   create_database_subnet_group = true
   enable_nat_gateway_single    = true
+  bastion_ssh_users            = var.bastion_ssh_users
 } 
