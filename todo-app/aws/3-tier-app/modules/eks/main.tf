@@ -17,7 +17,15 @@ provider "kubernetes" {
 }
 
 locals {
-  cluster_name = "test-eks"
+  name_suffix  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
+  cluster_name = "eks-${local.name_suffix}"
+  tags = {
+    AppId       = var.app.id
+    Version     = var.app.version
+    Role        = "infra"
+    Environment = var.app.env
+    #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
+  }
 }
 
 resource "aws_security_group" "worker_group_mgmt_one" {
@@ -65,7 +73,6 @@ module "vpc" {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/elb"                      = "1"
   }
-
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"             = "1"
@@ -78,15 +85,8 @@ module "eks" {
   cluster_name    = local.cluster_name
   cluster_version = "1.17"
   subnets         = module.vpc.private_subnets
-
-  tags = {
-    Environment = "test"
-    GithubRepo  = "terraform-aws-eks"
-    GithubOrg   = "terraform-aws-modules"
-  }
-
-  vpc_id = module.vpc.vpc_id
-
+  tags            = local.tags
+  vpc_id          = module.vpc.vpc_id
   worker_groups = [
     {
       name                          = "worker-group-1"
@@ -96,7 +96,6 @@ module "eks" {
       additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
     },
   ]
-
   worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
   #map_roles                            = var.map_roles
   #map_users                            = var.map_users
