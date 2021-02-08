@@ -8,47 +8,23 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
+data "aws_security_group" "worker_ssh" {
+  count = var.enable_ssh ? 1 : 0
+  name  = "security-group-${local.name_suffix}-bastion"
+}
+
 locals {
-  name_suffix  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
-  cluster_name = "eks-${local.name_suffix}"
+  name_suffix                  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
+  cluster_name                 = "eks-${local.name_suffix}"
+  worker_ssh_security_group_id = var.enable_ssh ? data.aws_security_group.worker_ssh[0].id : []
+  worker_security_group_ids    = concat(local.worker_ssh_security_group_id)
+
   tags = {
     AppId       = var.app.id
     Version     = var.app.version
     Role        = "infra"
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
-  }
-}
-
-resource "aws_security_group" "worker_group_mgmt_one" {
-  name_prefix = "worker_group_mgmt_one"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-    ]
-  }
-}
-
-resource "aws_security_group" "all_worker_mgmt" {
-  name_prefix = "all_worker_management"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-      "172.16.0.0/12",
-      "192.168.0.0/16",
-    ]
   }
 }
 
@@ -62,15 +38,17 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   worker_groups = [
     {
-      name                          = "worker-group-1"
-      instance_type                 = "t2.small"
-      additional_userdata           = "echo foo bar"
-      asg_desired_capacity          = 2
-      additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
+      name                 = "worker-group-1"
+      instance_type        = "t2.small"
+      additional_userdata  = "echo foo bar"
+      asg_desired_capacity = 2
+      //      additional_security_group_ids = [aws_security_group.worker_group_mgmt_one.id]
     },
   ]
-  worker_additional_security_group_ids = [aws_security_group.all_worker_mgmt.id]
+  worker_additional_security_group_ids = local.worker_security_group_ids
+  write_kubeconfig                     = false
   #map_roles                            = var.map_roles
   #map_users                            = var.map_users
   #map_accounts                         = var.map_accounts
+
 }
