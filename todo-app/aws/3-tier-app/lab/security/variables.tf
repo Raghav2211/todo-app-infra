@@ -10,12 +10,6 @@ variable "app" {
   )
 }
 
-variable "bastion_description" {
-  type        = string
-  description = "Bastion security group"
-  default     = "Bastion security group"
-}
-
 variable "todo_lb_description" {
   type        = string
   description = "Todo App LoadBalancer security group"
@@ -56,4 +50,9 @@ variable "todo_app_lb_https_ingress" {
   type        = bool
   description = "Whether to enable https"
   default     = true
+}
+variable "enable_todo_app_ssh" {
+  type        = bool
+  description = "Whether to enable ssh for todo app"
+  default     = false
 }
