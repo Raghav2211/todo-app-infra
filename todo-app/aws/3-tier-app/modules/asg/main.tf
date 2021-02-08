@@ -1,5 +1,22 @@
 data "aws_region" "current" {}
 
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc-${local.name_suffix}"]
+  }
+}
+
+# App
+data "aws_security_group" "app" {
+  vpc_id = data.aws_vpc.selected.id
+
+  filter {
+    name   = "group-name"
+    values = ["security-group-${local.name_suffix}-${var.app.name}-app"]
+  }
+}
+
 data "aws_security_group" "selected" {
   vpc_id = data.aws_vpc.selected.id
 
@@ -30,6 +47,7 @@ locals {
     Environment = var.app.env
     LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
+ scaling_capacity=var.scaling_capacity
 }
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
@@ -48,9 +66,9 @@ module "asg" {
   asg_name                  = "asg-${local.name_suffix}-${var.app.name}-app"
   vpc_zone_identifier       = data.aws_subnet_ids.private_subnets.ids
   health_check_type         = "EC2"
-  min_size                  = lookup(var.scaling_capacity, "min")
-  max_size                  = lookup(var.scaling_capacity, "max")
-  desired_capacity          = lookup(var.scaling_capacity, "desired")
+  min_size                  = lookup(local.scaling_capacity, "min")
+  max_size                  = lookup(local.scaling_capacity, "max")
+  desired_capacity          = lookup(local.scaling_capacity, "desired")
   wait_for_capacity_timeout = 0
   tags_as_map = local.tags
 }

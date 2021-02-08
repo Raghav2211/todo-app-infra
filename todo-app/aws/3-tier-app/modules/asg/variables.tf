@@ -9,15 +9,6 @@ variable "app" {
   )
 }
 
-# auto-scaling group & launch configuration
-variable "image_id" {
-  type        = string
-  description = "Application AMI id"
-  validation {
-    condition     = length(var.image_id) > 4 && substr(var.image_id, 0, 4) == "ami-"
-    error_message = "The image_id value must be a valid AMI id, starting with \"ami-\"."
-  }
-}
 
 variable "instance_type" {
   type        = string
@@ -34,10 +25,6 @@ variable "image_id" {
   }
 }
 
-variable "instance_type" {
-  type        = string
-  description = "App instance type"
-}
 
 
 variable "scaling_capacity" {
@@ -58,5 +45,5 @@ variable "app_installer_tpl_path" {
 variable "app_env_vars" {
   type        = map
   default     = {}
-  description = "App deployment enviornment variables"
+  description = "App deployment environment variables"
 }

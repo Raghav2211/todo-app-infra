@@ -31,6 +31,7 @@ module "todo_app" {
   instance_type          = var.instance_type
   app_installer_tpl_path = "${path.module}/templates/deployment.tpl"
   app_env_vars           = var.app_env_vars
+  scaling_capacity       = var.scaling_capacity
   app_health = {
     path = "/actuator/health"
   }

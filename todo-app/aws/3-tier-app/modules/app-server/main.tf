@@ -60,6 +60,7 @@ locals {
     Environment = var.app.env
     LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
+  app_installer_tpl_path=var.app_installer_tpl_path
 }
 
 module "alb" {
@@ -108,13 +109,11 @@ module "alb" {
 
 module "asg" {
   source  = "../asg/"
+  app             = var.app
+  app_installer_tpl_path=local.app_installer_tpl_path
   # Launch configuration
   image_id        = var.image_id
-  instance_type   = var.instance_type
-
+  instance_type   = var.instance_type  
   # Auto scaling group
-  min_size                  = lookup(var.scaling_capacity, "min")
-  max_size                  = lookup(var.scaling_capacity, "max")
-  desired_capacity          = lookup(var.scaling_capacity, "desired")
-  target_group_arns         = module.alb.target_group_arns
+  #target_group_arns         = module.alb.target_group_arns
 }
