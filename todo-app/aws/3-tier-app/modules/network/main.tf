@@ -37,7 +37,7 @@ locals {
   single_nat_gateway            = local.enable_nat_gateway_per_subnet && var.enable_nat_gateway_single
   enable_nat_gateway_per_az     = local.enable_nat_gateway_per_subnet && (var.enable_nat_gateway_per_az && var.enable_nat_gateway_single ? ! var.enable_nat_gateway_per_az : var.enable_nat_gateway_per_az)
   database_subnet_group         = var.create_database_subnet_group ? length(var.database_subnets) > 1 : ! var.create_database_subnet_group
-  public_subnets_size           = length(module.vpc.public_subnets)
+  public_subnets_size           = length(var.public_subnets)
   enable_bastion_host           = var.enable_bastion_host && local.public_subnets_size > 0
   ami                           = local.enable_bastion_host ? var.bastion_image_id != null ? var.bastion_image_id : data.aws_ami.ubuntu[0].image_id : ""
   instance_count                = local.enable_bastion_host ? var.bastion_instance_count != null ? var.bastion_instance_count > 0 ? var.bastion_instance_count : local.public_subnets_size : local.public_subnets_size : 0
