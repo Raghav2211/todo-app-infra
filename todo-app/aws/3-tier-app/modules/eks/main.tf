@@ -8,14 +8,6 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
 
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-  load_config_file       = false
-  version                = "~> 1.11"
-}
-
 locals {
   name_suffix  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   cluster_name = "eks-${local.name_suffix}"
@@ -57,25 +49,6 @@ resource "aws_security_group" "all_worker_mgmt" {
       "172.16.0.0/12",
       "192.168.0.0/16",
     ]
-  }
-}
-
-module "vpc" {
-  source                       = "../network/"
-  app                          = var.app
-  cidr                         = var.cidr
-  azs                          = var.azs
-  public_subnets               = var.public_subnets
-  private_subnets              = var.private_subnets
-  enable_nat_gateway_single    = true
-  create_database_subnet_group = false
-  public_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/elb"                      = "1"
-  }
-  private_subnet_tags = {
-    "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-    "kubernetes.io/role/internal-elb"             = "1"
   }
 }
 
