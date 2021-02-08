@@ -6,6 +6,10 @@ data "aws_vpc" "selected" {
     values = ["vpc-${local.name_suffix}"]
   }
 }
+data "aws_security_group" "todo_app_ssh" {
+  count = var.enable_todo_app_ssh ? 1 : 0
+  name = "security-group-${local.name_suffix}-bastion"
+}
 
 data "http" "myip" {
   count = var.env_cidr_block ? 1 : 0
@@ -21,23 +25,15 @@ locals {
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }
+   default_ingress_todo_app = [ {
+      rule                     = "http-8080-tcp"
+      source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
+    }]
+  ingress_todo_app = concat(local.default_ingress_todo_app, var.enable_todo_app_ssh?[{
+      rule                     = "ssh-tcp"
+      source_security_group_id = data.aws_security_group.todo_app_ssh[0].id
+    }]:[])
 }
-
-module "bastion_sg" {
-  source                 = "terraform-aws-modules/security-group/aws//modules/ssh"
-  version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-bastion"
-  vpc_id                 = data.aws_vpc.selected.id
-  description            = var.bastion_description
-  ingress_cidr_blocks    = concat(var.bastion_ingress_cidrs, var.env_cidr_block ? ["${chomp(data.http.myip[0].body)}/32"] : [])
-  use_name_prefix        = false
-  auto_ingress_with_self = []
-
-  tags = merge(local.tags, {
-    App = "bastion"
-  })
-}
-
 
 module "todo_app_load_balancer_sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/http-80"
@@ -64,17 +60,8 @@ module "todo_app_sg" {
   use_name_prefix        = false
   auto_ingress_with_self = []
   auto_ingress_rules     = []
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule                     = "ssh-tcp"
-      source_security_group_id = module.bastion_sg.this_security_group_id
-    },
-    {
-      rule                     = "http-8080-tcp"
-      source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
-    }
-  ]
-  number_of_computed_ingress_with_source_security_group_id = 2
+  computed_ingress_with_source_security_group_id = local.ingress_todo_app
+  number_of_computed_ingress_with_source_security_group_id = length(local.ingress_todo_app)
 
   tags = merge(local.tags, {
     App = "todo-app"
