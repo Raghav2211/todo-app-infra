@@ -20,6 +20,12 @@ variable "azs" {
   default     = []
 }
 
+variable "enable_bastion_host" {
+  type        = bool
+  description = "Whether to add bastion host"
+  default     = false
+}
+
 variable "bastion_description" {
   type        = string
   description = "Bastion security group"
@@ -119,4 +125,16 @@ variable "bastion_instance_count" {
   type        = number
   description = "Bastion ec2 instance count, Default is length of public subnets"
   default     = null
+}
+
+variable "public_subnet_tags" {
+  type        = map(string)
+  description = "Additional tags for public subnet"
+  default     = {}
+}
+
+variable "private_subnet_tags" {
+  type        = map(string)
+  description = "Additional tags for private subnet"
+  default     = {}
 }

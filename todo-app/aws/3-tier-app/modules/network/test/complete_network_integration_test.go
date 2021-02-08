@@ -105,7 +105,7 @@ func testSSHToBastion(t *testing.T, terraformOptions *terraform.Options, keyPair
 	}
 	maxRetries := 30
 	timeBetweenRetries := 5 * time.Second
-	description := fmt.Sprintf("SSH to public host %s%%s", sshuserName, bastionPublicIP)
+	description := fmt.Sprintf("SSH to public host %s@%s", sshuserName, bastionPublicIP)
 
 	// Run a simple echo command on the server
 	expectedText := "Hello, World"
