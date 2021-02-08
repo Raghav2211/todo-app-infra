@@ -8,7 +8,7 @@ data "aws_vpc" "selected" {
 }
 data "aws_security_group" "todo_app_ssh" {
   count = var.enable_todo_app_ssh ? 1 : 0
-  name = "security-group-${local.name_suffix}-bastion"
+  name  = "security-group-${local.name_suffix}-bastion"
 }
 
 data "http" "myip" {
@@ -25,14 +25,18 @@ locals {
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
   }
-   default_ingress_todo_app = [ {
-      rule                     = "http-8080-tcp"
-      source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
-    }]
-  ingress_todo_app = concat(local.default_ingress_todo_app, var.enable_todo_app_ssh?[{
-      rule                     = "ssh-tcp"
-      source_security_group_id = data.aws_security_group.todo_app_ssh[0].id
-    }]:[])
+  default_mysql_computed_ingress = [{
+    rule                     = "mysql-tcp"
+    source_security_group_id = module.todo_app_sg.this_security_group_id
+  }]
+  todo_app_computed_ssh_ingress = var.enable_todo_app_ssh ? [{
+    rule                     = "ssh-tcp"
+    source_security_group_id = data.aws_security_group.todo_app_ssh[0].id
+  }] : []
+  default_todo_app_computed_ingress = concat({
+    rule                     = "http-8080-tcp"
+    source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
+  }, local.todo_app_computed_ssh_ingress)
 }
 
 module "todo_app_load_balancer_sg" {
@@ -52,16 +56,16 @@ module "todo_app_load_balancer_sg" {
 }
 
 module "todo_app_sg" {
-  source                 = "terraform-aws-modules/security-group/aws//modules/http-8080"
-  version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-todo-app"
-  vpc_id                 = data.aws_vpc.selected.id
-  description            = var.todo_app_description
-  use_name_prefix        = false
-  auto_ingress_with_self = []
-  auto_ingress_rules     = []
-  computed_ingress_with_source_security_group_id = local.ingress_todo_app
-  number_of_computed_ingress_with_source_security_group_id = length(local.ingress_todo_app)
+  source                                                   = "terraform-aws-modules/security-group/aws//modules/http-8080"
+  version                                                  = "3.17.0"
+  name                                                     = "security-group-${local.name_suffix}-todo-app"
+  vpc_id                                                   = data.aws_vpc.selected.id
+  description                                              = var.todo_app_description
+  use_name_prefix                                          = false
+  auto_ingress_with_self                                   = []
+  auto_ingress_rules                                       = []
+  computed_ingress_with_source_security_group_id           = local.default_todo_app_computed_ingress
+  number_of_computed_ingress_with_source_security_group_id = length(local.default_todo_app_computed_ingress)
 
   tags = merge(local.tags, {
     App = "todo-app"
@@ -69,21 +73,16 @@ module "todo_app_sg" {
 }
 
 module "mysql_sg" {
-  source                 = "terraform-aws-modules/security-group/aws//modules/mysql"
-  version                = "3.17.0"
-  name                   = "security-group-${local.name_suffix}-mysql"
-  vpc_id                 = data.aws_vpc.selected.id
-  description            = var.mysql_description
-  use_name_prefix        = false
-  auto_ingress_with_self = []
-  auto_ingress_rules     = []
-  computed_ingress_with_source_security_group_id = [
-    {
-      rule                     = "mysql-tcp"
-      source_security_group_id = module.todo_app_sg.this_security_group_id
-    }
-  ]
-  number_of_computed_ingress_with_source_security_group_id = 1
+  source                                                   = "terraform-aws-modules/security-group/aws//modules/mysql"
+  version                                                  = "3.17.0"
+  name                                                     = "security-group-${local.name_suffix}-mysql"
+  vpc_id                                                   = data.aws_vpc.selected.id
+  description                                              = var.mysql_description
+  use_name_prefix                                          = false
+  auto_ingress_with_self                                   = []
+  auto_ingress_rules                                       = []
+  computed_ingress_with_source_security_group_id           = local.default_mysql_computed_ingress
+  number_of_computed_ingress_with_source_security_group_id = length(local.default_mysql_computed_ingress)
 
   tags = merge(local.tags, {
     App = "mysql"
