@@ -33,10 +33,10 @@ locals {
     rule                     = "ssh-tcp"
     source_security_group_id = data.aws_security_group.todo_app_ssh[0].id
   }] : []
-  default_todo_app_computed_ingress = concat({
+  default_todo_app_computed_ingress = concat([{
     rule                     = "http-8080-tcp"
     source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
-  }, local.todo_app_computed_ssh_ingress)
+  }], local.todo_app_computed_ssh_ingress)
 }
 
 module "todo_app_load_balancer_sg" {
