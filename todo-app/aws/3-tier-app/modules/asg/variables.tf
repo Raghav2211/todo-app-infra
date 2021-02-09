@@ -47,3 +47,9 @@ variable "app_env_vars" {
   default     = {}
   description = "App deployment environment variables"
 }
+variable "target_group_arns"{
+  type      = list(string)
+  default   = []
+  description  = "Alb target group arns"
+}
+  
