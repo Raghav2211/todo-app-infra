@@ -23,3 +23,14 @@ variable "enable_ssh" {
   description = "Whether to enable ssh on worker nodes via bastion"
   default     = false
 }
+
+variable "worker_conf" {
+  type = list(object({
+    name                 = string
+    instance_type        = string
+    asg_min_size         = number
+    asg_max_size         = number
+    asg_desired_capacity = number
+  }))
+  description = "Worker(s) configuration"
+}
