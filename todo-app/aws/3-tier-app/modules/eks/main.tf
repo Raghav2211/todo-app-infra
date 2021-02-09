@@ -16,13 +16,13 @@ data "aws_security_group" "worker_ssh" {
 locals {
   name_suffix  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   cluster_name = "eks-${local.name_suffix}"
-  tags = {
+  tags = merge(var.tags, {
     AppId       = var.app.id
     Version     = var.app.version
     Role        = "infra"
     Environment = var.app.env
     #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
-  }
+  })
   worker_ssh_security_group_id = var.enable_ssh ? data.aws_security_group.worker_ssh[0].id : []
   worker_security_group_ids    = concat(local.worker_ssh_security_group_id)
   worker_autoscaler_tags = [{
@@ -53,7 +53,7 @@ module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
   version                              = "13.2.1"
   cluster_name                         = local.cluster_name
-  cluster_version                      = "1.17"
+  cluster_version                      = var.k8s_version
   subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
   vpc_id                               = module.vpc.vpc_id

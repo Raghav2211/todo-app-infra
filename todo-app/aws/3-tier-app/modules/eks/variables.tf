@@ -18,6 +18,18 @@ variable "public_subnets" {}
 
 variable "private_subnets" {}
 
+variable "k8s_version" {
+  type        = string
+  description = "K8s version for eks cluster"
+  default     = "1.17"
+}
+
+variable "tags" {
+  description = "Common tags for all resources"
+  type        = map(string)
+  default     = {}
+}
+
 variable "enable_ssh" {
   type        = bool
   description = "Whether to enable ssh on worker nodes via bastion"
