@@ -1,3 +1,7 @@
+# Provider configuration
+provider "aws" {
+  region = var.region
+}
 data "aws_ami" "app" {
   most_recent = true
   owners      = [var.account_id] # Canonical
