@@ -47,7 +47,7 @@ locals {
     Environment = var.app.env
     LastScanned = formatdate("YYYYMMDDhh", timestamp())
   }
- scaling_capacity=var.scaling_capacity
+  scaling_capacity = var.scaling_capacity
 }
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
@@ -70,5 +70,5 @@ module "asg" {
   max_size                  = lookup(local.scaling_capacity, "max")
   desired_capacity          = lookup(local.scaling_capacity, "desired")
   wait_for_capacity_timeout = 0
-  tags_as_map = local.tags
+  tags_as_map               = local.tags
 }
