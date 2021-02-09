@@ -52,4 +52,3 @@ variable "target_group_arns"{
   default   = []
   description  = "Alb target group arns"
 }
-  
