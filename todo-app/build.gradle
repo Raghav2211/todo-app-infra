@@ -1,12 +1,26 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.0'
-    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
 
 group = 'com.psi.todo'
 version = '1.0.0'
 sourceCompatibility = '11'
+
+sourceSets {
+    test {
+        java.srcDirs = ['src/test/unit/java/']
+    }
+    integration {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir 'src/test/integration/java'
+        }
+    }
+}
+
 
 repositories {
     mavenCentral()
@@ -16,8 +30,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'
     implementation 'org.hibernate.validator:hibernate-validator'
@@ -31,9 +45,38 @@ dependencies {
     testImplementation 'com.h2database:h2'
 }
 
+configurations {
+    integrationImplementation.extendsFrom testImplementation
+    integrationCompile.extendsFrom testCompile
+    integrationRuntime.extendsFrom testRuntime
+}
+
 test {
     useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
 }
+
+task integration(type: Test) {
+    description = 'Runs the integration tests.'
+    testClassesDirs = sourceSets.integration.output.classesDirs
+    classpath = sourceSets.integration.runtimeClasspath
+    outputs.upToDateWhen { false }
+    mustRunAfter test
+}
+check.dependsOn integration
+
+integration {
+    environment "AWS_REGION", "eu-west-1"
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+    }
+}
+
 springBoot {
     buildInfo()
 }
