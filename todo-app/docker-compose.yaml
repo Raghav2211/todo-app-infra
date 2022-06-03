@@ -10,7 +10,7 @@ services:
   psitodoapp:
     image: psi-todo:${PSI_TODO_IMAGE_TAG:-latest}
     depends_on:
-      - psimysql # will not wait for mysql to be “ready” before starting todo-app , It'll only confirm dependency order & 
+      - psimysql # will not wait for mysql to be “ready” before starting todo-app , It'll only confirm dependency order &
                  # will automatic create dependencies which include in service defination
     ports:
       - 8080:8080
@@ -19,7 +19,5 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DB_NAME: ${MYSQL_DATABASE}
-      # UnComment below 3 properties to enable basic auth security
-      #PSI_TODO_SECURITY_BASIC_AUTH_ENABLE: ${BASIC_AUTH_ENABLE}
-      #PSI_TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
-      #PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
+      PSI_TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
+      PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
