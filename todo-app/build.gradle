@@ -90,6 +90,10 @@ spotless {
     }
 }
 
+jar {
+    enabled = false
+}
+
 springBoot {
     buildInfo()
 }
