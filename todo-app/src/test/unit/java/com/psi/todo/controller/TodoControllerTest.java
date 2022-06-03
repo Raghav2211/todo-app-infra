@@ -1,223 +1,252 @@
 package com.psi.todo.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psi.todo.dto.TodoResource;
 import com.psi.todo.entity.Todo;
+import com.psi.todo.repository.TodoRepository;
+import com.psi.todo.security.TodoWebSecurityConfig;
 import com.psi.todo.service.ITodoService;
-import com.psi.todo.validator.TodoExistsValidator;
-
+import com.psi.todo.service.TodoService;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 
-@SpringBootTest(classes = { TodoController.class, TodoExistsValidator.class })
-@AutoConfigureMockMvc(addFilters = false)
-@EnableWebMvc
+@ExtendWith(SpringExtension.class)
+@Import({TodoWebSecurityConfig.class, TodoService.class, TodoRepository.class})
+@WebFluxTest(controllers = TodoController.class)
 public class TodoControllerTest {
 
-    private static final String TOOD_ID_MUST_BE_GRATER_THAN_0 = "Tood id must be grater than 0";
+  private static final String TOOD_ID_MUST_BE_GRATER_THAN_0 = "Tood id must be grater than 0";
 
-    private static final String CONTENT_NOT_SPECIFIED = "Content not specified";
+  private static final String CONTENT_NOT_SPECIFIED = "Content not specified";
 
-    private static final String TODO_RECORD_DOESN_T_EXIST = "Todo record doesn't exist";
+  private static final String TODO_RECORD_DOESN_T_EXIST = "Todo record doesn't exist";
 
-    private static final String TODO_ROOT = "/api/v1/todo";
+  private static final String TODO_ROOT = "/api/v1/todo";
 
-    private static final String TODO_FINDBY_NULL = "/api/v1/todo/null";
+  private static final String TODO_FINDBY_ID = "/api/v1/todo/1";
 
-    private static final String TODO_FINDBY_ID = "/api/v1/todo/1";
+  @Autowired private WebTestClient webclient;
+  @Autowired ApplicationContext context;
+  @MockBean private TodoRepository todoRepository;
 
-    @Autowired
-    private MockMvc mockMvc;
+  @SpyBean private ITodoService todoService;
 
-    @MockBean
-    private ITodoService todoService;
+  private static Todo todoResponse;
+  private static TodoResource todoRequest;
+  private static TodoResource todoInvalidRequest;
 
-    private static Todo todoResponse;
-    private static TodoResource todoRequest;
-    private static TodoResource todoInvalidRequest;
+  @BeforeEach
+  public void setup() {
+    this.webclient = WebTestClient.bindToApplicationContext(this.context).configureClient().build();
+  }
 
-    @BeforeAll
-    @SneakyThrows({ JsonParseException.class, JsonMappingException.class, IOException.class })
-    public static void beforeClass() {
-        File resposeFile = new File("src/test/resources/data/todoResponse.json");
-        todoResponse = new ObjectMapper().readValue(resposeFile, Todo.class);
-        File requestFile = new File("src/test/resources/data/todoRequest.json");
-        todoRequest = new ObjectMapper().readValue(requestFile, TodoResource.class);
-        File invalidRequestFile = new File("src/test/resources/data/todoInvalidRequest.json");
-        todoInvalidRequest = new ObjectMapper().readValue(invalidRequestFile, TodoResource.class);
+  @BeforeAll
+  @SneakyThrows({JsonParseException.class, JsonMappingException.class, IOException.class})
+  public static void beforeClass() {
+    File resposeFile = new File("src/test/resources/data/todoResponse.json");
+    todoResponse = new ObjectMapper().readValue(resposeFile, Todo.class);
+    File requestFile = new File("src/test/resources/data/todoRequest.json");
+    todoRequest = new ObjectMapper().readValue(requestFile, TodoResource.class);
+    File invalidRequestFile = new File("src/test/resources/data/todoInvalidRequest.json");
+    todoInvalidRequest = new ObjectMapper().readValue(invalidRequestFile, TodoResource.class);
+  }
 
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testGetTodoById() {
+    Mockito.when(todoRepository.findById(1l)).thenReturn(Optional.of(todoResponse));
+    webclient
+        .get()
+        .uri(TODO_FINDBY_ID)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.content")
+        .isEqualTo(todoResponse.getContent());
+    Mockito.verify(todoRepository).findById(1l);
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testGetTodoById() {
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testGetTodoByIdNotFound() {
+    Mockito.when(todoRepository.findById(1l)).thenReturn(Optional.empty());
+    webclient
+        .get()
+        .uri(TODO_FINDBY_ID)
+        .exchange()
+        .expectStatus()
+        .is5xxServerError()
+        .expectBody()
+        .jsonPath("$.message")
+        .isEqualTo("Todo[1] not found");
+    Mockito.verify(todoRepository).findById(1l);
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-        Mockito.when(todoService.findById(1l)).thenReturn(Optional.of(todoResponse));
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        mockMvc.perform(MockMvcRequestBuilders.get(TODO_FINDBY_ID).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(new ObjectMapper().writeValueAsString(todoResponse)));
-        Mockito.verify(todoService, Mockito.times(2)).findById(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testGetAllTodo() {
+    Mockito.when(todoRepository.findAll()).thenReturn(List.of(todoResponse));
 
-    @SneakyThrows
-    @Test
-    public void testGetTodoByIdNotFound() {
-        Mockito.when(todoService.findById(1l)).thenReturn(Optional.empty());
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc.perform(MockMvcRequestBuilders.get(TODO_FINDBY_ID).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains(TODO_RECORD_DOESN_T_EXIST));
-        Mockito.verify(todoService).findById(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+    webclient
+        .get()
+        .uri(TODO_ROOT)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.[0].id")
+        .isEqualTo(1);
+    Mockito.verify(todoRepository).findAll();
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testGetTodoByNullId() {
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc.perform(MockMvcRequestBuilders.get(TODO_FINDBY_NULL).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains("NumberFormatException"));
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testCreateTodo() {
+    Todo returnTodo = new Todo();
+    returnTodo.setId(1l);
+    returnTodo.setContent(todoResponse.getContent());
+    returnTodo.setIsComplete(todoResponse.getIsComplete());
+    Mockito.when(todoRepository.save(Mockito.any(Todo.class))).thenReturn(returnTodo);
+    webclient
+        .post()
+        .uri(TODO_ROOT)
+        .body(BodyInserters.fromValue(todoRequest))
+        .headers(httpHeaders -> httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON)))
+        .exchange()
+        .expectStatus()
+        .isCreated()
+        .expectBody()
+        .jsonPath("$.id")
+        .isEqualTo(1);
+    Mockito.verify(todoRepository).save(Mockito.any(Todo.class));
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testGetAllTodo() {
-        Mockito.when(todoService.findAll()).thenReturn(List.of(todoResponse));
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        mockMvc.perform(MockMvcRequestBuilders.get(TODO_ROOT).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.[0].id", Matchers.is(1)));
-        Mockito.verify(todoService).findAll();
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testCreateWithInvalidTodo() {
+    webclient
+        .post()
+        .uri(TODO_ROOT)
+        .body(BodyInserters.fromValue(todoInvalidRequest))
+        .headers(httpHeaders -> httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON)))
+        .exchange()
+        .expectStatus()
+        .is5xxServerError()
+        .expectBody()
+        .jsonPath("$.message")
+        .isEqualTo("Todo content cannot be empty");
+    Mockito.verifyNoInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testCreateTodo() {
-        Mockito.when(todoService.create(todoRequest)).thenReturn(todoResponse);
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        mockMvc.perform(
-                MockMvcRequestBuilders.post(TODO_ROOT).content(new ObjectMapper().writeValueAsString(todoRequest))
-                        .contentType(MEDIA_TYPE_JSON_UTF8).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)));
-        Mockito.verify(todoService).create(todoRequest);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testUpdateTodo() {
+    Todo returnTodo = new Todo();
+    returnTodo.setId(1l);
+    returnTodo.setContent("DB TODO");
+    returnTodo.setIsComplete(true);
+    Mockito.when(todoRepository.findById(1l)).thenReturn(Optional.of(returnTodo));
+    Mockito.when(todoRepository.save(Mockito.any(Todo.class))).thenReturn(returnTodo);
 
-    @SneakyThrows
-    @Test
-    public void testCreateWithInvalidTodo() {
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc
-                .perform(MockMvcRequestBuilders.post(TODO_ROOT)
-                        .content(new ObjectMapper().writeValueAsString(todoInvalidRequest))
-                        .contentType(MEDIA_TYPE_JSON_UTF8).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains(CONTENT_NOT_SPECIFIED));
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+    webclient
+        .put()
+        .uri(TODO_FINDBY_ID)
+        .body(BodyInserters.fromValue(todoRequest))
+        .headers(httpHeaders -> httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON)))
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.id")
+        .isEqualTo(1)
+        .jsonPath("$.content")
+        .isEqualTo(todoRequest.getContent())
+        .jsonPath("$.isComplete")
+        .isEqualTo(todoRequest.getIsComplete());
 
-    @SneakyThrows
-    @Test
-    public void testUpdateTodo() {
-        Mockito.when(todoService.update(todoRequest, 1l)).thenReturn(todoResponse);
-        Mockito.when(todoService.findById(1l)).thenReturn(Optional.of(todoResponse));
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        mockMvc.perform(
-                MockMvcRequestBuilders.put(TODO_FINDBY_ID).content(new ObjectMapper().writeValueAsString(todoRequest))
-                        .contentType(MEDIA_TYPE_JSON_UTF8).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.content", Matchers.is("Update Error content")));
-        Mockito.verify(todoService).update(todoRequest, 1l);
-        Mockito.verify(todoService).findById(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+    Mockito.verify(todoRepository).findById(1l);
+    Mockito.verify(todoRepository).save(Mockito.any(Todo.class));
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testUpdateNonExistTodo() {
-        Mockito.when(todoService.findById(1l)).thenReturn(Optional.empty());
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc
-                .perform(MockMvcRequestBuilders.put(TODO_FINDBY_ID)
-                        .content(new ObjectMapper().writeValueAsString(todoRequest)).contentType(MEDIA_TYPE_JSON_UTF8)
-                        .accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains(TODO_RECORD_DOESN_T_EXIST));
-        Mockito.verify(todoService).findById(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testUpdateNonExistTodo() {
+    MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
+    Mockito.when(todoRepository.findById(1l)).thenReturn(Optional.empty());
+    webclient
+        .put()
+        .uri(TODO_FINDBY_ID)
+        .body(BodyInserters.fromValue(todoRequest))
+        .headers(httpHeaders -> httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON)))
+        .exchange()
+        .expectStatus()
+        .is5xxServerError()
+        .expectBody()
+        .jsonPath("$.message")
+        .isEqualTo("Todo[1] not found");
 
-    @SneakyThrows
-    @Test
-    public void testUpdateNegativeIdTodo() {
-        Mockito.when(todoService.findById(-1l)).thenReturn(Optional.empty());
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc
-                .perform(MockMvcRequestBuilders.put(TODO_FINDBY_ID)
-                        .content(new ObjectMapper().writeValueAsString(todoRequest)).contentType(MEDIA_TYPE_JSON_UTF8)
-                        .accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains(TODO_RECORD_DOESN_T_EXIST));
-        Mockito.verify(todoService).findById(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+    Mockito.verify(todoRepository).findById(1l);
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testDeleteTodo() {
-        Mockito.doNothing().when(todoService).delete(1l);
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        mockMvc.perform(MockMvcRequestBuilders.delete(TODO_FINDBY_ID).accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
-        Mockito.verify(todoService).delete(1l);
-        Mockito.verifyNoMoreInteractions(todoService);
-    }
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testDeleteTodo() {
+    Mockito.doNothing().when(todoRepository).deleteById(1l);
+    MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
+    webclient.delete().uri(TODO_FINDBY_ID).exchange().expectStatus().isNoContent();
+    Mockito.verify(todoRepository).deleteById(1l);
+    Mockito.verifyNoMoreInteractions(todoRepository);
+  }
 
-    @SneakyThrows
-    @Test
-    public void testDeleteWithNegativeTodoId() {
-        MediaType MEDIA_TYPE_JSON_UTF8 = MediaType.APPLICATION_JSON;
-        String error = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/todo/-1").accept(MEDIA_TYPE_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn().getResolvedException()
-                .getMessage();
-        assertTrue(error.contains(TOOD_ID_MUST_BE_GRATER_THAN_0));
-        Mockito.verifyNoMoreInteractions(todoService);
-
-    }
-
+  @SneakyThrows
+  @Test
+  @WithMockUser
+  public void testDeleteTodoWithNegativeId() {
+    webclient
+        .delete()
+        .uri("/api/v1/todo/-1")
+        .exchange()
+        .expectStatus()
+        .is5xxServerError()
+        .expectBody()
+        .jsonPath("$.message")
+        .isEqualTo("Todo[-1] is not a valid id");
+    Mockito.verifyNoInteractions(todoRepository);
+  }
 }

@@ -1,20 +1,19 @@
 package com.psi.todo.service;
 
-import java.util.Optional;
-
 import com.psi.todo.dto.TodoResource;
 import com.psi.todo.entity.Todo;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface ITodoService {
 
-    public Todo create(TodoResource todo);
+  public Mono<Todo> create(Mono<TodoResource> todo);
 
-    public Todo update(TodoResource todo,Long id);
+  public Mono<Todo> update(Mono<TodoResource> todo, Long id);
 
-    public Optional<Todo> findById(Long id);
+  public Mono<Todo> findById(Long id);
 
-    public Iterable<Todo> findAll();
+  public Flux<Todo> findAll();
 
-    public void delete(Long id);
-
+  public Mono<Void> delete(Long id);
 }

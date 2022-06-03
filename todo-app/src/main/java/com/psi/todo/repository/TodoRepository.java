@@ -1,8 +1,6 @@
 package com.psi.todo.repository;
 
+import com.psi.todo.entity.Todo;
 import org.springframework.data.repository.CrudRepository;
 
-import com.psi.todo.entity.Todo;
-
-public interface TodoRepository extends CrudRepository<Todo, Long> {
-}
+public interface TodoRepository extends CrudRepository<Todo, Long> {}

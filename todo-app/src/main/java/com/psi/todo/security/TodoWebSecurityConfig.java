@@ -1,49 +1,66 @@
 package com.psi.todo.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.util.StringUtils;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
-@EnableWebSecurity
+@EnableWebFluxSecurity
 @Configuration
-public class TodoWebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Slf4j
+public class TodoWebSecurityConfig {
 
-    private static final String USER = "USER";
-    @Value(value = "${psi.todo.security.basic.auth.username:#{null}}")
-    private String basicAuthUserName;
-    @Value(value = "${psi.todo.security.basic.auth.password:#{null}}")
-    private String basicAuthPassWord;
-    @Value(value = "${psi.todo.security.basic.auth.enable:false}")
-    private Boolean isBasicAuthEnable;
+  private static final String USER = "USER";
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        if (isBasicAuthEnable) {
-            hasBasicAuthCredentials();
-            http.csrf().disable().authorizeRequests().antMatchers("/actuator/info", "/actuator/health").permitAll()
-                    .anyRequest().authenticated().and().httpBasic();
-        } else {
-            http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
-        }
-    }
+  @Value(value = "${psi.todo.security.basic.auth.username}")
+  private String basicAuthUserName;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        if (isBasicAuthEnable) {
-            hasBasicAuthCredentials();
-            auth.inMemoryAuthentication().withUser(basicAuthUserName).password(basicAuthPassWord).roles(USER);
-        }
-    }
+  @Value(value = "${psi.todo.security.basic.auth.password}")
+  private String basicAuthPassWord;
 
-    private void hasBasicAuthCredentials() {
-        if (!StringUtils.hasText(basicAuthUserName) || !StringUtils.hasText(basicAuthPassWord)) {
-            throw new IllegalArgumentException("Basic Auth crendentials(username/password) can't be null");
-        }
-    }
+  @Value(value = "${psi.todo.security.basic.auth.enable:false}")
+  private Boolean isBasicAuthEnable;
 
+  @Bean
+  public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
+    return http.csrf()
+        .disable()
+        .authorizeExchange()
+        .pathMatchers("/actuator/info", "/actuator/health")
+        .permitAll()
+        .and()
+        .authorizeExchange()
+        .anyExchange()
+        .authenticated()
+        .and()
+        .httpBasic()
+        .and()
+        .formLogin()
+        .and()
+        .build();
+  }
+
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public MapReactiveUserDetailsService userDetailsService(BCryptPasswordEncoder passwordEncoder) {
+    UserDetails user =
+        User.builder()
+            .username(basicAuthUserName)
+            .password(basicAuthPassWord)
+            .passwordEncoder((password) -> passwordEncoder.encode(password))
+            .roles(USER)
+            .build();
+    return new MapReactiveUserDetailsService(user);
+  }
 }
