@@ -1,11 +1,8 @@
 package com.psi.todo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import java.util.Date;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +18,15 @@ public class Todo {
 
   private String content;
   private Boolean isComplete;
+  private Date date;
+
+  @PrePersist
+  public void onPrePersist() {
+    date = new Date();
+  }
+
+  @PreUpdate
+  public void onPreUpdate() {
+    date = new Date();
+  }
 }
