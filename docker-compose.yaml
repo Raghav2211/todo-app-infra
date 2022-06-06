@@ -1,23 +1,23 @@
 version: "3"
 services:
-  psimysql:
+  mysql:
     image: mysql:${MYSQL_IMAGE_TAG}
     environment:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  psitodoapp:
-    image: psi-todo:${PSI_TODO_IMAGE_TAG:-latest}
+  todo:
+    image: ghcr.io/raghav2211/spring-web-flux-todo-app/todo:${TODO_IMAGE_TAG:-latest}
     depends_on:
-      - psimysql # will not wait for mysql to be “ready” before starting todo-app , It'll only confirm dependency order &
+      - mysql # will not wait for mysql to be “ready” before starting todo-app , It'll only confirm dependency order &
                  # will automatic create dependencies which include in service defination
     ports:
       - 8080:8080
     environment:
-      MYSQL_HOST: psimysql:3306
+      MYSQL_HOST: mysql:3306
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DB_NAME: ${MYSQL_DATABASE}
-      PSI_TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
-      PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
+      TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
+      TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}

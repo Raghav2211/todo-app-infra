@@ -1,13 +1,13 @@
 version: "3"
 services:
-  psimysql:
+  mysql:
     container_name: mysql #Specify a custom container name, rather than a generated default name 
     volumes: 
       - mysql_data:/var/lib/mysql:cached   # Strong consistency is quite expensive, requiring coordination between all of a files writers to guarantee 
                                                       # they don’t inappropriately clobber each other’s changes
                                                       # So Relax consistency guarantees using `cached` mode (Don’t do this in production …)
-  psitodoapp:
-    container_name: psi-todo #Specify a custom container name, rather than a generated default name                                                           
+  todo:
+    container_name: todo #Specify a custom container name, rather than a generated default name                                                           
     restart: on-failure:5 
 volumes:
   mysql_data:
