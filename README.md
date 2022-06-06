@@ -1,6 +1,4 @@
-![Build](https://github.com/Raghav2211/psi-lab/workflows/Build/badge.svg)
-
-# TODO INFRA
+# TODO APP INFRA
 
 Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-flux-todo-app.git) in different environment 
 
