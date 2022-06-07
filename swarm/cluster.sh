@@ -87,7 +87,7 @@ function help() {
    	echo "Usage:    ${me} [OPTIONS] COMMAND"
     echo ""
     echo "Author:"
-    echo "   PSI Lab Contributors - <$(git config --get remote.origin.url)>"
+    echo "   TODO APP INFRA Contributors - <$(git config --get remote.origin.url)>"
     echo ""
     echo "Options:"
     echo " --debug, -D                    Enable debug mode"

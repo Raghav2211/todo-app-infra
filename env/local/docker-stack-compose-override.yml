@@ -1,6 +1,6 @@
-version: "3"
+version: "3.9"
 services:
-  psimysql: 
+  mysql: 
     deploy:
       labels:
         name: mysql
@@ -10,15 +10,14 @@ services:
       placement: 
         constraints: 
           - "node.role == worker"
-  psitodoapp:
-    image: ${PSI_TODO_STACK_IMAGE}
+  todo:
     deploy:
       labels:
-        name: psi-todo
-        version: ${PSI_TODO_IMAGE_TAG:-latest}
+        name: todo
+        version: ${TODO_IMAGE_TAG:-latest}
         component: web
         env: "local" 
-      replicas: ${PSI_TODO_REPLICA}
+      replicas: ${TODO_REPLICA}
       placement: 
         constraints: 
           - "node.role == worker" 
