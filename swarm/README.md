@@ -15,7 +15,8 @@
        # Boot local cluster [ Swarm Manager(s)/Worker(s) node ]
        $ bash cluster.sh create local
     ```
-    
+   *Note* If you find problem related to `VboxManage Access denied` then follow the steps mention in this [link](https://stackoverflow.com/questions/70281938/docker-machine-unable-to-create-a-machine-on-macos-vboxmanage-returning-e-acces)
+
    Verify cluster 
 
     ```bash
@@ -46,23 +47,12 @@
     # Local registry
     $ docker service create --name registry --publish 5000:5000 registry:2
     
-    # Tag the image as localhost:5000/psi-todo. This creates an additional tag for the existing image.
-    $ docker tag psi-todo:1.0.0 localhost:5000/psi-todo
-    
-    # Push the image to the local registry running at localhost:5000
-    $ docker push localhost:5000/psi-todo
-    
-    # Remove locally cached images
-    $ docker image remove psi-todo
-    $ docker image remove psi-todo:1.0.0
-    $ docker image remove localhost:5000/psi-todo
-    
     # Deploy todo app cluster 
-    $ docker stack deploy -c <(docker-compose --env-file=../env/<env>/Docker.env -f ../docker-compose.yaml -f ../env/<env>/docker-stack-compose-override.yml config) psi-todo
+    $ docker stack deploy -c <(docker-compose --env-file=../env/<env>/Docker.env -f ../docker-compose.yaml -f ../env/<env>/docker-stack-compose-override.yml config) todo
     
     # or 
     # Apply persistent with mysql 
-    docker stack deploy -c <(docker-compose --env-file=../env/local/Docker.env -f ../docker-compose.yaml -f ../env/local/docker-stack-compose-override.yml -f ../env/local/docker-stack-persistent-compose-override.yml config) psi-todo
+    docker stack deploy -c <(docker-compose --env-file=../env/local/Docker.env -f ../docker-compose.yaml -f ../env/local/docker-stack-compose-override.yml -f ../env/local/docker-stack-persistent-compose-override.yml config) todo
     
     ```
 
@@ -70,10 +60,9 @@
  
     ```bash
       $ docker service ls 
-       ID                  NAME                  MODE                REPLICAS            IMAGE                            PORTS
-       x2or6oc3lkes        psi-todo_psimysql     replicated          1/1                 mysql:8.0.22                     
-       zd2vezg73ksd        psi-todo_psitodoapp   replicated          1/1                 localhost:5000/psi-todo:latest   *:8080->8080/tcp
-       ac6h0l8eg3ko        registry              replicated          1/1                 registry:2                       *:5000->5000/tcp
+       ID                  NAME                 MODE               REPLICAS            IMAGE                                                    PORTS
+       x2or6oc3lkes        todo_mysql           replicated         1/1                 mysql:8.0.22                     
+       zd2vezg73ksd        todo_todo            replicated         1/1                 ghcr.io/raghav2211/spring-web-flux-todo-app/todo:latest  *:8080->8080/tcp
 
     ```
 
@@ -85,7 +74,7 @@
  
     
     ```bash
-       $ docker stack rm psi-todo
+       $ docker stack rm todo
     ```   
     
   - Configuration
@@ -94,8 +83,8 @@
 
     Parameter | Description | Default
     --- | --- | ---
-    `PSI_TODO_REPLICA` | No of replica for Todo-app | `1`
-    `PSI_TODO_STACK_IMAGE` | Todo-app Image | `localhost:5000/psi-todo`    
+    `TODO_REPLICA` | No of replica for Todo-app | `1`
+    `TODO_STACK_IMAGE` | Todo-app Image | `latest`    
     `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
     `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
     `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
