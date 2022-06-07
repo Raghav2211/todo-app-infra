@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "psi-todo.fullname" . }}
-  labels: {{- include "psi-todo.labels" . | nindent 4 }}
+  name: {{ include "todo.fullname" . }}
+  labels: {{- include "todo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replica | default 1 }}
   selector:
     matchLabels:
-      {{- include "psi-todo.selectorLabels" . | nindent 6 }}
+      {{- include "todo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "psi-todo.selectorLabels" . | nindent 8 }}
+        {{- include "todo.selectorLabels" . | nindent 8 }}
     spec:
       affinity:
         nodeAffinity:
@@ -68,22 +68,22 @@ spec:
                 configMapKeyRef:
                   key: database
                   name: {{ default "mysql" .Values.mysqlRef }}-config
-            - name: PSI_TODO_SECURITY_BASIC_AUTH_ENABLE
+            - name: TODO_SECURITY_BASIC_AUTH_ENABLE
               valueFrom:
                 configMapKeyRef:
                   key: securityBasicAuthEnable
-                  name: {{ include "psi-todo.fullname" . }}-config 
+                  name: {{ include "todo.fullname" . }}-config 
             {{- if .Values.config.securityBasicAuthEnable }}                                               
-            - name: PSI_TODO_SECURITY_BASIC_AUTH_USERNAME
+            - name: TODO_SECURITY_BASIC_AUTH_USERNAME
               valueFrom:
                 secretKeyRef:
                   key: security-basic-auth-username
-                  name: {{ include "psi-todo.fullname" . }}-secret
-            - name: PSI_TODO_SECURITY_BASIC_AUTH_PASSWORD
+                  name: {{ include "todo.fullname" . }}-secret
+            - name: TODO_SECURITY_BASIC_AUTH_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: security-basic-auth-password
-                  name: {{ include "psi-todo.fullname" . }}-secret
+                  name: {{ include "todo.fullname" . }}-secret
             {{- end }}      
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

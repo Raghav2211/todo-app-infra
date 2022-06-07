@@ -11,47 +11,47 @@ This chart bootstraps a single node Todo App deployment on a [Kubernetes](http:/
 
 ## Installing the Chart
 
-To install the chart with the release name `psi-todo`:
+To install the chart with the release name `todo`:
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug psi-todo psi-todo
+$ helm install --dry-run --debug todo todo
 
 # Install chart
-$ helm install psi-todo psi-todo
+$ helm install todo todo
 ```
 
-To install the chart with the release name `psi-todo` with respective environment secret and configuration file:
+To install the chart with the release name `todo` with respective environment secret and configuration file:
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug psi-todo psi-todo -f psi-todo/env/<env>/secrets.yaml -f psi-todo/env/<env>/values.yaml
+$ helm install --dry-run --debug todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
 
 # Install chart
-$ helm install psi-todo psi-todo -f psi-todo/env/<env>/secrets.yaml -f psi-todo/env/<env>/values.yaml
+$ helm install todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `psi-todo` deployment:
+To uninstall/delete the `todo` deployment:
 
 ```bash
-$ helm uninstall psi-todo
+$ helm uninstall todo
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release completely.
 
 ## Configuration
 
-The following table lists the configurable parameters of the PSI-TODO chart and their default values.
+The following table lists the configurable parameters of the TODO chart and their default values.
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `replica`                                 | Number of instance to run at any time                                                      | 1 |
-| `image`                                        | `psi-todo` image configuration.                                                            | ` ` |
-| `image.repository`                             | `psi-todo` image repository.                                                               | `psi-todo`|
-| `image.pullPolicy`                             | `psi-todo` image pull policy.                                                              | `Never`|
-| `image.tag`                                    | `psi-todo` image tag.                                                                      | `1.0.0`|
+| `replica`                                 | Number of instance to run at any time                                                      	| 1 |
+| `image`                                        | `todo` image configuration.                                                            	| ` ` |
+| `image.repository`                             | `todo` image repository.                                                               	| `psi-todo`|
+| `image.pullPolicy`                             | `todo` image pull policy.                                                             	 | `Never`|
+| `image.tag`                                    | `todo` image tag.                                                                      	| `1.0.0`|
 | `livenessProbe`                                | Indicates whether the container is running.                                                | ` {}` |
 | `service`                                      | Kubernetes service configuration.                                                          | ` ` |
 | `service.type`                                 | ServiceTypes allow you to specify what kind of Service you want.                           | `LoadBalancer` |
@@ -59,7 +59,7 @@ The following table lists the configurable parameters of the PSI-TODO chart and 
 | `service.nodeport`                             | NodePort gives you the freedom to set up your own load balancing solution.                 | 30000|
 | `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
 | `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
-| `resources`                                    | `psi-todo` CPU/Memory resource requests/limits                                             | `{}` |
+| `resources`                                    | `todo` CPU/Memory resource requests/limits                                             	| `{}` |
 | `initContainers`                               | Init containers can contain utilities or setup scripts not present in an app image         | ` `  |
 | `initContainers.dbWait`                        | dbWait until mysql is not up                                                               | ` `  |
 | `initContainers.dbWait.image`                  | image for running init container                                                           | `busybox `  |

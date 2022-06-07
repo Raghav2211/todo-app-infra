@@ -17,9 +17,6 @@
     ```bash
        eval $(minikube docker-env)  
     ```
- - Build
- 
-    [Build & Create Docker Image](../README.md#build)
  
  - Deploy  mysql
           
@@ -27,14 +24,14 @@
     
  - Deploy Todo-app    
  
-    [Deploy Todo App  using helm](psi-todo/README.md#Installing%20the%20Chart)
+    [Deploy Todo App  using helm](todo/README.md#Installing%20the%20Chart)
 
  - Verify all pods are up and running
  
     ```bash
       $ kubectl get pods
        NAME                         READY   STATUS    RESTARTS   AGE
-       psi-todo-6f4f69b7d7-8t8kg    1/1     Running   0          92m
+       todo-6f4f69b7d7-8t8kg        1/1     Running   0          92m
        mysql-58b87bf444-pshmk       1/1     Running   0          92m
 
     ```
