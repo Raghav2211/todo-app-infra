@@ -15,7 +15,7 @@
        # Boot local cluster [ Swarm Manager(s)/Worker(s) node ]
        $ bash cluster.sh create local
     ```
-   *Note* If you find problem related to `VboxManage Access denied` then follow the steps mention in this [link](https://stackoverflow.com/questions/70281938/docker-machine-unable-to-create-a-machine-on-macos-vboxmanage-returning-e-acces)
+   **Note** If you find problem related to `VboxManage Access denied` then follow the steps mention in this [link](https://stackoverflow.com/questions/70281938/docker-machine-unable-to-create-a-machine-on-macos-vboxmanage-returning-e-acces)
 
    Verify cluster 
 
@@ -37,15 +37,10 @@
     ```bash
        $ eval $(docker-machine env manager1)
     ```
- - Build
- 
-    [Build & Create Docker Image](../README.md#build)
  
  - Deploy the Stack
           
     ```bash
-    # Local registry
-    $ docker service create --name registry --publish 5000:5000 registry:2
     
     # Deploy todo app cluster 
     $ docker stack deploy -c <(docker-compose --env-file=../env/<env>/Docker.env -f ../docker-compose.yaml -f ../env/<env>/docker-stack-compose-override.yml config) todo
