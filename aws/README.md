@@ -1,7 +1,5 @@
 # Deploy Todo Application with RDS(MySql) on AWS EC2
 
-![Terraform Plan](https://github.com/Raghav2211/psi-lab/workflows/Terraform%20Plan/badge.svg)
-
 ![Todo-RDS-MySql-EC2](todo_phase_1.png)
 
 ## About ##

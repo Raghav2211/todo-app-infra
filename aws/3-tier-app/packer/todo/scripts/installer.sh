@@ -8,10 +8,10 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confd
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 sudo apt-get -y -qq install curl git openjdk-11-jdk maven apt-transport-https ca-certificates
 
-# Setup sudo to allow no-password sudo for "psi" group and adding "todo" user
-sudo groupadd -r psi
+# Setup sudo to allow no-password sudo for "todo" group and adding "todo" user
+sudo groupadd -r todo
 sudo useradd -m -s /bin/bash todo
-sudo usermod -a -G psi todo
+sudo usermod -a -G todo todo
 sudo cp /etc/sudoers /etc/sudoers.orig
 echo "todo  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/todo
 
@@ -33,15 +33,15 @@ echo ~todo
 cd /home/todo
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
-git clone https://github.com/Raghav2211/psi-lab.git
-cd psi-lab/todo-app
-mvn clean package -DskipTests
+git clone https://github.com/Raghav2211/spring-web-flux-todo-app.git
+cd spring-web-flux-todo-app
+mvn clean package
 sudo mkdir /opt/todo
-sudo cp target/psi-todo-${APP_VERSION}.jar /opt/todo/app.jar
+sudo cp target/todo-${APP_VERSION}.jar /opt/todo/app.jar
 sudo cp /tmp/bootstrap.sh /opt/todo/bootstrap.sh
 sudo chmod 744 /opt/todo/bootstrap.sh
 sudo cp /tmp/app.service /etc/systemd/system/todo.service
 cd ../..
-rm -r psi-lab
+rm -r spring-web-flux-todo-app
 EOF
 
