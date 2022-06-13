@@ -44,7 +44,7 @@ This is an example showing how to deploy a Todo application integrated with RDS(
   $ export AWS_REGION="<region>"
     
   # Build AMI       
-  $ packer build todo.json
+  $ packer build app.json
     
 ```
 
