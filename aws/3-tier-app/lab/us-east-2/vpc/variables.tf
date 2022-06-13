@@ -1,4 +1,4 @@
-variable "region" {}
+#variable "region" {}
 
 variable "app" {
   type = object(
@@ -21,4 +21,4 @@ variable "private_subnets" {}
 variable "database_subnets" {}
 
 # Validation on admin as user
-variable "bastion_ssh_users" {}
+#variable "bastion_ssh_users" {}
