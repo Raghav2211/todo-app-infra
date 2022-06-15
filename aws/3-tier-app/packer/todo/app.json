@@ -3,13 +3,17 @@
       "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
       "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
       "aws_region": "{{env `AWS_REGION`}}",
-      "app_version" : "{{env `APP_VERSION`}}"
+      "app_version" : "{{env `APP_VERSION`}}",
+      "vpc" : "{{env `VPC_ID`}}",
+      "subnet" : "{{env `SUBNET_ID`}}"
   },
   "builders": [
       {
           "type": "amazon-ebs",
           "access_key": "{{user `aws_access_key`}}",
           "secret_key": "{{user `aws_secret_key`}}",
+          "vpc_id": "{{user `vpc`}}",
+          "subnet_id": "{{user `subnet`}}",
           "region": "{{user `aws_region`}}",
           "source_ami_filter": {
               "filters": {
