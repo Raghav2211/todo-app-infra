@@ -19,6 +19,3 @@ variable "public_subnets" {}
 variable "private_subnets" {}
 
 variable "database_subnets" {}
-
-# Validation on admin as user
-#variable "bastion_ssh_users" {}
