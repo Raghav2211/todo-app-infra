@@ -1,5 +1,5 @@
 module "mysql" {
-  source          = "../../../../modules/database/mysql"
+  source          = "../../../modules/database/mysql"
   app             = var.app
   instance_type   = var.instance_type
   master_user     = var.master_user

@@ -1,5 +1,5 @@
 module "vpc" {
-  source                       = "../../../../modules/network"
+  source                       = "../../../modules/network"
   app                          = var.app
   cidr                         = var.cidr
   azs                          = var.azs

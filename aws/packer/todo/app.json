@@ -1,0 +1,55 @@
+{
+  "variables": {
+      "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+      "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+      "aws_region": "{{env `AWS_REGION`}}",
+      "app_version" : "{{env `APP_VERSION`}}",
+      "vpc" : "{{env `VPC_ID`}}",
+      "subnet" : "{{env `SUBNET_ID`}}"
+  },
+  "builders": [
+      {
+          "type": "amazon-ebs",
+          "access_key": "{{user `aws_access_key`}}",
+          "secret_key": "{{user `aws_secret_key`}}",
+          "vpc_id": "{{user `vpc`}}",
+          "subnet_id": "{{user `subnet`}}",
+          "region": "{{user `aws_region`}}",
+          "source_ami_filter": {
+              "filters": {
+                  "virtualization-type": "hvm",
+                  "name": "ubuntu/images/*ubuntu-focal-20.04-amd64-server-*",
+                  "root-device-type": "ebs"
+              },
+              "owners": [
+                  "099720109477"
+              ],
+              "most_recent": true
+          },
+          "instance_type": "t2.micro",
+          "ssh_username": "ubuntu",
+          "ami_description": "Todo App {{user `app_version`}} Image",
+          "ami_name": "todo-app-{{user `app_version`}}-amd64-hvm-ebs-{{isotime timestamp}}",
+          "tags": {
+            "OS_Version": "Ubuntu",
+            "Release": "{{user `app_version`}}",
+            "Name": "TodoApp",
+            "Region": "{{user `aws_region`}}"
+          }
+      }
+  ],
+  "provisioners": [
+    {
+        "type": "file",
+        "sources": "todo.pub,services/bootstrap.sh,services/app.service",
+        "destination": "/tmp/"
+      },
+    {
+        "type": "shell",
+        "script": "scripts/installer.sh",
+        "environment_vars": [
+            "APP_VERSION={{user `app_version`}}"
+        ]
+    }
+]
+}
