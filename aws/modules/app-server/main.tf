@@ -107,27 +107,13 @@ module "alb" {
 }
 
 module "asg" {
-  source  = "terraform-aws-modules/autoscaling/aws"
-  version = "3.8.0"
-
-  name = "ec2-${local.name_suffix}-${var.app.name}-app"
-
+  source                 = "../asg/"
+  app                    = var.app
+  app_installer_tpl_path = var.app_installer_tpl_path
+  app_env_vars=var.app_env_vars
   # Launch configuration
-  lc_name         = "lc-${local.name_suffix}-${var.app.name}-app"
-  image_id        = var.image_id
-  instance_type   = var.instance_type
-  security_groups = list(data.aws_security_group.app.id)
-  user_data       = data.template_file.app_data.rendered
-
+  image_id      = var.image_id
+  instance_type = var.instance_type
   # Auto scaling group
-  asg_name                  = "asg-${local.name_suffix}-${var.app.name}-app"
-  vpc_zone_identifier       = data.aws_subnet_ids.private_subnets.ids
-  health_check_type         = "EC2"
-  min_size                  = lookup(var.scaling_capacity, "min")
-  max_size                  = lookup(var.scaling_capacity, "max")
-  desired_capacity          = lookup(var.scaling_capacity, "desired")
-  wait_for_capacity_timeout = 0
   target_group_arns         = module.alb.target_group_arns
-
-  tags_as_map = local.tags
 }
