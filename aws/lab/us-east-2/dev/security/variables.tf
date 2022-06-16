@@ -1,37 +1,20 @@
-variable "region" {}
-
 variable "app" {
-  type = object(
-    {
-      id      = string
-      version = string
-      env     = string
-    }
-  )
+  default = {
+    environment = "dev"
+    account     = "lab"
+  }
 }
 
 variable "todo_lb_description" {
-  type        = string
-  description = "Todo App LoadBalancer security group"
-  default     = "Todo App LoadBalancer security group"
+  default = "Todo App LoadBalancer security group"
 }
 
 variable "todo_app_description" {
-  type        = string
-  description = "Todo App security group"
-  default     = "Todo App security group"
+  default = "Todo App security group"
 }
 
 variable "mysql_description" {
-  type        = string
-  description = "Secuity group description"
-  default     = "RDS security group"
-}
-
-variable "bastion_ingress_cidrs" {
-  type        = list(any)
-  description = "Ingress CIDR(s) blocks for the bastion security group"
-  default     = []
+  default = "RDS security group"
 }
 
 variable "env_cidr_block" {
@@ -47,12 +30,6 @@ variable "todo_app_lb_ingress_cidrs" {
 }
 
 variable "todo_app_lb_https_ingress" {
-  type        = bool
-  description = "Whether to enable https"
-  default     = true
-}
-variable "enable_todo_app_ssh" {
-  type        = bool
-  description = "Whether to enable ssh for todo app"
-  default     = false
+  type    = bool
+  default = true
 }
