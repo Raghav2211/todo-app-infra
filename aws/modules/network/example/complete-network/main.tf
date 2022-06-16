@@ -5,9 +5,8 @@ provider "aws" {
 module "vpc" {
   source = "../../"
   app = {
-    id      = "psi"
-    version = "1.0.0"
-    env     = "lab"
+    environment = "test"
+    account     = "lab"
   }
   cidr                         = "172.31.0.0/24"
   azs                          = ["us-west-2a", "us-west-2b"]
@@ -17,6 +16,4 @@ module "vpc" {
   create_internet_gateway      = true
   create_database_subnet_group = true
   enable_nat_gateway_single    = true
-  enable_bastion_host          = true
-  bastion_ssh_users            = var.bastion_ssh_users
 } 

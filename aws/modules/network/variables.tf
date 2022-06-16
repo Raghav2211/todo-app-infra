@@ -1,9 +1,8 @@
 variable "app" {
   type = object(
     {
-      id      = string
-      version = string
-      env     = string
+      environment = string # dev, uat
+      account     = string # lab, prd
     }
   )
 }
@@ -16,26 +15,26 @@ variable "cidr" {
 
 variable "azs" {
   description = "A list of availability zones in the region"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 
 variable "public_subnets" {
   description = "A list of public subnets inside the VPC"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "private_subnets" {
   description = "A list of private subnets inside the VPC"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
 variable "database_subnets" {
   description = "A list of database subnets"
-  type        = list
+  type        = list(any)
   default     = []
 }
 
