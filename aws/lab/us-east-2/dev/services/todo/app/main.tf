@@ -1,29 +1,3 @@
-data "aws_ami" "app" {
-  most_recent = true
-  owners      = [var.account_id] # Canonical
-  filter {
-    name   = "tag:Name"
-    values = ["TodoApp"]
-  }
-
-  filter {
-    name   = "tag:OS_Version"
-    values = ["Ubuntu"]
-  }
-
-  filter {
-    name   = "tag:Release"
-    values = [var.app.version]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-
-}
-
-
 module "todo_app" {
   source                 = "../../../../../modules/app-server"
   app                    = var.app
