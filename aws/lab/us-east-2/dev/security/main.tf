@@ -1,11 +1,5 @@
 data "aws_region" "current" {}
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = ["vpc-${local.name_suffix}"]
-  }
-}
 data "aws_security_group" "todo_app_ssh" {
   count = var.enable_todo_app_ssh ? 1 : 0
   name  = "security-group-${local.name_suffix}-bastion"
@@ -43,7 +37,7 @@ module "todo_app_load_balancer_sg" {
   source                 = "terraform-aws-modules/security-group/aws//modules/http-80"
   version                = "3.17.0"
   name                   = "security-group-${local.name_suffix}-todo-app-lb"
-  vpc_id                 = data.aws_vpc.selected.id
+  vpc_id                 = module.vpc.id
   description            = var.todo_lb_description
   ingress_cidr_blocks    = var.todo_app_lb_ingress_cidrs
   use_name_prefix        = false
@@ -59,7 +53,7 @@ module "todo_app_sg" {
   source                                                   = "terraform-aws-modules/security-group/aws//modules/http-8080"
   version                                                  = "3.17.0"
   name                                                     = "security-group-${local.name_suffix}-todo-app"
-  vpc_id                                                   = data.aws_vpc.selected.id
+  vpc_id                                                   = module.vpc.id
   description                                              = var.todo_app_description
   use_name_prefix                                          = false
   auto_ingress_with_self                                   = []
@@ -76,7 +70,7 @@ module "mysql_sg" {
   source                                                   = "terraform-aws-modules/security-group/aws//modules/mysql"
   version                                                  = "3.17.0"
   name                                                     = "security-group-${local.name_suffix}-mysql"
-  vpc_id                                                   = data.aws_vpc.selected.id
+  vpc_id                                                   = module.vpc.id
   description                                              = var.mysql_description
   use_name_prefix                                          = false
   auto_ingress_with_self                                   = []

@@ -29,7 +29,7 @@ variable "mysql_description" {
 }
 
 variable "bastion_ingress_cidrs" {
-  type        = list
+  type        = list(any)
   description = "Ingress CIDR(s) blocks for the bastion security group"
   default     = []
 }
@@ -41,7 +41,7 @@ variable "env_cidr_block" {
 }
 
 variable "todo_app_lb_ingress_cidrs" {
-  type        = list
+  type        = list(any)
   description = "Ingress CIDR(s) blocks for the bastion security group, Default is all [0.0.0.0/0]"
   default     = ["0.0.0.0/0"]
 }
