@@ -3,17 +3,13 @@ locals {
     account     = var.app.account
     project     = "security"
     environment = var.app.environment
-    application = "vpc"
+    application = "rds"
     team        = "sre"
   }
-  default_mysql_computed_ingress = [{
-    rule                     = "mysql-tcp"
-    source_security_group_id = module.todo_app_sg.this_security_group_id
-  }]
-  default_todo_app_computed_ingress = [{
-    rule                     = "http-8080-tcp"
-    source_security_group_id = module.todo_app_load_balancer_sg.this_security_group_id
-  }]
+  # default_mysql_computed_ingress = [{
+  #   rule                     = "mysql-tcp"
+  #   source_security_group_id = module.todo_app_sg.this_security_group_id
+  # }]
 }
 
 module "mysql_sg" {
@@ -25,8 +21,8 @@ module "mysql_sg" {
   use_name_prefix                                          = false
   auto_ingress_with_self                                   = []
   auto_ingress_rules                                       = []
-  computed_ingress_with_source_security_group_id           = local.default_mysql_computed_ingress
-  number_of_computed_ingress_with_source_security_group_id = length(local.default_mysql_computed_ingress)
+  #computed_ingress_with_source_security_group_id           = local.default_mysql_computed_ingress
+  #number_of_computed_ingress_with_source_security_group_id = length(local.default_mysql_computed_ingress)
 
   tags = merge(local.tags, {
     app = "mysql"
