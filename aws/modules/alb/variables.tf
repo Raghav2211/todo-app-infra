@@ -1,12 +1,21 @@
 variable "app" {
   type = object(
     {
-      id      = string
-      name    = string
-      version = string
-      env     = string
+      environment = string # dev, uat
+      account     = string # lab, prd
+      name        = string
     }
   )
+}
+variable "vpc_id" {
+  type = string
+}
+
+variable "security_group_ids" {
+  type = list(string)
+}
+variable "subnet_ids" {
+  type = list(string)
 }
 
 variable "app_port" {
@@ -31,10 +40,4 @@ variable "app_health" {
   type        = map(any)
   description = "Application Health check configuration"
   default     = {}
-}
-
-variable "app_env_vars" {
-  type        = map(any)
-  default     = {}
-  description = "App deployment environment variables"
 }
