@@ -1,5 +1,5 @@
 module "todo_app" {
-  source                 = "../../../../../modules/app-server"
+  source                 = "../../../../../../modules/app-server"
   app                    = var.app
   image_id               = data.aws_ami.app.image_id
   instance_type          = var.instance_type

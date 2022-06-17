@@ -41,12 +41,12 @@ variable "app_installer_tpl_path" {
 }
 
 variable "app_env_vars" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "App deployment environment variables"
 }
-variable "target_group_arns"{
-  type      = list(string)
-  default   = []
-  description  = "Alb target group arns"
+variable "target_group_arns" {
+  type        = list(string)
+  default     = []
+  description = "Alb target group arns"
 }

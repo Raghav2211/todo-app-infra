@@ -28,13 +28,13 @@ variable "load_balance_algo" {
 }
 
 variable "app_health" {
-  type        = map
+  type        = map(any)
   description = "Application Health check configuration"
   default     = {}
 }
 
 variable "app_env_vars" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "App deployment environment variables"
 }

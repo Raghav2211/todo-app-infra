@@ -21,7 +21,7 @@ module "todo_app_load_balancer_sg" {
   ingress_cidr_blocks    = var.todo_app_lb_ingress_cidrs
   use_name_prefix        = false
   auto_ingress_with_self = []
-  auto_ingress_rules     = ["http-80-tcp" , "https-443-tcp"]
+  auto_ingress_rules     = ["http-80-tcp", "https-443-tcp"]
 
   tags = merge(local.tags, {
     app = "todo-app-lb"
