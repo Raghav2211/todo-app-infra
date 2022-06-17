@@ -1,13 +1,17 @@
 variable "app" {
   type = object(
     {
-      id      = string
-      version = string
-      env     = string
+      environment = string # dev, uat
+      account     = string # lab, prd
+      team        = string
+      name        = string
     }
   )
 }
 
+variable "vpc_id" {
+  type = string
+}
 variable "instance_type" {
   description = "RDS(Mysql) instance type"
   type        = string
@@ -42,6 +46,10 @@ variable "master_password" {
     condition     = length(var.master_password) >= 8
     error_message = "Master password should not be of length less than 8 charactors."
   }
+}
+
+variable "security_group_ids" {
+  type = list(string)
 }
 
 variable "subnet_group" {

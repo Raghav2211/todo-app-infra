@@ -1,43 +1,23 @@
 data "aws_region" "current" {}
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = ["vpc-${local.name_suffix}"]
-  }
-}
-
-data "aws_security_group" "selected" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "group-name"
-    values = ["security-group-${local.name_suffix}-${local.app_name}"]
-  }
-}
-
 locals {
-  app_name              = "mysql"
-  name_suffix           = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
-  database_name         = var.database_name != "" ? var.database_name : var.create_database_name_as_appid ? var.app.id : null
-  database_subnet_group = var.subnet_group != "" ? var.subnet_group : "vpc-${local.name_suffix}"
+  database_subnet_group = var.subnet_group != "" ? var.subnet_group : var.app.environment
   tags = {
-    AppId       = var.app.id
-    App         = local.app_name
-    Version     = var.app.version
-    Role        = "db"
-    Environment = var.app.env
-    LastScanned = formatdate("YYYYMMDDhh", timestamp())
+    account     = var.app.account
+    project     = "mysql"
+    environment = var.app.environment
+    application = "database"
+    team        = var.app.team
   }
 }
 
 module "mysql" {
   source  = "terraform-aws-modules/rds/aws"
-  version = "2.20.0"
+  version = "4.4.0"
 
-  identifier = "rds-${local.name_suffix}-${local.app_name}"
+  identifier = "mysql-${var.app.environment}-${var.app.name}"
 
-  engine            = local.app_name
+  engine            = "mysql"
   engine_version    = "8.0.21"
   instance_class    = var.instance_type
   allocated_storage = var.storage_size_in_gib
@@ -45,12 +25,12 @@ module "mysql" {
   #storage_type = var.storage_type
 
   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
-  name     = local.database_name
+  db_name  = var.app.name
   username = var.master_user
   password = var.master_password
   port     = "3306"
 
-  vpc_security_group_ids = list(data.aws_security_group.selected.id)
+  vpc_security_group_ids = var.security_group_ids
   create_db_subnet_group = false
   db_subnet_group_name   = local.database_subnet_group
 
