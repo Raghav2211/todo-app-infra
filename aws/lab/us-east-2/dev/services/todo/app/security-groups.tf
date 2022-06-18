@@ -50,7 +50,7 @@ resource "aws_security_group_rule" "todo_mysql_security_group_rule" {
   security_group_id        = data.terraform_remote_state.mysql_todo_dev.outputs.todo_app_ingress_security_id
   type                     = "ingress"
   source_security_group_id = module.todo_app_sg.this_security_group_id
-  from_port                = 3306
-  to_port                  = 3306
+  from_port                = data.terraform_remote_state.mysql_todo_dev.outputs.port
+  to_port                  = data.terraform_remote_state.mysql_todo_dev.outputs.port
   protocol                 = "tcp"
 }

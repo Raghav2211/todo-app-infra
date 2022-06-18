@@ -9,3 +9,7 @@ output "instance_address" {
 output "instance_endpoint" {
   value = module.mysql.db_instance_endpoint
 }
+
+output "port" {
+  value = module.mysql.port
+}
