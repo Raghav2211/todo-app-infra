@@ -1,14 +1,20 @@
 variable "app" {
   type = object(
     {
-      id      = string
-      name    = string
-      version = string
-      env     = string
+      environment = string # dev, uat
+      account     = string # lab, prd
+      name        = string
     }
   )
 }
 
+variable "security_group_ids" {
+  type = list(string)
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
 
 variable "instance_type" {
   type        = string
@@ -45,8 +51,7 @@ variable "app_env_vars" {
   default     = {}
   description = "App deployment environment variables"
 }
-variable "target_group_arns" {
+variable "alb_target_group_arns" {
   type        = list(string)
-  default     = []
   description = "Alb target group arns"
 }

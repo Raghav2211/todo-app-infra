@@ -1,73 +1,40 @@
 data "aws_region" "current" {}
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = ["vpc-${local.name_suffix}"]
-  }
-}
-
-# App
-data "aws_security_group" "app" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "group-name"
-    values = ["security-group-${local.name_suffix}-${var.app.name}"]
-  }
-}
-
-data "aws_security_group" "selected" {
-  vpc_id = data.aws_vpc.selected.id
-
-  filter {
-    name   = "group-name"
-    values = ["security-group-${local.name_suffix}-${var.app.name}"]
-  }
-}
 data "template_file" "app_data" {
   template = file(var.app_installer_tpl_path)
   vars     = var.app_env_vars
 }
-data "aws_subnet_ids" "private_subnets" {
-  vpc_id = data.aws_vpc.selected.id
 
-  filter {
-    name   = "tag:Tier"
-    values = ["private"]
-  }
-}
 locals {
-  name_suffix = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
   tags = {
-    AppId       = var.app.id
-    App         = var.app.name
-    Version     = var.app.version
-    Role        = "infra"
-    Environment = var.app.env
-    LastScanned = formatdate("YYYYMMDDhh", timestamp())
+    account     = var.app.account
+    project     = "infra"
+    environment = var.app.environment
+    application = "ec2"
+    team        = "sre"
   }
 }
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "3.8.0"
 
-  name = "ec2-${local.name_suffix}-${var.app.name}"
+  name = "${var.app.environment}-${var.app.name}"
 
   # Launch configuration
-  lc_name         = "lc-${local.name_suffix}-${var.app.name}"
+  lc_name         = "lc-${var.app.environment}-${var.app.name}"
   image_id        = var.image_id
   instance_type   = var.instance_type
-  security_groups = list(data.aws_security_group.app.id)
+  security_groups = var.security_group_ids
   user_data       = data.template_file.app_data.rendered
 
   # Auto scaling group
-  asg_name                  = "asg-${local.name_suffix}-${var.app.name}"
-  vpc_zone_identifier       = data.aws_subnet_ids.private_subnets.ids
+  asg_name                  = "asg-${var.app.environment}-${var.app.name}"
+  vpc_zone_identifier       = var.subnet_ids
   health_check_type         = "EC2"
   min_size                  = lookup(var.scaling_capacity, "min")
   max_size                  = lookup(var.scaling_capacity, "max")
   desired_capacity          = lookup(var.scaling_capacity, "desired")
   wait_for_capacity_timeout = 0
   tags_as_map               = local.tags
+  target_group_arns         = var.alb_target_group_arns
 }
