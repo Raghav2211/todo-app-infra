@@ -13,7 +13,7 @@ sudo groupadd -r todo
 sudo useradd -m -s /bin/bash springtodo
 sudo usermod -a -G todo springtodo
 sudo cp /etc/sudoers /etc/sudoers.orig
-echo "todo  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/springtodo
+echo "springtodo  ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/springtodo
 
 # Installing SSH key
 sudo mkdir -p /home/springtodo/.ssh
