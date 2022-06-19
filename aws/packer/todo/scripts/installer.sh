@@ -35,7 +35,8 @@ export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
 git clone https://github.com/Raghav2211/spring-web-flux-todo-app.git
 cd spring-web-flux-todo-app
-mvn clean package
+mvn clean package -DskipTests
+APP_VERSION=$(mvn help:evaluate -q -DforceStdout -D"expression=project.version")
 sudo mkdir /opt/todo
 sudo cp target/todo-${APP_VERSION}.jar /opt/todo/app.jar
 sudo cp /tmp/bootstrap.sh /opt/todo/bootstrap.sh

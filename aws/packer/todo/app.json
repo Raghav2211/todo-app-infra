@@ -3,7 +3,6 @@
       "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
       "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
       "aws_region": "{{env `AWS_REGION`}}",
-      "app_version" : "{{env `APP_VERSION`}}",
       "vpc" : "{{env `VPC_ID`}}",
       "subnet" : "{{env `SUBNET_ID`}}"
   },
@@ -46,10 +45,7 @@
       },
     {
         "type": "shell",
-        "script": "scripts/installer.sh",
-        "environment_vars": [
-            "APP_VERSION={{user `app_version`}}"
-        ]
+        "script": "scripts/installer.sh"
     }
 ]
 }
