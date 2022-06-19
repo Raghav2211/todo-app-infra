@@ -1,6 +1,9 @@
 output "id" {
   value = module.vpc.vpc_id
 }
+output "cidr" {
+  value = module.vpc.cidr
+}
 output "public_subnets" {
   value = module.vpc.public_subnets
 }

@@ -3,7 +3,7 @@ variable "app" {
     environment = "dev"
     account     = "lab"
     name        = "todo"
-    version     = "latest"
+    version     = "1.0.0"
   }
 }
 
@@ -13,10 +13,10 @@ variable "instance_type" {
 
 variable "app_env_vars" {
   default = {
-    MYSQL_HOST     = "mysql-dev-test.************.us-east-2.rds.amazonaws.com" # TODO: use rds data source to get MYSQL_HOST
+    MYSQL_HOST     = "mysql-dev-test.************.us-east-2.rds.amazonaws.com:3306" # TODO: use rds data source to get MYSQL_HOST
     MYSQL_DB_NAME  = "test"
     MYSQL_USER     = "admin"
-    MYSQL_PASSWORD = "********" # TODO: use aws secret manager to get username & password
+    MYSQL_PASSWORD = "admin123" # TODO: use aws secret manager to get username & password
   }
 }
 

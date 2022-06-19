@@ -11,9 +11,13 @@ variable "instance_type" {
   default = "db.m5.large"
 }
 
-variable "master_user" {}
+variable "master_user" {
+  default = "admin" //TODO: integrate this with aws secret manager
+}
 
-variable "master_password" {}
+variable "master_password" {
+  default = "admin123" // TODO: integrate this with aws secret manager
+}
 
 variable "multi_az" {
   default = false

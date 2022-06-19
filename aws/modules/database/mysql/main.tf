@@ -25,10 +25,11 @@ module "mysql" {
   #storage_type = var.storage_type
 
   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
-  db_name  = var.app.name
-  username = var.master_user
-  password = var.master_password
-  port     = "3306"
+  db_name                = var.app.name
+  username               = var.master_user
+  password               = var.master_password
+  create_random_password = false
+  port                   = "3306"
 
   vpc_security_group_ids = var.security_group_ids
   create_db_subnet_group = false

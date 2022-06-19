@@ -1,0 +1,52 @@
+name: "Terraform Plan"
+
+# Trigger when a pull request is received
+on:
+  pull_request:
+    paths:
+      - '**.tf'
+      - '!**/README.md'
+      - '!.github/**'
+
+jobs:
+  terraform-plan:
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /aws
+    steps:
+      # Checkout the code
+      # Marketplace: https://github.com/marketplace/actions/checkout
+      - name: "Setup - Checkout"
+        uses: actions/checkout@v2.1.0
+
+      # Downloads a specific version of Terraform CLI and adds it to PATH
+      # Marketplace: https://github.com/marketplace/actions/hashicorp-setup-terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.13.5
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: "Terraform Format check"
+        run: |
+          find . \( -path './lab/.terraform' \) -prune -o -type f -name '*.tf' | while read f
+          do
+            terraform fmt -check $f
+              if [ $? -ne 0 ]
+              then
+                  exit 1;
+              fi
+          done
+
+      - name: "Terraform Init & Validate"
+        env:
+          AWS_DEFAULT_REGION: us-east-2
+        run: |
+          terraform init /aws/lab/us-east-2/dev/vpc
+          terraform validate /aws/lab/us-east-2/dev/vpc
+          terraform init /aws/lab/us-east-2/dev/database/mysql
+          terraform validate /aws/lab/us-east-2/dev/database/mysql
+          terraform init /aws/lab/us-east-2/dev/services/todo/app
+          terraform validate /aws/lab/us-east-2/dev/services/todo/app
