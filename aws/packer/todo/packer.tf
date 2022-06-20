@@ -41,20 +41,16 @@ resource "null_resource" "todo_packer" {
   }
   provisioner "local-exec" {
     command = <<EOF
-
-packer build \
-  -var 'region=${data.aws_region.current.name}' \
-  -var 'vpc=${data.terraform_remote_state.vpc_dev.outputs.id}' \
-  -var 'subnet=${data.terraform_remote_state.vpc_dev.outputs.public_subnets[0]}' \
-  -var 'ami_name=${local.ami_name}' \
-  -var 'app_version=${var.app_version}' \
-  app.json
-if [ $? -eq 0 ]; then
-  printf "\n Succeeded \n"
-else
-  printf "\n Failed \n" >&2
-  exit 1
-fi
-EOF
+                  packer build \
+                    -var 'region=${data.aws_region.current.name}' \
+                    -var 'vpc=${data.terraform_remote_state.vpc_dev.outputs.id}' \
+                    -var 'subnet=${data.terraform_remote_state.vpc_dev.outputs.public_subnets[0]}' \
+                    -var 'ami_name=${local.ami_name}' \
+                    -var 'app_version=${var.app_version}' \
+                    app.json || {
+                      printf "\n Failed \n" >&2
+                      exit 1
+                    }
+              EOF
   }
 }
