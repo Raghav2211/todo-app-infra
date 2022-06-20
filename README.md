@@ -21,20 +21,21 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
      ```
     **Configuration** 
 
-    The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
+  The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
+
+  Parameter | Description | Default
+  --- | --- | ---
+  `TODO_IMAGE_TAG` | Image tag for Todo-App | `latest`
+  `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
+  `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
+  `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
+  `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                
+  `MYSQL_USER` | Username of new user to create | ``        
+  `MYSQL_PASSWORD` | Password for the new user | ``            
+  `MYSQL_ROOT_PASSWORD` | Password for the root user | ``              
+  `MYSQL_DATABASE` | Name for new database to create | ``                
+  `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
     
-    Parameter | Description | Default
-      --- | --- | ---
-    `TODO_IMAGE_TAG` | Image tag for Todo-App | `latest`
-    `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`
-    `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``
-    `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``
-    `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`
-    `MYSQL_USER` | Username of new user to create | ``
-    `MYSQL_PASSWORD` | Password for the new user | ``
-    `MYSQL_ROOT_PASSWORD` | Password for the root user | ``
-    `MYSQL_DATABASE` | Name for new database to create | ``
-    `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``
 
 - Uninstall
 
