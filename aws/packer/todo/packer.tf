@@ -40,7 +40,7 @@ resource "null_resource" "todo_packer" {
     ami_name = local.ami_name
   }
   provisioner "local-exec" {
-    command     = <<EOF
+    command = <<EOF
 
 packer build \
   -var 'region=${data.aws_region.current.name}' \
