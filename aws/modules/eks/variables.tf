@@ -1,14 +1,13 @@
 variable "app" {
   type = object(
     {
-      id      = string
-      version = string
-      env     = string
+      environment = string # dev, uat
+      account     = string # lab, prd
     }
   )
 }
 
-variable region {}
+variable "region" {}
 
 variable "cidr" {}
 
@@ -21,7 +20,7 @@ variable "private_subnets" {}
 variable "k8s_version" {
   type        = string
   description = "K8s version for eks cluster"
-  default     = "1.17"
+  default     = "1.19"
 }
 
 variable "tags" {

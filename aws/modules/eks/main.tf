@@ -14,14 +14,12 @@ data "aws_security_group" "worker_ssh" {
 }
 
 locals {
-  name_suffix  = "${data.aws_region.current.name}-${substr(var.app.env, 0, 1)}-${var.app.id}"
-  cluster_name = "eks-${local.name_suffix}"
   tags = merge(var.tags, {
-    AppId       = var.app.id
-    Version     = var.app.version
-    Role        = "infra"
-    Environment = var.app.env
-    #Time        = formatdate("YYYYMMDDhhmmss", timestamp())
+    account     = var.app.account
+    project     = "infra"
+    environment = var.app.environment
+    application = "eks"
+    team        = "sre"
   })
   worker_ssh_security_group_id = var.enable_ssh ? data.aws_security_group.worker_ssh[0].id : []
   worker_security_group_ids    = concat(local.worker_ssh_security_group_id)
@@ -31,7 +29,7 @@ locals {
     "value"               = "true"
     },
     {
-      "key"                 = "k8s.io/cluster-autoscaler/${local.cluster_name}"
+      "key"                 = "k8s.io/cluster-autoscaler/${var.app.environment}"
       "propagate_at_launch" = "false"
       "value"               = "true"
   }]
@@ -51,8 +49,8 @@ locals {
 
 module "eks" {
   source                               = "terraform-aws-modules/eks/aws"
-  version                              = "13.2.1"
-  cluster_name                         = local.cluster_name
+  version                              = "18.24.0"
+  cluster_name                         = var.app.environment
   cluster_version                      = var.k8s_version
   subnets                              = module.vpc.private_subnets
   tags                                 = local.tags
