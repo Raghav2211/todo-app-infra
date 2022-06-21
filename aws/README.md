@@ -6,10 +6,9 @@
 This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
 
 1. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
-2. Bastion is on  public subnet which will provide access through ssh to connect to application(EC2) or database (RDS)  for troubleshooting.
-3. Nat Gateway provides access to internet to the private subnets.
-4. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
-5. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs). The load balancer also needs at least 2 public subnets in different AZs.
+2. Nat Gateway provides access to internet to the private subnets.
+3. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
+4. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs) with auto-scaling group. The load balancer also needs at least 2 public subnets in different AZs.
 
 ## Prerequisite ##
 
@@ -27,43 +26,27 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 
 ## Deploy ##
 
-
-- Create AMI
- 
-``` bash
-  # Go to packer 
-  $ cd 3-tier-app/packer/todo
-    
-  # Create ssh key for ssh in todo cluster
-  $ ssh-keygen -t rsa -C "<email-address>" -f todo
-    
-  # export variables for packer
-  $ export APP_VERSION="<todo-app-version>"
-  $ export AWS_REGION="<region>"
-    
-  # Build AMI       
-  $ packer build app.json
-    
-```
-
 - Deploy AWS stack
 
 ```bash 
   
   # Go to environment folder in which you want to deploy cluster
-  $ cd ../../<env>
+  $ cd ./<account>/<region>/<envionment>
   
   # Create VPC
-  $ terraform apply -var-file=vpc/terraform.tfvars vpc 
-  
-  # Create security groups
-  $ terraform apply -var-file=security/terraform.tfvars security 
+  $ terraform apply vpc 
   
   # Create RDS(MySql) cluster
-  $ terraform apply -var-file=database/mysql/terraform.tfvars database/mysql
+  $ terraform apply  database/mysql/todo
+  
+  # Create TODO AMI
+  $ cd ../../../packer/todo 
+  $ ssh-keygen -t rsa -C "<email-address>" -f todo
+  $ terraform apply 
   
   # Create Todo App EC2 cluster
-  $ terraform apply -var-file=services/todo/app/terraform.tfvars services/todo/app
+  $ cd -
+  $ terraform apply services/todo/app
     
 ```
 
@@ -89,7 +72,7 @@ This is an example showing how to deploy a Todo application integrated with RDS(
   $ ssh -i <bastion_pem_file> -A <bastion_user>@<basion_public_ip>
    
   # Access the private instance
-  $ ssh todo@<todo_private_ip>
+  $ ssh springtodo@<todo_private_ip>
    
   # Get status
   $ sudo systemctl status todo
@@ -99,35 +82,98 @@ This is an example showing how to deploy a Todo application integrated with RDS(
 ## Folder layout 
 ```
 .
-└── 3-tier-app
-    ├── lab
-    │   ├── database
-    │   │   └── mysql
-    │   ├── security
-    │   ├── services
-    │   │   └── todo
-    │   │       └── app
-    │   │           └── templates
-    │   └── vpc
-    ├── modules
-    │   ├── app-server
-    │   ├── database
-    │   │   └── mysql
-    │   │       └── example
-    │   ├── ec2
-    │   ├── eks
-    │   └── network
-    │       ├── example
-    │       │   └── complete-network
-    │       ├── test
-    │       └── userdata
-    ├── packer
-    │   └── todo
-    │       ├── app.json
-    │       ├── scripts
-    │       ├── services
-    │       └── todo
-    └── test
+├── lab
+│   └── us-east-2
+│       └── dev
+│           ├── database
+│           │   └── mysql
+│           │       └── todo
+│           │           ├── data_sources.tf
+│           │           ├── main.tf
+│           │           ├── outputs.tf
+│           │           ├── provider.tf
+│           │           ├── security-groups.tf
+│           │           └── variables.tf
+│           ├── services
+│           │   └── todo
+│           │       └── app
+│           │           ├── data_sources.tf
+│           │           ├── main.tf
+│           │           ├── provider.tf
+│           │           ├── security-groups.tf
+│           │           ├── templates
+│           │           │   └── deployment.tpl
+│           │           └── variables.tf
+│           └── vpc
+│               ├── main.tf
+│               ├── outputs.tf
+│               ├── provider.tf
+│               └── variables.tf
+├── modules
+│   ├── alb
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── provider.tf
+│   │   └── variables.tf
+│   ├── asg
+│   │   ├── main.tf
+│   │   ├── provider.tf
+│   │   └── variables.tf
+│   ├── database
+│   │   └── mysql
+│   │       ├── example
+│   │       │   ├── main.tf
+│   │       │   └── outputs.tf
+│   │       ├── main.tf
+│   │       ├── outputs.tf
+│   │       ├── provider.tf
+│   │       └── variables.tf
+│   ├── ec2
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variables.tf
+│   ├── eks
+│   │   ├── examples
+│   │   │   └── complete-cluster
+│   │   │       └── main.tf
+│   │   ├── kubernetes.tf
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── version.tf
+│   │   └── vpc.tf
+│   ├── network
+│   │   ├── example
+│   │   │   └── complete-network
+│   │   │       ├── main.tf
+│   │   │       └── outputs.tf
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── provider.tf
+│   │   ├── test
+│   │   │   ├── go.mod
+│   │   │   └── go.sum
+│   │   └── variables.tf
+│   └── tf-state
+│       ├── main.tf
+│       ├── outputs.tf
+│       ├── provider.tf
+│       └── variables.tf
+├── packer
+│   └── todo
+│       ├── app.json
+│       ├── packer.tf
+│       ├── scripts
+│       │   └── installer.sh
+│       ├── services
+│       │   ├── app.service
+│       │   └── bootstrap.sh
+│       ├── todo
+│       └── todo.pub
+├── remote-state
+│   └── lab
+│       └── us-east-2
+│           └── main.tf
+└── test
 ```
 
 
