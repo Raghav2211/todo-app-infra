@@ -7,22 +7,26 @@ variable "app" {
   )
 }
 
-variable "region" {}
+variable "vpc_id" {
+  type = string
+}
+variable "public_subnet_ids" {
+  type = list(string)
+}
 
-variable "cidr" {}
-
-variable "azs" {}
-
-variable "public_subnets" {}
-
-variable "private_subnets" {}
+variable "nodegroup_subnet_ids" {
+  type = list(string)
+}
 
 variable "k8s_version" {
   type        = string
   description = "K8s version for eks cluster"
   default     = "1.19"
 }
-
+variable "additional_cluster_tags" {
+  type    = map(string)
+  default = {}
+}
 variable "tags" {
   description = "Common tags for all resources"
   type        = map(string)
@@ -33,15 +37,4 @@ variable "enable_ssh" {
   type        = bool
   description = "Whether to enable ssh on worker nodes via bastion"
   default     = false
-}
-
-variable "worker_conf" {
-  type = list(object({
-    name                 = string
-    instance_type        = string
-    asg_min_size         = number
-    asg_max_size         = number
-    asg_desired_capacity = number
-  }))
-  description = "Worker(s) configuration"
 }
