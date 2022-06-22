@@ -81,7 +81,11 @@ variable "env_cidr_block" {
   description = "Add current deployment enviornment cidr block"
   default     = true
 }
-
+variable "enable_eks" {
+  type        = bool
+  description = "Enable eks on vpc so that required tags on public/private subnets could be set"
+  default     = false
+}
 variable "public_subnet_tags" {
   type        = map(string)
   description = "Additional tags for public subnet"
