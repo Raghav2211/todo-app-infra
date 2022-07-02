@@ -33,7 +33,7 @@ echo ~springtodo
 cd /home/springtodo
 export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin
-git clone https://github.com/Raghav2211/spring-web-flux-todo-app.git
+git clone --depth 1 --branch v${APP_VERSION} https://github.com/Raghav2211/spring-web-flux-todo-app.git
 cd spring-web-flux-todo-app
 mvn clean package -DskipTests
 sudo mkdir /opt/todo
