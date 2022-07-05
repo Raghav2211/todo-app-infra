@@ -1,12 +1,9 @@
 version: "3.9"
 services:
-  mysql:
-    image: mysql:${MYSQL_IMAGE_TAG}
-    environment:
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
   todo:
     image: ghcr.io/raghav2211/spring-web-flux-todo-app/todo:${TODO_IMAGE_TAG:-latest}
     ports:
