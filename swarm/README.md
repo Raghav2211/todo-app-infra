@@ -44,21 +44,13 @@
     # If you want to use local registry instead of ghcr 
     $ docker service create --name registry --publish 5000:5000 registry:2
     
-    # Tag the image as localhost:5000/todo. This creates an additional tag for the existing image.
-    $ docker tag todo:2.0.0 localhost:5000/todo
-    $ docker tag edge-service:1.0.0 localhost:5000/edge-service
+    # Build & tag 
+    $ docker tag todo:${TODO_APP_VERSION} localhost:5000/todo
+    $ docker tag edge-service:${EDGE_SERVICE_VERSION} localhost:5000/edge-service
     
     # Push the image to the local registry running at localhost:5000
     $ docker push localhost:5000/todo
     $ docker push localhost:5000/edge-service
-    
-    # Remove locally cached images
-    $ docker image remove todo
-    $ docker image remove todo:2.0.0
-    $ docker image remove localhost:5000/todo
-    $ docker image remove edge-service
-    $ docker image remove edge-service:1.0.0
-    $ docker image remove localhost:5000/edge-service 
    
      
     # Deploy todo app cluster 
@@ -84,28 +76,39 @@
  
     http://localhost:8080/swagger-ui/
     
- - Uninstalling the Stack 
+   - Uninstalling the Stack 
  
-    
+   ```bash
+       # if build local images to deploy cluster
+     
+       # Remove locally cached images
+      $ docker image remove todo
+      $ docker image remove todo:${TODO_APP_VERSION}
+      $ docker image remove localhost:5000/todo
+      $ docker image remove edge-service
+      $ docker image remove edge-service:${EDGE_SERVICE_VERSION}
+      $ docker image remove localhost:5000/edge-service 
+    ```
     ```bash
+       $ eval $(docker-machine env -u) 
        $ docker stack rm todo
     ```   
     
-  - Configuration
+ - Configuration
   
-    The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
+   The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
 
-    Parameter | Description | Default
-    --- | --- | ---
-    `TODO_REPLICA` | No of replica for Todo-app | `1`
-    `TODO_STACK_IMAGE` | Todo-app Image | `latest`    
-    `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
-    `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
-    `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
-    `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                    
-    `MYSQL_USER` | Username of new user to create | ``        
-    `MYSQL_PASSWORD` | Password for the new user | ``            
-    `MYSQL_ROOT_PASSWORD` | Password for the root user | ``                
-    `MYSQL_DATABASE` | Name for new database to create | ``                
-    `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
+   Parameter | Description | Default
+   --- | --- | ---
+   `TODO_REPLICA` | No of replica for Todo-app | `1`
+   `TODO_STACK_IMAGE` | Todo-app Image | `latest`    
+   `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
+   `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
+   `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
+   `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                    
+   `MYSQL_USER` | Username of new user to create | ``        
+   `MYSQL_PASSWORD` | Password for the new user | ``            
+   `MYSQL_ROOT_PASSWORD` | Password for the root user | ``                
+   `MYSQL_DATABASE` | Name for new database to create | ``                
+   `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
       

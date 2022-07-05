@@ -10,16 +10,34 @@ services:
         constraints: 
           - "node.role == worker"
   todo:
+    image: ${TODO_STACK_IMAGE}
     deploy:
       labels:
         name: todo
-        version: ${TODO_IMAGE_TAG:-latest}
+        version: latest
         component: web
         env: "local" 
       replicas: ${TODO_REPLICA}
       placement: 
         constraints: 
           - "node.role == worker" 
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+
+  edge-service:
+    image: ${EDGE_SERVICE_STACK_IMAGE}
+    deploy:
+      labels:
+        name: edge-service
+        version: latest
+        component: web
+        env: "local"
+      replicas: ${EDGE_SERVICE_REPLICA}
+      placement:
+        constraints:
+          - "node.role == worker"
       restart_policy:
         condition: on-failure
         delay: 5s
