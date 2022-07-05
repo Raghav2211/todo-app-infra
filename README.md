@@ -27,6 +27,8 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
        --- | --- | ---
        `TODO_IMAGE_TAG` | Image tag for Todo-App | `2.0.0`
        `EDGE_SERVICE_IMAGE_TAG` | Image tag for Edge Service | `1.0.0`             
+       `EDGE_GOOGLE_CLIENT_ID` | Google client Id for oauth2 | ``
+       `EDGE_GOOGLE_CLIENT_SECRET` | Google client secret for oauth2 | ``
        `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``                    
 
 
