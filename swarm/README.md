@@ -66,33 +66,34 @@
  
     ```bash
       $ docker service ls 
-       ID                  NAME                 MODE               REPLICAS            IMAGE                                                    PORTS
-       x2or6oc3lkes        todo_mysql           replicated         1/1                 mysql:8.0.22                     
-       zd2vezg73ksd        todo_todo            replicated         1/1                 ghcr.io/raghav2211/spring-web-flux-todo-app/todo:latest  *:8080->8080/tcp
+       
+      ID             NAME                MODE         REPLICAS   IMAGE                                PORTS
+    a5xtv1s0jtm9   registry            replicated     1/1        registry:2                           *:5000->5000/tcp
+    0wqkzciwyjp7   todo_edge-service   replicated     1/1        localhost:5000/edge-service:latest   *:8081->8081/tcp
+    dxrgqsmjafwa   todo_mongo          replicated     1/1        mongo:4.2.21                         *:27017->27017/tcp
+    xyy9feyvm75l   todo_todo           replicated     1/1        localhost:5000/todo:latest           *:8080->8080/tcp 
+   
 
     ```
 
- - Access swagger api endpoint with below url.
+ - Access
  
-    http://localhost:8080/swagger-ui/
+   http://localhost:8081  # get access_token 
+   
+   http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)
     
-   - Uninstalling the Stack 
+ - Uninstalling the Stack 
  
    ```bash
-       # if build local images to deploy cluster
      
-       # Remove locally cached images
-      $ docker image remove todo
-      $ docker image remove todo:${TODO_APP_VERSION}
-      $ docker image remove localhost:5000/todo
-      $ docker image remove edge-service
-      $ docker image remove edge-service:${EDGE_SERVICE_VERSION}
-      $ docker image remove localhost:5000/edge-service 
+       # Remove locally cached images 
+      $ docker rmi -f $(docker images -aq)
+      
+      # remove stack
+      $ docker stack rm todo
+      $ eval $(docker-machine env -u) 
+      $ bash cluster.sh delete local 
     ```
-    ```bash
-       $ eval $(docker-machine env -u) 
-       $ docker stack rm todo
-    ```   
     
  - Configuration
   
