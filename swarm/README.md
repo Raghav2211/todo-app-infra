@@ -102,14 +102,10 @@
    Parameter | Description | Default
    --- | --- | ---
    `TODO_REPLICA` | No of replica for Todo-app | `1`
-   `TODO_STACK_IMAGE` | Todo-app Image | `latest`    
-   `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
-   `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
-   `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
-   `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                    
-   `MYSQL_USER` | Username of new user to create | ``        
-   `MYSQL_PASSWORD` | Password for the new user | ``            
-   `MYSQL_ROOT_PASSWORD` | Password for the root user | ``                
-   `MYSQL_DATABASE` | Name for new database to create | ``                
-   `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
+   `TODO_STACK_IMAGE` | Todo-app Image | `localhost:5000/todo`
+   `EDGE_SERVICE_REPLICA` | No of replica for Edge-service | `1`
+   `EDGE_SERVICE_STACK_IMAGE` | Edge-service Image | `localhost:5000/edge-service`
+   `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``
+   `EDGE_GOOGLE_CLIENT_ID` | Google client Id for oauth2 | ``
+   `EDGE_GOOGLE_CLIENT_SECRET` | Google client secret for oauth2 | ``
       
