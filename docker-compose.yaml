@@ -1,17 +1,24 @@
 version: "3.9"
 services:
   mongodb:
-    image: mongo
+    container_name: mongo
+    image: mongo:4.2.21
     ports:
       - "27017:27017"
   todo:
-    image: ghcr.io/raghav2211/spring-web-flux-todo-app/todo:${TODO_IMAGE_TAG:-latest}
+    image: todo:2.0.0
+    container_name: todo
     ports:
       - "8080:8080"
     environment:
-      MYSQL_HOST: mysql:3306
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DB_NAME: ${MYSQL_DATABASE}
-      TODO_SECURITY_BASIC_AUTH_USERNAME: ${BASIC_AUTH_USERNAME}
-      TODO_SECURITY_BASIC_AUTH_PASSWORD: ${BASIC_AUTH_PASSWORD}
+      MONGO_HOST: mongo
+
+  edge-service:
+    image: edge-service:1.0.0
+    container_name: edge-service
+    ports:
+      - "8081:8081"
+    environment:
+      CLIENT_SECRET: "<client-secret>"
+      CLIENT_ID: "<client-id>"
+      TODO_APP_HOST: todo
