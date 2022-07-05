@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  mongodb:
+  mongo:
     container_name: mongo #Specify a custom container name, rather than a generated default name
     volumes: 
       - mongo_data:/data/db:cached   # Strong consistency is quite expensive, requiring coordination between all of a files writers to guarantee
