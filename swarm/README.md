@@ -41,12 +41,31 @@
  - Deploy the Stack
           
     ```bash
+    # If you want to use local registry instead of ghcr 
+    $ docker service create --name registry --publish 5000:5000 registry:2
     
+    # Tag the image as localhost:5000/todo. This creates an additional tag for the existing image.
+    $ docker tag todo:2.0.0 localhost:5000/todo
+    $ docker tag edge-service:1.0.0 localhost:5000/edge-service
+    
+    # Push the image to the local registry running at localhost:5000
+    $ docker push localhost:5000/todo
+    $ docker push localhost:5000/edge-service
+    
+    # Remove locally cached images
+    $ docker image remove todo
+    $ docker image remove todo:2.0.0
+    $ docker image remove localhost:5000/todo
+    $ docker image remove edge-service
+    $ docker image remove edge-service:1.0.0
+    $ docker image remove localhost:5000/edge-service 
+   
+     
     # Deploy todo app cluster 
     $ docker stack deploy -c <(docker-compose --env-file=../env/<env>/Docker.env -f ../docker-compose.yaml -f ../env/<env>/docker-stack-compose-override.yml config) todo
     
     # or 
-    # Apply persistent with mysql 
+    # Apply persistent with mongo 
     docker stack deploy -c <(docker-compose --env-file=../env/local/Docker.env -f ../docker-compose.yaml -f ../env/local/docker-stack-compose-override.yml -f ../env/local/docker-stack-persistent-compose-override.yml config) todo
     
     ```
