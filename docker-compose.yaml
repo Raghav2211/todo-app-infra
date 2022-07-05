@@ -6,7 +6,7 @@ services:
     ports:
       - "27017:27017"
   todo:
-    image: todo:2.0.0
+    image: todo:${TODO_IMAGE_TAG}
     container_name: todo
     ports:
       - "8080:8080"
@@ -14,7 +14,7 @@ services:
       MONGO_HOST: mongo
 
   edge-service:
-    image: edge-service:1.0.0
+    image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
     container_name: edge-service
     ports:
       - "8081:8081"
