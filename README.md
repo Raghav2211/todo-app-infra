@@ -25,16 +25,9 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
 
        Parameter | Description | Default
        --- | --- | ---
-       `TODO_IMAGE_TAG` | Image tag for Todo-App | `latest`
-       `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
-       `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
-       `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
-       `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                
-       `MYSQL_USER` | Username of new user to create | ``        
-       `MYSQL_PASSWORD` | Password for the new user | ``            
-       `MYSQL_ROOT_PASSWORD` | Password for the root user | ``              
-       `MYSQL_DATABASE` | Name for new database to create | ``                
-       `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
+       `TODO_IMAGE_TAG` | Image tag for Todo-App | `2.0.0`
+       `EDGE_SERVICE_IMAGE_TAG` | Image tag for Edge Service | `1.0.0`             
+       `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``                    
 
 
      - Uninstall
