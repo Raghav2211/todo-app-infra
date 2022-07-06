@@ -17,7 +17,8 @@
    ```bash
       eval $(minikube docker-env)  
    ```
-    
+- [Deploy Edge Service](edge-service/README.md#Installing%20the%20Chart)
+
 - [Deploy Todo-app](todo/README.md#Installing%20the%20Chart)  
 
 - Verify all pods are up and running
