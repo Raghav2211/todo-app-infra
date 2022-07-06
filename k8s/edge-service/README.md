@@ -1,9 +1,9 @@
-#  Todo App Helm Chart
+#  Edge Service App Helm Chart
 
 
 ## Introduction
 
-This chart bootstraps a single node Todo App deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a single node Edge Service deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -11,39 +11,32 @@ This chart bootstraps a single node Todo App deployment on a [Kubernetes](http:/
 
 ## Installing the Chart
 
-To install the chart with the release name `todo`:
+To install the chart with the release name `edge-service`:
+
+To install the chart with the release name `edge-service` with respective environment secret and configuration file:
 
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug todo todo
+$ helm install --dry-run --debug edge-service edge-service -f edge-service/env/<env>/secrets.yaml
 
 # Install chart
-$ helm install todo todo
-```
-
-To install the chart with the release name `todo` with respective environment secret and configuration file:
-
-```bash
-# Verify the configuration 
-$ helm install --dry-run --debug todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
-
-# Install chart
-$ helm install todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
+$ minikube image load edge-service:1.0.0
+$ helm install edge-service edge-service -f edge-service/env/<env>/secrets.yaml
 ```
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `todo` deployment:
+To uninstall/delete the `edge-service` deployment:
 
 ```bash
-$ helm uninstall todo
+$ helm uninstall edge-service
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release completely.
 
 ## Configuration
 
-The following table lists the configurable parameters of the TODO chart and their default values.
+The following table lists the configurable parameters of the Edge Service chart and their default values.
 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |

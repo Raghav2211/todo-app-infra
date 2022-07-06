@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "todo.fullname" . }}
-  labels: {{- include "todo.labels" . | nindent 4 }}
+  name: {{ include "edge-service.fullname" . }}
+  labels: {{- include "edge-service.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replica | default 1 }}
   selector:
     matchLabels:
-      {{- include "todo.selectorLabels" . | nindent 6 }}
+      {{- include "edge-service.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "todo.selectorLabels" . | nindent 8 }}
+        {{- include "edge-service.selectorLabels" . | nindent 8 }}
     spec:
       affinity:
         nodeAffinity:
@@ -48,47 +48,17 @@ spec:
             failureThreshold: {{ default 3 .Values.livenessProbe.failureThreshold }}
           {{end}}  
           env:
-            - name: MYSQL_HOST
-              valueFrom:
-                configMapKeyRef:
-                  key: url
-                  name: {{ default "mysql" .Values.mysqlRef }}-config
-            - name: MYSQL_USER
+            - name: TODO_HOST
+              value: {{ .Values.todoHost }}
+            - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  key: username
-                  name: {{ default "mysql" .Values.mysqlRef }}-secret
-            - name: MYSQL_PASSWORD
+                  key: google-client-id
+                  name: edge-service-secret
+            - name: CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: {{ default "mysql" .Values.mysqlRef }}-secret
-            - name: MYSQL_DB_NAME
-              valueFrom:
-                configMapKeyRef:
-                  key: database
-                  name: {{ default "mysql" .Values.mysqlRef }}-config
-            - name: TODO_SECURITY_BASIC_AUTH_ENABLE
-              valueFrom:
-                configMapKeyRef:
-                  key: securityBasicAuthEnable
-                  name: {{ include "todo.fullname" . }}-config 
-            {{- if .Values.config.securityBasicAuthEnable }}                                               
-            - name: TODO_SECURITY_BASIC_AUTH_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: security-basic-auth-username
-                  name: {{ include "todo.fullname" . }}-secret
-            - name: TODO_SECURITY_BASIC_AUTH_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: security-basic-auth-password
-                  name: {{ include "todo.fullname" . }}-secret
-            {{- end }}      
+                  key: google-client-secret
+                  name: edge-service-secret
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      initContainers:
-        - name: init-mysql-wait
-          image: "{{ .Values.initContainers.dbWait.image | default "busybox" }}:{{ .Values.initContainers.dbWait.tag | default "latest" }}"
-          imagePullPolicy: {{ .Values.initContainers.dbWait.imagePullPolicy | default "IfNotPresent" }}
-          command: ['sh', '-c', 'until nslookup {{ default "mysql" .Values.mysqlRef }}; do echo waiting for {{ default "mysql" .Values.mysqlRef }}; sleep 2; done;']      

@@ -1,9 +1,9 @@
 #Default values fo Todo app
 replica: 1
 image:
-  repository: ghcr.io/raghav2211/spring-web-flux-todo-app/todo
+  repository: edge-service
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "1.0.0"
 
 
 livenessProbe: {}
@@ -16,8 +16,8 @@ livenessProbe: {}
 
 service:
   type: LoadBalancer
-  port: 8080
-  nodePort: 30000
+  port: 8081
+  nodePort: 30001
 
 #mysqlRef is for inject secret & config of mysql
 mysqlRef: "" 
@@ -30,18 +30,10 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-initContainers:
-  dbWait: {} # dbWait until mysql is not up 
-#    image: busybox 
-#    tag: latest
-#    imagePullPolicy: IfNotPresent  
+# edge - oauth2 secrets
+edge: {}
+#  google:
+#    clientId:
+#    clientSecret:
 
-# security :- Spring security 
-security: {}
-#  basicAuth:
-#    username: # Basic auth username
-#    password: # Basic auth password
-
-# config :- Config for todoApp
-config:
-  securityBasicAuthEnable: false # Enable/ Disable basic-auth    
+todoHost: http://todo:8080
