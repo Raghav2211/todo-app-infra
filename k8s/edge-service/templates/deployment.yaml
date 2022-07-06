@@ -48,13 +48,47 @@ spec:
             failureThreshold: {{ default 3 .Values.livenessProbe.failureThreshold }}
           {{end}}  
           env:
-            - name: MONGO_HOST
-              value: {{ .Values.mongoHost }}
-
+            - name: MYSQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: url
+                  name: {{ default "mysql" .Values.mysqlRef }}-config
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ default "mysql" .Values.mysqlRef }}-secret
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ default "mysql" .Values.mysqlRef }}-secret
+            - name: MYSQL_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: database
+                  name: {{ default "mysql" .Values.mysqlRef }}-config
+            - name: TODO_SECURITY_BASIC_AUTH_ENABLE
+              valueFrom:
+                configMapKeyRef:
+                  key: securityBasicAuthEnable
+                  name: {{ include "todo.fullname" . }}-config 
+            {{- if .Values.config.securityBasicAuthEnable }}                                               
+            - name: TODO_SECURITY_BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: security-basic-auth-username
+                  name: {{ include "todo.fullname" . }}-secret
+            - name: TODO_SECURITY_BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: security-basic-auth-password
+                  name: {{ include "todo.fullname" . }}-secret
+            {{- end }}      
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       initContainers:
-        - name: init-mongo-wait
+        - name: init-mysql-wait
           image: "{{ .Values.initContainers.dbWait.image | default "busybox" }}:{{ .Values.initContainers.dbWait.tag | default "latest" }}"
           imagePullPolicy: {{ .Values.initContainers.dbWait.imagePullPolicy | default "IfNotPresent" }}
-          command: ['sh', '-c', 'until nslookup {{ default "mongo" .Values.mongoHost }}; do echo waiting for {{ default "mongo" .Values.mongoHost }}; sleep 2; done;']
+          command: ['sh', '-c', 'until nslookup {{ default "mysql" .Values.mysqlRef }}; do echo waiting for {{ default "mysql" .Values.mysqlRef }}; sleep 2; done;']      

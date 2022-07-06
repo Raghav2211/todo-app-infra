@@ -7,7 +7,7 @@ This chart bootstraps a single node Todo App deployment on a [Kubernetes](http:/
 
 ## Prerequisites
 
-- Mongo
+- MySql
 
 ## Installing the Chart
 
@@ -15,12 +15,20 @@ To install the chart with the release name `todo`:
 
 ```bash
 # Verify the configuration 
-$ minikube image load todo:2.0.0
-$ helm dep update todo
 $ helm install --dry-run --debug todo todo
 
 # Install chart
 $ helm install todo todo
+```
+
+To install the chart with the release name `todo` with respective environment secret and configuration file:
+
+```bash
+# Verify the configuration 
+$ helm install --dry-run --debug todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
+
+# Install chart
+$ helm install todo todo -f todo/env/<env>/secrets.yaml -f todo/env/<env>/values.yaml
 ```
 
 ## Uninstalling the Chart

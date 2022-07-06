@@ -17,17 +17,8 @@
    ```bash
       eval $(minikube docker-env)  
    ```
- 
-- Deploy  mongodb
-          
-   ```bash
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    helm install my-release bitnami/mongodb
--  ```
     
-- Deploy Todo-app    
- 
-   [Deploy Todo App  using helm](todo/README.md#Installing%20the%20Chart)
+- [Deploy Todo-app](todo/README.md#Installing%20the%20Chart)  
 
 - Verify all pods are up and running
  
