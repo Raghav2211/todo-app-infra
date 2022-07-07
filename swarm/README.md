@@ -35,12 +35,22 @@
  - Link host docker client to the VM's docker daemon
  
     ```bash
+   
+       # save local images 
+       $ docker save todo:${TODO_APP_VERSION} | gzip > todo.tgz
+       $ docker save edge-service:${EDGE_SERVICE_VERSION} | gzip > edge.tgz
+        
        $ eval $(docker-machine env manager1)
+       
+       # load images in virtual box docker daemon env
+       $ docker load -i todo.tgz
+       $ docker load -i edge.tgz 
     ```
  
  - Deploy the Stack
           
     ```bash
+     
     # If you want to use local registry instead of ghcr 
     $ docker service create --name registry --publish 5000:5000 registry:2
     

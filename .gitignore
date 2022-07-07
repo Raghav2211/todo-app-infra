@@ -75,3 +75,4 @@ override.tf.json
 .terraformrc
 terraform.rc
 /aws/packer/todo/todo
+*.tgz
