@@ -41,29 +41,21 @@ The following table lists the configurable parameters of the Edge Service chart 
 | Parameter                                    | Description                                                                                  | Default                                              |
 | -------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `replica`                                 | Number of instance to run at any time                                                      	| 1 |
-| `image`                                        | `todo` image configuration.                                                            	| ` ` |
-| `image.repository`                             | `todo` image repository.                                                               	| `psi-todo`|
-| `image.pullPolicy`                             | `todo` image pull policy.                                                             	 | `Never`|
-| `image.tag`                                    | `todo` image tag.                                                                      	| `1.0.0`|
+| `image`                                        | `edge-service` image configuration.                                                            	| ` ` |
+| `image.repository`                             | `edge-service` image repository.                                                               	| `edge-service`|
+| `image.pullPolicy`                             | `edge-service` image pull policy.                                                             	 | `IfNotPresent`|
+| `image.tag`                                    | `edge-service` image tag.                                                                      	| `1.0.0`|
 | `livenessProbe`                                | Indicates whether the container is running.                                                | ` {}` |
 | `service`                                      | Kubernetes service configuration.                                                          | ` ` |
 | `service.type`                                 | ServiceTypes allow you to specify what kind of Service you want.                           | `LoadBalancer` |
-| `service.port`                                 | Port internal to Kubernetes                                    .                           | 8080 |
-| `service.nodeport`                             | NodePort gives you the freedom to set up your own load balancing solution.                 | 30000|
-| `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
-| `mysqlRef`                                     | mysqlRef is for inject secret & config of mysql.                                           | "" |
-| `resources`                                    | `todo` CPU/Memory resource requests/limits                                             	| `{}` |
-| `initContainers`                               | Init containers can contain utilities or setup scripts not present in an app image         | ` `  |
-| `initContainers.dbWait`                        | dbWait until mysql is not up                                                               | ` `  |
-| `initContainers.dbWait.image`                  | image for running init container                                                           | `busybox `  |
-| `initContainers.dbWait.tag`                    | image tag for running init container                                                       | `latest `  |
-| `initContainers.dbWait.imagePullPolicy`        | image pull policy for running init container                                               | `IfNotPresent `  |
-| `security`                                     | Spring security                                                                            | `  `  |
-| `security.basicAuth`                           | Spring security of type basicauth                                                          | `  `  |
-| `security.basicAuth.username`                  | Spring security of type basicauth username                                                 | `  `  |
-| `security.basicAuth.password`                  | Spring security of type basicauth password                                                 | `  `  |
-| `config`                                   | Config for todoApp                                                                         | `  `  |
-| `config.securityBasicAuthEnable`           | Enable/ Disable basic-auth                                                                 |`false`|
+| `service.port`                                 | Port internal to Kubernetes                                    .                           | 8081 |
+| `service.nodeport`                             | NodePort gives you the freedom to set up your own load balancing solution.                 | 30001|
+| `resources`                                    | `edge-service` CPU/Memory resource requests/limits                                         | `{}` |
+| `edge`                                         | Edge service config                                                                        | `  `  |
+| `edge.google`                                  | Edge service google oauth2 configuration                                                   | `  `  |
+| `edge.google.clientId`                         | Google oauth2 client id
+| `edge.google.clientSecret`                     | Google oauth2 client secret                                                               | `  `  |
+| `springProfiles`                               | Spring profile to pick configuration                                                     | ` k8s`  |
 
 
 
