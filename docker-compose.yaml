@@ -11,7 +11,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      MONGO_HOST: mongo
+      SPRING_PROFILES_ACTIVE: docker
 
   edge-service:
     image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
@@ -21,4 +21,4 @@ services:
     environment:
       CLIENT_SECRET: ${EDGE_GOOGLE_CLIENT_SECRET}
       CLIENT_ID: ${EDGE_GOOGLE_CLIENT_ID}
-      TODO_APP_HOST: todo
+      SPRING_PROFILES_ACTIVE: docker
