@@ -111,7 +111,7 @@ install_docker_machine() {
   elif [[ "$OSTYPE" == "msys" ]]; then    
     install_docker_machine_win
   fi
-  exit 0;
+  #exit 0;
 }
 
 install_virtualbox() {
@@ -122,7 +122,7 @@ install_virtualbox() {
   elif [[ "$OSTYPE" == "msys" ]]; then    
     install_virtualbox_win
   fi
-  exit 0;
+  #exit 0;
 }
 
 help() {
