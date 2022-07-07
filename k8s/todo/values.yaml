@@ -19,9 +19,6 @@ service:
   port: 8080
   nodePort: 30000
 
-#mongoHost is for inject secret & config of mysql
-mongoHost: "mongodb"
-
 resources: {}
   # limits:
   #   cpu: 100m
@@ -30,13 +27,11 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-initContainers:
-  dbWait: {} # dbWait until mysql is not up 
-#    image: busybox 
-#    tag: latest
-#    imagePullPolicy: IfNotPresent
+springProfiles: k8s
 
 #mongo chart values
 mongodb:
   enabled: true
   fullnameOverride: mongodb
+  auth:
+    enabled: false

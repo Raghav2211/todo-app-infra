@@ -11,12 +11,7 @@
     ```bash
        bash setup.sh bootlocal  
     ```
-   
-- Link host docker client to the VM's docker daemon
- 
-   ```bash
-      eval $(minikube docker-env)  
-   ```
+  
 - [Deploy Edge Service](edge-service/README.md#Installing%20the%20Chart)
 
 - [Deploy Todo-app](todo/README.md#Installing%20the%20Chart)  
@@ -37,6 +32,8 @@
        minikube tunnel
    ```
 
-- Access swagger api endpoint with below url.
- 
-   http://localhost:8080/swagger-ui/
+- Access
+
+  http://localhost:8081  # get access_token
+
+  http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)

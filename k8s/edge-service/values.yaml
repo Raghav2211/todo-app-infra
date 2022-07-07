@@ -19,9 +19,6 @@ service:
   port: 8081
   nodePort: 30001
 
-#mysqlRef is for inject secret & config of mysql
-mysqlRef: "" 
-
 resources: {}
   # limits:
   #   cpu: 100m
@@ -36,4 +33,4 @@ edge: {}
 #    clientId:
 #    clientSecret:
 
-todoHost: http://todo:8080
+springProfiles: k8s

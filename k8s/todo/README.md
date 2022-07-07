@@ -15,7 +15,7 @@ To install the chart with the release name `todo`:
 
 ```bash
 # Verify the configuration 
-$ minikube image load todo:2.0.0
+$ minikube image load todo:${TODO_APP_VERSION}
 $ helm dep update todo
 $ helm install --dry-run --debug todo todo
 

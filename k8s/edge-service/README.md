@@ -20,7 +20,7 @@ To install the chart with the release name `edge-service` with respective enviro
 $ helm install --dry-run --debug edge-service edge-service -f edge-service/env/<env>/secrets.yaml
 
 # Install chart
-$ minikube image load edge-service:1.0.0
+$ minikube image load edge-service:${EDGE_SERVICE_VERSION}
 $ helm install edge-service edge-service -f edge-service/env/<env>/secrets.yaml
 ```
 

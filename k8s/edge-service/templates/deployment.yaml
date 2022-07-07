@@ -48,8 +48,8 @@ spec:
             failureThreshold: {{ default 3 .Values.livenessProbe.failureThreshold }}
           {{end}}  
           env:
-            - name: TODO_HOST
-              value: {{ .Values.todoHost }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.springProfiles }}
             - name: CLIENT_ID
               valueFrom:
                 secretKeyRef:
