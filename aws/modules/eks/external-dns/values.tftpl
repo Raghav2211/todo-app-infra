@@ -10,3 +10,8 @@ aws:
   zoneType: public
 
 domainFilters: ${DOMAIN_FILTERS}
+
+# leverage IRSA.
+podSecurityContext:
+    runAsUser: 0
+    fsGroup:   65534
