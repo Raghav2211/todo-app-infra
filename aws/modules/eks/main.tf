@@ -120,6 +120,14 @@ module "eks" {
   tags         = local.tags
 }
 
+module "external_dns" {
+  source     = "./external-dns"
+  count      = var.external_dns.create ? 1 : 0
+  depends_on = [module.eks.cluster_id]
+  aws_region = data.aws_region.current.name
+  domain_filters = var.external_dns.domain_filters
+}
+
 resource "tls_private_key" "this" {
   algorithm = "RSA"
 }

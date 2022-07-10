@@ -1,0 +1,12 @@
+rbac:
+  create: false
+
+sources:
+  - ingress
+  - service
+
+aws:
+  region: ${AWS_REGION}
+  zoneType: public
+
+domainFilters: ${DOMAIN_FILTERS}
