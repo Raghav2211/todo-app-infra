@@ -128,7 +128,6 @@ module "external_dns" {
   domain_filters    = var.external_dns.domain_filters
   oidc_provider_arn = module.eks.oidc_provider_arn
   tags              = local.tags
-  depends_on        = [module.eks.cluster_id]
 }
 
 resource "tls_private_key" "this" {
