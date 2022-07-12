@@ -41,7 +41,7 @@ variable "enable_ssh" {
 
 variable "external_dns" {
   type = object({
-    create = bool
+    create         = bool
     domain_filters = list(string)
   })
   description = "External dns configuration"

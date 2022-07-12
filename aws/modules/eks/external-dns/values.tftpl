@@ -1,3 +1,4 @@
+# https://levitrares.com/host-https-medium.com/@waytohs0110/failed-to-sync-v1-ingress-context-deadline-exceeded-with-eks-649b0fa37e2d?source=read_next_recirc---------2---------------------74128080_0286_487d_9065_48a76c09ccd9-------
 rbac:
   create: false
 
@@ -9,9 +10,13 @@ aws:
   region: ${AWS_REGION}
   zoneType: public
 
-domainFilters: ${DOMAIN_FILTERS}
+domainFilters: ${jsonencode(DOMAIN_FILTERS)}
 
 # leverage IRSA.
 podSecurityContext:
     runAsUser: 0
     fsGroup:   65534
+
+serviceAccount:
+    annotations:
+        "eks.amazonaws.com/role-arn": ${IAM_ROLE_EXTERNAL_DNS}
