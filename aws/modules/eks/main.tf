@@ -21,7 +21,7 @@ module "eks" {
   subnet_ids = var.nodegroup_subnet_ids # should be private
   cluster_addons = {
     coredns = {
-      addon_version = "v1.8.0-eksbuild.1"
+      addon_version     = "v1.8.0-eksbuild.1"
       resolve_conflicts = "OVERWRITE"
     }
     kube-proxy = {}

@@ -8,6 +8,6 @@ variable "app" {
 variable "external_dns" {
   default = {
     create         = true
-    domain_filters = ["todo.tmp.test.com"]
+    domain_filters = ["todo.tmp.dev.farm"]
   }
 }

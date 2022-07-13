@@ -11,11 +11,12 @@ locals {
 }
 
 resource "helm_release" "external_dns" {
-  name       = "external-dns"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "external-dns"
-  version    = "6.6.0"
-  namespace  = local.external_dns_namespace
+  name             = "external-dns"
+  repository       = "https://charts.bitnami.com/bitnami"
+  chart            = "external-dns"
+  version          = "6.6.0"
+  namespace        = local.external_dns_namespace
+  create_namespace = true
   values = [
     templatefile("${path.module}/values.tftpl", {
       AWS_REGION            = var.aws_region
