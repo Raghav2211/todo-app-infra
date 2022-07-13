@@ -1,5 +1,13 @@
 locals {
   external_dns_namespace = "external-dns"
+  zones = {
+    for domain in var.domain_filters :
+    domain => {
+      domain_name = domain
+      comment     = "Public"
+    }
+  }
+
 }
 
 resource "helm_release" "external_dns" {
@@ -11,7 +19,7 @@ resource "helm_release" "external_dns" {
   values = [
     templatefile("${path.module}/values.tftpl", {
       AWS_REGION            = var.aws_region
-      DOMAIN_FILTERS        = tolist([module.zone.route53_zone_name])
+      DOMAIN_FILTERS        = sort(keys(module.zones.route53_zone_name)) #var.domain_filters
       IAM_ROLE_EXTERNAL_DNS = module.external_dns_irsa_role.iam_role_arn
   })]
 }
@@ -34,14 +42,9 @@ module "external_dns_irsa_role" {
 }
 
 
-module "zone" {
+module "zones" {
   source  = "terraform-aws-modules/route53/aws//modules/zones"
   version = "~> 2.0"
-  zones = {
-    "rusty.tmp.develop.farm" = {
-      comment = "Zone for todo test"
-      tags    = var.tags
-    }
-  }
-  tags = var.tags
+  zones   = local.zones
+  tags    = var.tags
 }
