@@ -12,9 +12,9 @@
        bash setup.sh bootlocal  
     ```
   
-- [Deploy Edge Service](edge-service/README.md#Installing%20the%20Chart)
+- [Deploy Edge Service](../helm-charts/edge-service/README.md#Installing%20the%20Chart)
 
-- [Deploy Todo-app](todo/README.md#Installing%20the%20Chart)  
+- [Deploy Todo-app](../helm-charts/todo/README.md#Installing%20the%20Chart)  
 
 - Verify all pods are up and running
  

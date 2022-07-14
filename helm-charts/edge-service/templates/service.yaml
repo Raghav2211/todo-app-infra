@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "edge-service.fullname" . }}
+  labels:
+    {{- include "edge-service.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+      nodePort: {{ .Values.service.nodePort }}
+      name: http
+  selector:
+    {{- include "edge-service.selectorLabels" . | nindent 4 }}

@@ -10,6 +10,9 @@ module "todo-tf-state-bucket" {
   bucket = "todo-tf-state-${var.account}"
   acl    = "private"
 
+  # Allow deletion of non-empty bucket
+  force_destroy = true
+
   # S3 bucket-level Public Access Block configuration
   block_public_acls       = true
   block_public_policy     = true
