@@ -20,7 +20,7 @@ resource "helm_release" "external_dns" {
   values = [
     templatefile("${path.module}/values.tftpl", {
       AWS_REGION            = var.aws_region
-      DOMAIN_FILTERS        = sort(keys(module.zones.route53_zone_name)) #var.domain_filters
+      DOMAIN_FILTERS        = sort(keys(module.zones.route53_zone_name))
       IAM_ROLE_EXTERNAL_DNS = module.external_dns_irsa_role.iam_role_arn
   })]
 }
@@ -35,7 +35,7 @@ module "external_dns_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = var.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:${local.external_dns_namespace}"]
+      namespace_service_accounts = ["${local.external_dns_namespace}:${local.external_dns_namespace}"]
     }
   }
 
