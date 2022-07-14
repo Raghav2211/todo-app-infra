@@ -34,3 +34,6 @@ edge: {}
 #    clientSecret:
 
 springProfiles: k8s
+
+ingress:
+  enabled: false

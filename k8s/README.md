@@ -37,3 +37,9 @@
   http://localhost:8081  # get access_token
 
   http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)
+
+## EKS ##
+```bash
+# install nginx ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/aws/deploy.yaml
+```

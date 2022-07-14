@@ -5,16 +5,13 @@
 
 This chart bootstraps a single node Edge Service deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-## Prerequisites
-
-- MySql
-
 ## Installing the Chart
 
 To install the chart with the release name `edge-service`:
 
 To install the chart with the release name `edge-service` with respective environment secret and configuration file:
 
+- Local
 ```bash
 # Verify the configuration 
 $ helm install --dry-run --debug edge-service edge-service -f edge-service/env/<env>/secrets.yaml
@@ -22,6 +19,16 @@ $ helm install --dry-run --debug edge-service edge-service -f edge-service/env/<
 # Install chart
 $ minikube image load edge-service:${EDGE_SERVICE_VERSION}
 $ helm install edge-service edge-service -f edge-service/env/<env>/secrets.yaml
+```
+
+- EKS
+```bash
+# Verify the configuration 
+$ helm install --dry-run --debug edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
+
+# Install chart
+$ helm install edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
+    
 ```
 
 ## Uninstalling the Chart
