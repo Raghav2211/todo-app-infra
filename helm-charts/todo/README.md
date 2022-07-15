@@ -13,6 +13,7 @@ This chart bootstraps a single node Todo App deployment on a [Kubernetes](http:/
 
 To install the chart with the release name `todo`:
 
+- Local
 ```bash
 # Verify the configuration 
 $ minikube image load todo:${TODO_APP_VERSION}
@@ -21,6 +22,15 @@ $ helm install --dry-run --debug todo todo
 
 # Install chart
 $ helm install todo todo
+```
+- EKS
+```bash
+# Verify the configuration 
+$ helm install --dry-run --debug --set aws.account=<account> --set aws.region=<region> todo todo -f todo/env/eks/values.yaml
+
+# Install chart
+$ helm install --set aws.account=<account> --set aws.region=<region> todo todo -f todo/env/eks/values.yaml
+
 ```
 
 ## Uninstalling the Chart

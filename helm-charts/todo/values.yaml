@@ -35,3 +35,6 @@ mongodb:
   fullnameOverride: mongodb
   auth:
     enabled: false
+
+ingress:
+  enabled: false

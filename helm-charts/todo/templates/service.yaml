@@ -10,7 +10,9 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.port }}
       protocol: TCP
+      {{- if eq .Values.service.type "LoadBalancer" }}
       nodePort: {{ .Values.service.nodePort }}
+      {{end}}
       name: http
   selector:
     {{- include "todo.selectorLabels" . | nindent 4 }}

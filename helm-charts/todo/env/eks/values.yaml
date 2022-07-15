@@ -1,5 +1,5 @@
 image:
-  repository: "{{ .Values.aws.account }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/edge-service"
+  repository: "{{ .Values.aws.account }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/todo"
 
 springProfiles: eks
 
@@ -10,9 +10,11 @@ affinityNodes: {}
 
 service:
   type: ClusterIP
-  port: 8080
+
+mongodb:
+  enabled: false
 
 ingress:
   enabled: true
   class: nginx
-  hostname: edge-service.todo.tmp.dev.farm
+  hostname: todo-app.todo.tmp.dev.farm

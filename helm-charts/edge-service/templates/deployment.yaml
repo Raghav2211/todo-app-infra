@@ -30,7 +30,7 @@ spec:
 {{end}}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository | default .Chart.Name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ tpl .Values.image.repository . | default .Chart.Name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
