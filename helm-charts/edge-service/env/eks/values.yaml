@@ -1,0 +1,18 @@
+image:
+  repository: "{{ .Values.aws.account }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/edge-service"
+
+springProfiles: eks
+
+# TODO : add affinity rule
+affinityNodes: {}
+#  - ip-172-31-0-17.us-east-2.compute.internal
+#  - ip-172-31-0-38.us-east-2.compute.internal
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  class: nginx
+  hostname: edge-service.todo.tmp.dev.farm

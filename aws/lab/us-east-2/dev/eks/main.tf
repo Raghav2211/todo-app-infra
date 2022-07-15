@@ -4,4 +4,6 @@ module "dev_eks" {
   vpc_id               = data.terraform_remote_state.vpc_dev.outputs.id
   public_subnet_ids    = data.terraform_remote_state.vpc_dev.outputs.public_subnets
   nodegroup_subnet_ids = data.terraform_remote_state.vpc_dev.outputs.private_subnets
+  external_dns         = var.external_dns
+
 }

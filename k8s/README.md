@@ -11,37 +11,36 @@
     ```bash
        bash setup.sh bootlocal  
     ```
-   
- - Link host docker client to the VM's docker daemon
- 
-    ```bash
-       eval $(minikube docker-env)  
-    ```
- 
- - Deploy  mysql
-          
-    [Deploy MySql using helm](mysql/README.md#Installing%20the%20Chart)
-    
- - Deploy Todo-app    
- 
-    [Deploy Todo App  using helm](todo/README.md#Installing%20the%20Chart)
+  
+- [Deploy Edge Service](../helm-charts/edge-service/README.md#Installing%20the%20Chart)
 
- - Verify all pods are up and running
+- [Deploy Todo-app](../helm-charts/todo/README.md#Installing%20the%20Chart)  
+
+- Verify all pods are up and running
  
-    ```bash
-      $ kubectl get pods
-       NAME                         READY   STATUS    RESTARTS   AGE
-       todo-6f4f69b7d7-8t8kg        1/1     Running   0          92m
-       mysql-58b87bf444-pshmk       1/1     Running   0          92m
+   ```bash
+     $ kubectl get pods
+      NAME                         READY   STATUS    RESTARTS   AGE
+      todo-6f4f69b7d7-8t8kg        1/1     Running   0          92m
+      mysql-58b87bf444-pshmk       1/1     Running   0          92m
 
-    ```
+   ```
 
- - Execute below command in a separate terminal which creates a route to services deployed with type LoadBalancer and sets their Ingress to their ClusterIP.
+- Execute below command in a separate terminal which creates a route to services deployed with type LoadBalancer and sets their Ingress to their ClusterIP.
 
-    ```bash
-        minikube tunnel
-    ```
+   ```bash
+       minikube tunnel
+   ```
 
- - Access swagger api endpoint with below url.
- 
-    http://localhost:8080/swagger-ui/
+- Access
+
+  http://localhost:8081  # get access_token
+
+  http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)
+
+## EKS ##
+```bash
+# install nginx ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+```

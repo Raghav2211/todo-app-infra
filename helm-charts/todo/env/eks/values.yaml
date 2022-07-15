@@ -1,0 +1,20 @@
+image:
+  repository: "{{ .Values.aws.account }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/todo"
+
+springProfiles: eks
+
+# TODO : add affinity rule
+affinityNodes: {}
+#  - ip-172-31-0-17.us-east-2.compute.internal
+#  - ip-172-31-0-38.us-east-2.compute.internal
+
+service:
+  type: ClusterIP
+
+mongodb:
+  enabled: false
+
+ingress:
+  enabled: true
+  class: nginx
+  hostname: todo-app.todo.tmp.dev.farm

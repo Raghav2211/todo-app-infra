@@ -11,37 +11,38 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
 
 ## Deploy ##
 1. Deployment using docker-compose
-     - Install
+   - Install
 
-          ```bash
-          docker-compose --env-file=env/<env>/Docker.env up -d
-          #or 
-          # Override default docker-compose configuration
-          docker-compose --env-file=env/<env>/Docker.env -f docker-compose.yaml -f env/<env>/docker-compose-override.yml up -d
-          ```
-         **Configuration** 
+     ```bash
+      $ docker-compose --env-file=env/<env>/Docker.env up -d 
 
-       The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
+      # Override default docker-compose configuration
+      $ docker-compose --env-file=env/<env>/Docker.env -f docker-compose.yaml -f env/<env>/docker-compose-override.yml up -d
+     ```    
 
-       Parameter | Description | Default
-       --- | --- | ---
-       `TODO_IMAGE_TAG` | Image tag for Todo-App | `latest`
-       `BASIC_AUTH_ENABLE` | Enable spring Basic-Auth | `false`        
-       `BASIC_AUTH_USERNAME` | Username of Basic-Auth | ``                    
-       `BASIC_AUTH_PASSWORD` | Password of Basic-Auth | ``                            
-       `MYSQL_IMAGE_TAG` | Image tag for Mysql | `8.0.22`                                
-       `MYSQL_USER` | Username of new user to create | ``        
-       `MYSQL_PASSWORD` | Password for the new user | ``            
-       `MYSQL_ROOT_PASSWORD` | Password for the root user | ``              
-       `MYSQL_DATABASE` | Name for new database to create | ``                
-       `MYSQL_DATA_SRC_PATH` | Host path for persistence mysql data | ``                    
+   - Access
 
+      http://localhost:8081  # get access_token
 
-     - Uninstall
+      http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)
 
-          ```bash
-          docker-compose down
-          ```
+   - Uninstall
+
+        ```bash
+        $ docker-compose down
+        ```
+   - Configuration
+
+      The following table lists the configurable parameters of the TodoApp swarm cluster and their default values.
+    
+      Parameter | Description | Default
+      --- | --- | ---
+      `TODO_IMAGE_TAG` | Image tag for Todo-App | `2.0.0`
+      `EDGE_SERVICE_IMAGE_TAG` | Image tag for Edge Service | `1.0.0`             
+      `EDGE_GOOGLE_CLIENT_ID` | Google client Id for oauth2 | ``
+      `EDGE_GOOGLE_CLIENT_SECRET` | Google client secret for oauth2 | ``
+      `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``  
+
 2. On swarm cluster using docker stack
 [Swarm](swarm/README.md)
 3. On k8s using minikube
