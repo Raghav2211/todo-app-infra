@@ -14,20 +14,20 @@ To install the chart with the release name `edge-service` with respective enviro
 - Local
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug edge-service edge-service -f edge-service/env/local/secrets.yaml
+$ helm install --dry-run --debug --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/local/secrets.yaml
 
 # Install chart
 $ minikube image load edge-service:${EDGE_SERVICE_VERSION}
-$ helm install edge-service edge-service -f edge-service/env/local/secrets.yaml
+$ helm install --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/local/secrets.yaml
 ```
 
 - EKS
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug --set aws.account=<account> --set aws.region=<region> edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
+$ helm install --dry-run --debug --set aws.account=<account> --set aws.region=<region> --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
 
 # Install chart
-$ helm install --set aws.account=<account> --set aws.region=<region> edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
+$ helm install --set aws.account=<account> --set aws.region=<region> --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/local/secrets.yaml -f edge-service/env/eks/values.yaml
     
 ```
 

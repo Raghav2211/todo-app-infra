@@ -41,5 +41,6 @@
 ## EKS ##
 ```bash
 # install nginx ingress controller
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/aws/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ```
