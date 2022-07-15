@@ -42,5 +42,6 @@
 ```bash
 # install nginx ingress controller
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
+# https://stackoverflow.com/a/67276914/1693371
 kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ```
