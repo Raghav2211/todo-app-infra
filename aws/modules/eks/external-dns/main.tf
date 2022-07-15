@@ -3,8 +3,9 @@ locals {
   zones = {
     for domain in var.domain_filters :
     domain => {
-      domain_name = domain
-      comment     = "Public"
+      domain_name   = domain
+      comment       = "Public"
+      force_destroy = true
     }
   }
 
