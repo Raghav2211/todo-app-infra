@@ -8,8 +8,6 @@ locals {
     application = "database"
     team        = var.app.team
   }
-  availability_zones_id = ["a", "b", "c"]
-  availability_zones    = [for i in range(var.cluster_size) : format("%s%s", data.aws_region.current.name, local.availability_zones_id[i])]
 }
 
 resource "aws_docdb_cluster" "this" {
