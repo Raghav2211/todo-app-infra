@@ -18,7 +18,6 @@ resource "aws_docdb_cluster" "this" {
   master_password                 = var.master_password
   skip_final_snapshot             = true
   apply_immediately               = true
-  backup_retention_period         = 0
   vpc_security_group_ids          = var.security_group_ids
   db_subnet_group_name            = aws_docdb_subnet_group.this.name
   db_cluster_parameter_group_name = aws_docdb_cluster_parameter_group.this.name
@@ -31,7 +30,6 @@ resource "aws_docdb_cluster_instance" "this" {
   count              = var.cluster_size
   identifier         = "mongo-${var.app.environment}-${var.app.name}-${count.index}"
   cluster_identifier = join("", aws_docdb_cluster.this.*.id)
-  engine             = "docdb"
   instance_class     = var.instance_type
   tags               = local.tags
 }
