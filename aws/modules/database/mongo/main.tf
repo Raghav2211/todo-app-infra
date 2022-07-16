@@ -39,7 +39,6 @@ resource "aws_docdb_subnet_group" "this" {
   tags        = local.tags
 }
 
-# https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-parameter-group-create.html
 resource "aws_docdb_cluster_parameter_group" "this" {
   name        = "pg-${var.app.environment}-${var.app.name}"
   description = "DB cluster parameter group."
