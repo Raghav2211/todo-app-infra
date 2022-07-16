@@ -121,16 +121,6 @@ module "eks" {
   tags         = local.tags
 }
 
-module "external_dns" {
-  source            = "./external-dns"
-  count             = var.external_dns.create ? 1 : 0
-  environment       = var.app.environment
-  aws_region        = data.aws_region.current.name
-  domain_filters    = var.external_dns.domain_filters
-  oidc_provider_arn = module.eks.oidc_provider_arn
-  tags              = local.tags
-}
-
 resource "tls_private_key" "this" {
   algorithm = "RSA"
 }
