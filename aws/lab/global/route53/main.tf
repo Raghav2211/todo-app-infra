@@ -1,4 +1,6 @@
-locals {
+module "zones" {
+  source  = "terraform-aws-modules/route53/aws//modules/zones"
+  version = "~> 2.0"
   zones = {
     for domain in var.domain_filters :
     domain => {
@@ -14,11 +16,4 @@ locals {
     application = "external-dns"
     team        = "sre"
   }
-}
-
-module "zones" {
-  source  = "terraform-aws-modules/route53/aws//modules/zones"
-  version = "~> 2.0"
-  zones   = local.zones
-  tags    = local.tags
 }
