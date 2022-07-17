@@ -1,6 +1,6 @@
 # Deploy Todo Application with RDS(MySql) on AWS EC2
 
-![Todo-RDS-MySql-EC2](todo_phase_1.png)
+![Todo-RDS-MySql-EC2](todo_v_1_0_0.png)
 
 ## About ##
 This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
