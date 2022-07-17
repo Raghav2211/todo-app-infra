@@ -12,7 +12,7 @@ data "aws_ami" "eks_default" {
 
   filter {
     name   = "name"
-    values = ["amazon-eks-node-${var.k8s_version}-v*"]
+    values = ["amazon-eks-node-${local.k8s_version}-v*"]
   }
 }
 
@@ -22,7 +22,7 @@ data "aws_ami" "eks_default_bottlerocket" {
 
   filter {
     name   = "name"
-    values = ["bottlerocket-aws-k8s-${var.k8s_version}-x86_64-*"]
+    values = ["bottlerocket-aws-k8s-${local.k8s_version}-x86_64-*"]
   }
 }
 

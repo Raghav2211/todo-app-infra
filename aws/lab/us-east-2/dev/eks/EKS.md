@@ -1,5 +1,5 @@
 # EKS #
 ```
 $ terraform apply
-aws eks update-kubeconfig --region <AWS_REGION> --name dev
+aws eks update-kubeconfig --region us-east-2 --name dev
 ```

@@ -14,15 +14,10 @@ variable "public_subnet_ids" {
   type = list(string)
 }
 
-variable "nodegroup_subnet_ids" {
+variable "private_subnet_ids" {
   type = list(string)
 }
 
-variable "k8s_version" {
-  type        = string
-  description = "K8s version for eks cluster"
-  default     = "1.19"
-}
 variable "additional_cluster_tags" {
   type    = map(string)
   default = {}
@@ -37,4 +32,15 @@ variable "enable_ssh" {
   type        = bool
   description = "Whether to enable ssh on worker nodes via bastion"
   default     = false
+}
+
+variable "bottlerocket_node_group_config" {
+  type = map(object({
+    instance_type = string
+    asg = object({
+      min_size     = number
+      max_size     = number
+      desired_size = number
+    })
+  }))
 }

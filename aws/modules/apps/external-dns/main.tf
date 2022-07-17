@@ -9,6 +9,7 @@ locals {
     application = "external-dns"
     team        = "sre"
   }
+  hosted_zone_ids_arns = [for host_zone_id in var.hosted_zones_ids : "arn:aws:route53:::hostedzone/${host_zone_id}"]
 }
 
 resource "helm_release" "external_dns" {
@@ -21,7 +22,7 @@ resource "helm_release" "external_dns" {
   values = [
     templatefile("${path.module}/../values/values.tftpl", {
       AWS_REGION            = data.aws_region.current.name
-      DOMAIN_FILTERS        = var.domain_filters
+      DOMAIN_FILTERS        = var.hosted_zones_name
       IAM_ROLE_EXTERNAL_DNS = module.external_dns_irsa_role.iam_role_arn
   })]
 }
@@ -31,7 +32,7 @@ module "external_dns_irsa_role" {
 
   role_name                     = "${var.app.environment}-external-dns"
   attach_external_dns_policy    = true
-  external_dns_hosted_zone_arns = ["arn:aws:route53:::hostedzone/*"]
+  external_dns_hosted_zone_arns = local.hosted_zone_ids_arns
 
   oidc_providers = {
     ex = {

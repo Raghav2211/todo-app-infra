@@ -22,5 +22,8 @@ variable "cluster_certificate_authority_data" {
   description = "EKS cluster certificate"
 }
 
-variable "domain_filters" { type = list(string) }
+variable "hosted_zones_name" { type = list(string) }
+
+variable "hosted_zones_ids" { type = list(string) }
+
 variable "oidc_provider_arn" { type = string }

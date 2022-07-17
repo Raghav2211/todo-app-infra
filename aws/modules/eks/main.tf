@@ -1,4 +1,38 @@
 locals {
+  k8s_version = 1.19
+  bottlerocket_config = {
+    for instance, config in var.bottlerocket_node_group_config :
+    instance => {
+      name = instance
+
+      platform      = "bottlerocket"
+      ami_id        = data.aws_ami.eks_default_bottlerocket.id
+      instance_type = config.instance_type
+      min_size      = config.asg.min_size
+      max_size      = config.asg.max_size
+      desired_size  = config.asg.desired_size
+      key_name      = aws_key_pair.this.key_name
+
+      iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
+
+      bootstrap_extra_args = <<-EOT
+          # The admin host container provides SSH access and runs with "superpowers".
+          # It is disabled by default, but can be disabled explicitly.
+          [settings.host-containers.admin]
+          enabled = false
+
+          # The control host container provides out-of-band access via SSM.
+          # It is enabled by default, and can be disabled if you do not expect to use SSM.
+          # This could leave you with no way to access the API and change settings on an existing node!
+          [settings.host-containers.control]
+          enabled = true
+
+          [settings.kubernetes.node-labels]
+          ingress = "allowed"
+          EOT
+    }
+  }
+
   tags = merge(var.tags, {
     account     = var.app.account
     project     = "infra"
@@ -13,19 +47,23 @@ module "eks" {
   version = "18.24.0"
 
   cluster_name                    = var.app.environment
-  cluster_version                 = var.k8s_version
+  cluster_version                 = "1.19"
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   #cluster_service_ipv4_cidr       = data.aws_vpc.selected.cidr_block # TODO : change CIDR block for service layer of k8s as per user requirement
   vpc_id     = var.vpc_id
-  subnet_ids = var.nodegroup_subnet_ids # should be private
+  subnet_ids = var.private_subnet_ids # should be private
   cluster_addons = {
     coredns = {
       addon_version     = "v1.8.0-eksbuild.1"
       resolve_conflicts = "OVERWRITE"
     }
-    kube-proxy = {}
+    kube-proxy = {
+      addon_version     = "v1.19.6-eksbuild.2"
+      resolve_conflicts = "OVERWRITE"
+    }
     vpc-cni = {
+      addon_version     = "v1.11.2-eksbuild.1"
       resolve_conflicts = "OVERWRITE"
     }
   }
@@ -85,40 +123,9 @@ module "eks" {
       "k8s.io/cluster-autoscaler/${var.app.environment}" : "owned",
     }
   }
-
-  self_managed_node_groups = {
-
-    # Bottlerocket node group
-    bottlerocket = {
-      name = "bottlerocket-self-mng"
-
-      platform      = "bottlerocket"
-      ami_id        = data.aws_ami.eks_default_bottlerocket.id
-      instance_type = "m5.large"
-      desired_size  = 2
-      key_name      = aws_key_pair.this.key_name
-
-      iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-
-      bootstrap_extra_args = <<-EOT
-      # The admin host container provides SSH access and runs with "superpowers".
-      # It is disabled by default, but can be disabled explicitly.
-      [settings.host-containers.admin]
-      enabled = false
-
-      # The control host container provides out-of-band access via SSM.
-      # It is enabled by default, and can be disabled if you do not expect to use SSM.
-      # This could leave you with no way to access the API and change settings on an existing node!
-      [settings.host-containers.control]
-      enabled = true
-
-      [settings.kubernetes.node-labels]
-      ingress = "allowed"
-      EOT
-    }
-  }
-  cluster_tags = var.additional_cluster_tags
-  tags         = local.tags
+  self_managed_node_groups = local.bottlerocket_config
+  cluster_tags             = var.additional_cluster_tags
+  tags                     = local.tags
 }
 
 resource "tls_private_key" "this" {
@@ -128,13 +135,5 @@ resource "tls_private_key" "this" {
 resource "aws_key_pair" "this" {
   key_name   = var.app.environment
   public_key = tls_private_key.this.public_key_openssh
-}
-
-resource "aws_ec2_capacity_reservation" "targeted" {
-  instance_type           = "m6i.large"
-  instance_platform       = "Linux/UNIX"
-  availability_zone       = "${data.aws_region.current.name}a"
-  instance_count          = 1
-  instance_match_criteria = "targeted"
 }
 
