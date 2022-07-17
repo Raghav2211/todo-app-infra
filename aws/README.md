@@ -1,191 +1,50 @@
-# Deploy Todo Application with RDS(MySql) on AWS EC2
-
-![Todo-RDS-MySql-EC2](todo_v_1_0_0.png)
-
-## About ##
-This is an example showing how to deploy a Todo application integrated with RDS(MySql) on to multiple AZs.
-
-1. Here application  and dataBase are deployed in different private subnets which are not directly accessible to outside world.
-2. Nat Gateway provides access to internet to the private subnets.
-3. For deploying application on to EC2 we need an AMI (Amazon Machine Image) which will be created using packer.
-4. To get high availability of Todo App, we deploy our Todo app to run on at least two Availability Zones (AZs) with auto-scaling group. The load balancer also needs at least 2 public subnets in different AZs.
-
-## Prerequisite ##
-
-- Install AWS CLI
-
-  `https://cloudaffaire.com/how-to-install-aws-cli/`
-  
-- Install Terraform
-
-  `https://learn.hashicorp.com/tutorials/terraform/install-cli`
-  
-- Setup AWS credentials
-
-  `https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html`
-
-## Deploy ##
-
-- Deploy AWS stack
-
-```bash 
-  
-  # Go to environment folder in which you want to deploy cluster
-  $ cd ./<account>/<region>/<envionment>
-  
-  # Create VPC
-  $ terraform apply vpc 
-  
-  # Create RDS(MySql) cluster
-  $ terraform apply  database/mysql/todo
-  
-  # Create TODO AMI
-  $ cd ../../../packer/todo 
-  $ ssh-keygen -t rsa -C "<email-address>" -f todo
-  $ terraform apply 
-  
-  # Create Todo App EC2 cluster
-  $ cd -
-  $ terraform apply services/todo/app
-    
-```
-
-## To check the application ##
-
-- Login to AWS console using your own credentials
-- Click on  services and then to EC2
-- Under EC2 click on LoadBalancers
-- Under LoadBalancers copy DNS Name
-- Goto ->> `http://<ALB-DNS>/swagger-ui/`
-- Now you should see the swagger page for TODO application
-
-
-## Troubleshoot ##
-
-- SSH Todo App EC2 instance(s)
-
-```bash
-  # Add todo private key to key chain
-  $ ssh-add -k <todo_pem_file>
-   
-  # Access the Bastion Host
-  $ ssh -i <bastion_pem_file> -A <bastion_user>@<basion_public_ip>
-   
-  # Access the private instance
-  $ ssh springtodo@<todo_private_ip>
-   
-  # Get status
-  $ sudo systemctl status todo
-
-```
+# Deploy Todo Application
+- [v1.0.0](v1_0_0.md)
+- [v2.0.0]()
 
 ## Folder layout 
 ```
 .
 ├── lab
+│   ├── global
+│   │   └── route53
 │   └── us-east-2
 │       └── dev
+│           ├── apps
+│           │   ├── external-dns
+│           │   └── todo
+│           │       └── templates
 │           ├── database
+│           │   ├── mongo
+│           │   │   └── todo
 │           │   └── mysql
 │           │       └── todo
-│           │           ├── data_sources.tf
-│           │           ├── main.tf
-│           │           ├── outputs.tf
-│           │           ├── provider.tf
-│           │           ├── security-groups.tf
-│           │           └── variables.tf
-│           ├── services
-│           │   └── todo
-│           │       └── app
-│           │           ├── data_sources.tf
-│           │           ├── main.tf
-│           │           ├── provider.tf
-│           │           ├── security-groups.tf
-│           │           ├── templates
-│           │           │   └── deployment.tpl
-│           │           └── variables.tf
+│           ├── eks
 │           └── vpc
-│               ├── main.tf
-│               ├── outputs.tf
-│               ├── provider.tf
-│               └── variables.tf
 ├── modules
 │   ├── alb
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── provider.tf
-│   │   └── variables.tf
+│   ├── apps
+│   │   ├── external-dns
+│   │   └── values
 │   ├── asg
-│   │   ├── main.tf
-│   │   ├── provider.tf
-│   │   └── variables.tf
 │   ├── database
+│   │   ├── mongo
 │   │   └── mysql
-│   │       ├── example
-│   │       │   ├── main.tf
-│   │       │   └── outputs.tf
-│   │       ├── main.tf
-│   │       ├── outputs.tf
-│   │       ├── provider.tf
-│   │       └── variables.tf
-│   ├── ec2
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variables.tf
+│   │       └── example
 │   ├── eks
-│   │   ├── examples
-│   │   │   └── complete-cluster
-│   │   │       └── main.tf
-│   │   ├── kubernetes.tf
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── version.tf
-│   │   └── vpc.tf
+│   │   └── examples
+│   │       └── complete-cluster
 │   ├── network
 │   │   ├── example
 │   │   │   └── complete-network
-│   │   │       ├── main.tf
-│   │   │       └── outputs.tf
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   ├── provider.tf
-│   │   ├── test
-│   │   │   ├── go.mod
-│   │   │   └── go.sum
-│   │   └── variables.tf
+│   │   └── test
 │   └── tf-state
-│       ├── main.tf
-│       ├── outputs.tf
-│       ├── provider.tf
-│       └── variables.tf
 ├── packer
 │   └── todo
-│       ├── app.json
-│       ├── packer.tf
 │       ├── scripts
-│       │   └── installer.sh
-│       ├── services
-│       │   ├── app.service
-│       │   └── bootstrap.sh
-│       ├── todo
-│       └── todo.pub
+│       └── services
 ├── remote-state
 │   └── lab
 │       └── us-east-2
-│           └── main.tf
 └── test
 ```
-
-
-## AWS Resources used for Todo Application
-
-- AWS EBS (Elastic Block Storage)
-- AWS EC2 (Elastic Compute Cloud)
-- AWS RDS (Relational Database Service)
-- AWS VPC (Virtual Private Cloud)
-- AWS IGW (Internet GateWay)
-- AWS ALB (Application Load Balancer)
-- AWS ASG (Auto Scaling Group)
-- AWS NAT (Network Address Translation)
-- AWS SG  (Security Group)
-- AWS AMI (Amazon Machine Image)
