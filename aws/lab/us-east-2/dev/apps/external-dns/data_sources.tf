@@ -11,7 +11,7 @@ data "terraform_remote_state" "eks_dev" {
   }
 }
 
-data "terraform_remote_state" "route53" {
+data "terraform_remote_state" "global_route53" {
   backend = "s3"
 
   config = {
