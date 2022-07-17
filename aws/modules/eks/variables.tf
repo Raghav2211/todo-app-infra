@@ -38,11 +38,3 @@ variable "enable_ssh" {
   description = "Whether to enable ssh on worker nodes via bastion"
   default     = false
 }
-
-variable "external_dns" {
-  type = object({
-    create         = bool
-    domain_filters = list(string)
-  })
-  description = "External dns configuration"
-}
