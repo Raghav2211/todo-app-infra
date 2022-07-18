@@ -1,5 +1,3 @@
-data "aws_region" "current" {}
-
 locals {
   external_dns_namespace = "external-dns"
   tags = {
@@ -36,7 +34,7 @@ module "external_dns_irsa_role" {
 
   oidc_providers = {
     ex = {
-      provider_arn               = var.oidc_provider_arn
+      provider_arn               = data.terraform_remote_state.eks.outputs.oidc_provider_arn
       namespace_service_accounts = ["${local.external_dns_namespace}:${local.external_dns_namespace}"]
     }
   }
