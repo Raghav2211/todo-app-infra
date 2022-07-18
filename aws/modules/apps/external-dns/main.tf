@@ -20,7 +20,7 @@ resource "helm_release" "external_dns" {
   namespace        = local.external_dns_namespace
   create_namespace = true
   values = [
-    templatefile("${path.module}/../values/values.tftpl", {
+    templatefile("${path.module}/../values/external-dns.tftpl", {
       AWS_REGION            = data.aws_region.current.name
       DOMAIN_FILTERS        = var.hosted_zones_name
       IAM_ROLE_EXTERNAL_DNS = module.external_dns_irsa_role.iam_role_arn
