@@ -35,5 +35,7 @@ edge: {}
 
 springProfiles: k8s
 
+affinity: {}
+
 ingress:
   enabled: false

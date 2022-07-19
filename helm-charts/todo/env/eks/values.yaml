@@ -3,10 +3,7 @@ image:
 
 springProfiles: eks
 
-# TODO : add affinity rule
-affinityNodes: {}
-#  - ip-172-31-0-17.us-east-2.compute.internal
-#  - ip-172-31-0-38.us-east-2.compute.internal
+affinity: {}
 
 service:
   type: ClusterIP

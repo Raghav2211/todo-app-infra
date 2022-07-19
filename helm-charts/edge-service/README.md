@@ -14,11 +14,11 @@ To install the chart with the release name `edge-service` with respective enviro
 - Local
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service
+$ helm install --dry-run --debug --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/minikube/values.yaml
 
 # Install chart
 $ minikube image load edge-service:${EDGE_SERVICE_VERSION}
-$ helm install --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service
+$ helm install --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/minikube/values.yaml
 ```
 
 - EKS

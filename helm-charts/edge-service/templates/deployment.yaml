@@ -13,21 +13,10 @@ spec:
       labels:
         {{- include "edge-service.selectorLabels" . | nindent 8 }}
     spec:
+{{- if .Values.affinity }}
       affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                 - key: kubernetes.io/hostname
-                   operator: In
-                   values:
-{{- if .Values.affinityNodes -}}                    
-                   {{- range .Values.affinityNodes }}
-                     - {{ . }}
-                   {{- end }}
-{{else}}
-                     - {{ default "minikube" }}
-{{end}}
+{{ toYaml .Values.affinity | indent 8 }}
+{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ tpl .Values.image.repository . | default .Chart.Name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

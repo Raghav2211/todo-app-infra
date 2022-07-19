@@ -21,7 +21,7 @@ $ helm dep update todo
 $ helm install --dry-run --debug todo todo
 
 # Install chart
-$ helm install todo todo
+$ helm install todo todo 
 ```
 - EKS
 ```bash

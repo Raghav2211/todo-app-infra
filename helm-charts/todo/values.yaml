@@ -36,5 +36,7 @@ mongodb:
   auth:
     enabled: false
 
+affinity: {}
+
 ingress:
   enabled: false
