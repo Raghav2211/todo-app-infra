@@ -2,7 +2,7 @@ terraform {
 
   backend "s3" {
     bucket         = "todo-tf-state-lab"
-    key            = "eks/dev.tf"
+    key            = "lab/us-east-2/dev/eks/dev.tf"
     region         = "us-east-2"
     encrypt        = true
     kms_key_id     = "alias/todo-tf-state-key"

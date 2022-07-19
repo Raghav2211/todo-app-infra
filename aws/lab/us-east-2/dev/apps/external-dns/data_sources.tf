@@ -3,7 +3,7 @@ data "terraform_remote_state" "global_route53" {
 
   config = {
     bucket         = "todo-tf-state-lab"
-    key            = "global/route53.tf"
+    key            = "lab/global/route53.tf"
     region         = "us-east-2"
     encrypt        = true
     kms_key_id     = "alias/todo-tf-state-key"
