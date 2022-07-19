@@ -48,8 +48,9 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
 3. On k8s using minikube
 [K8s](k8s/README.md)
 4. On EC2 using packer
-[EC2](aws/README.md)
-5. On EKS (IN-PROGRESS)
+[EC2](aws/v1_0_0.md)
+5. On EKS
+[EKS](aws/v2_0_0.md)
 
 
 
