@@ -7,7 +7,7 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
 - [X] Todo App deployment on local using swarm
 - [X] Todo App deployment on local k8s using Helm
 - [X] Todo App deployment on AWS on EC2
-- [ ] Todo App deployment on AWS using eks
+- [X] Todo App deployment on AWS using eks
 
 ## Deploy ##
 1. Deployment using docker-compose
