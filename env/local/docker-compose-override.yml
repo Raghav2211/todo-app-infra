@@ -7,8 +7,7 @@ services:
                                                       # they don’t inappropriately clobber each other’s changes
                                                       # So Relax consistency guarantees using `cached` mode (Don’t do this in production …)
   todo:
-    container_name: todo #Specify a custom container name, rather than a generated default name                                                           
-    restart: on-failure:5 
+    restart: on-failure:5
 volumes:
   mongo_data:
     # To use below configuration for host path ensure MONGO_DATA_SRC_PATH should exists

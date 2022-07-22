@@ -39,6 +39,7 @@
        # save local images 
        $ docker save todo:${TODO_APP_VERSION} | gzip > todo.tgz
        $ docker save edge-service:${EDGE_SERVICE_VERSION} | gzip > edge.tgz
+       $ docker save config-server:${CONFIG_SERVER_VERSION} | gzip > config.tgz 
         
        $ eval $(docker-machine env manager1)
        
@@ -54,11 +55,13 @@
     # If you want to use local registry instead of ghcr 
     $ docker service create --name registry --publish 5000:5000 registry:2
     
-    # Build & tag 
+    # Build & tag
+    $ docker tag config-server:${CONFIG_SERVER_VERSION} localhost:5000/config-server 
     $ docker tag todo:${TODO_APP_VERSION} localhost:5000/todo
     $ docker tag edge-service:${EDGE_SERVICE_VERSION} localhost:5000/edge-service
     
     # Push the image to the local registry running at localhost:5000
+    $ docker push localhost:5000/config-server
     $ docker push localhost:5000/todo
     $ docker push localhost:5000/edge-service
    
@@ -79,6 +82,7 @@
        
       ID             NAME                MODE         REPLICAS   IMAGE                                PORTS
     a5xtv1s0jtm9   registry            replicated     1/1        registry:2                           *:5000->5000/tcp
+    eg08gas6wgzd   todo_config-server  replicated     1/1        localhost:5000/config-server:latest   
     0wqkzciwyjp7   todo_edge-service   replicated     1/1        localhost:5000/edge-service:latest   *:8081->8081/tcp
     dxrgqsmjafwa   todo_mongo          replicated     1/1        mongo:4.2.21                         *:27017->27017/tcp
     xyy9feyvm75l   todo_todo           replicated     1/1        localhost:5000/todo:latest           *:8080->8080/tcp 
@@ -115,7 +119,7 @@
    `TODO_STACK_IMAGE` | Todo-app Image | `localhost:5000/todo`
    `EDGE_SERVICE_REPLICA` | No of replica for Edge-service | `1`
    `EDGE_SERVICE_STACK_IMAGE` | Edge-service Image | `localhost:5000/edge-service`
+   `CONFIG_SERVER_REPLICA` | No of replica for Config-Server | `1`
+   `CONFIG_SERVER_STACK_IMAGE` | Config-Server Image | `localhost:5000/config-server` 
    `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``
-   `EDGE_GOOGLE_CLIENT_ID` | Google client Id for oauth2 | ``
-   `EDGE_GOOGLE_CLIENT_SECRET` | Google client secret for oauth2 | ``
       
