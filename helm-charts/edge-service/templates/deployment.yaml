@@ -39,15 +39,5 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.springProfiles }}
-            - name: CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  key: google-client-id
-                  name: edge-service-secret
-            - name: CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  key: google-client-secret
-                  name: edge-service-secret
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

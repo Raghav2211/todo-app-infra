@@ -14,20 +14,20 @@ To install the chart with the release name `edge-service` with respective enviro
 - Local
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/minikube/values.yaml
+$ helm install --dry-run --debug edge-service edge-service -f edge-service/env/minikube/values.yaml
 
 # Install chart
 $ minikube image load edge-service:${EDGE_SERVICE_VERSION}
-$ helm install --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/minikube/values.yaml
+$ helm install edge-service edge-service -f edge-service/env/minikube/values.yaml
 ```
 
 - EKS
 ```bash
 # Verify the configuration 
-$ helm install --dry-run --debug --set aws.account=<account> --set aws.region=<region> --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/eks/values.yaml
+$ helm install --dry-run --debug --set aws.account=<account> --set aws.region=<region> edge-service edge-service -f edge-service/env/eks/values.yaml
 
 # Install chart
-$ helm install --set aws.account=<account> --set aws.region=<region> --set edge.google.client.id=<id> --set edge.google.client.secret=<secret> edge-service edge-service -f edge-service/env/eks/values.yaml
+$ helm install --set aws.account=<account> --set aws.region=<region> edge-service edge-service -f edge-service/env/eks/values.yaml
     
 ```
 
@@ -58,10 +58,6 @@ The following table lists the configurable parameters of the Edge Service chart 
 | `service.port`                                 | Port internal to Kubernetes                                    .                           | 8081 |
 | `service.nodeport`                             | NodePort gives you the freedom to set up your own load balancing solution.                 | 30001|
 | `resources`                                    | `edge-service` CPU/Memory resource requests/limits                                         | `{}` |
-| `edge`                                         | Edge service config                                                                        | `  `  |
-| `edge.google`                                  | Edge service google oauth2 configuration                                                   | `  `  |
-| `edge.google.clientId`                         | Google oauth2 client id
-| `edge.google.clientSecret`                     | Google oauth2 client secret                                                               | `  `  |
 | `springProfiles`                               | Spring profile to pick configuration                                                     | ` k8s`  |
 
 

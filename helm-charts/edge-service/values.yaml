@@ -27,12 +27,6 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-# edge - oauth2 secrets
-edge: {}
-#  google:
-#    clientId:
-#    clientSecret:
-
 springProfiles: k8s
 
 affinity: {}
