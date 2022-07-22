@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "config-server.fullname" . }}
+  labels: {{- include "config-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replica | default 1 }}
+  selector:
+    matchLabels:
+      {{- include "config-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "config-server.selectorLabels" . | nindent 8 }}
+    spec:
+{{- if .Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity | indent 8 }}
+{{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ tpl .Values.image.repository . | default .Chart.Name }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- if .Values.livenessProbe.enabled }}    
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: {{ default 60 .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ default 30 .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ default 10 .Values.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ default 1 .Values.livenessProbe.successThreshold }}
+            failureThreshold: {{ default 3 .Values.livenessProbe.failureThreshold }}
+          {{end}}  
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.springProfiles }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

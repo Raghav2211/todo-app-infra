@@ -105,6 +105,7 @@
       
       # remove stack
       $ docker stack rm todo
+      $ docker service rm registry
       $ eval $(docker-machine env -u) 
       $ bash cluster.sh delete local 
     ```
