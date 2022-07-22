@@ -3,6 +3,9 @@ services:
   mongo:
     container_name: mongo
     image: mongo:4.2.21
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
     ports:
       - "27017:27017"
   kms:
@@ -13,6 +16,13 @@ services:
     ports:
       - 4566:8080
       - 4599:8080
+
+  config-server:
+    image: config-server:${CONFIG_SERVER_IMAGE_TAG}
+    container_name: config-server
+    ports:
+      - 8888:8888
+
   todo:
     image: todo:${TODO_IMAGE_TAG}
     container_name: todo
@@ -20,6 +30,8 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      AWS_ACCESS_KEY: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
   edge-service:
     image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
     container_name: edge-service
