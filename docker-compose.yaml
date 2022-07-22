@@ -20,8 +20,6 @@ services:
   config-server:
     image: config-server:${CONFIG_SERVER_IMAGE_TAG}
     container_name: config-server
-    ports:
-      - 8888:8888
 
   todo:
     image: todo:${TODO_IMAGE_TAG}
@@ -32,12 +30,13 @@ services:
       SPRING_PROFILES_ACTIVE: docker
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
+
   edge-service:
     image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
     container_name: edge-service
     ports:
       - "8081:8081"
     environment:
-      CLIENT_SECRET: ${EDGE_GOOGLE_CLIENT_SECRET}
-      CLIENT_ID: ${EDGE_GOOGLE_CLIENT_ID}
       SPRING_PROFILES_ACTIVE: docker
+      AWS_ACCESS_KEY: dummy
+      AWS_SECRET_ACCESS_KEY: dummy
