@@ -23,7 +23,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.port.to }}
               protocol: TCP
           {{- if .Values.livenessProbe.enabled }}    
           livenessProbe:
@@ -35,9 +35,6 @@ spec:
             timeoutSeconds: {{ default 10 .Values.livenessProbe.timeoutSeconds }}
             successThreshold: {{ default 1 .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ default 3 .Values.livenessProbe.failureThreshold }}
-          {{end}}  
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.springProfiles }}
+          {{end}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

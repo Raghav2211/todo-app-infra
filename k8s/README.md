@@ -12,6 +12,10 @@
     ```bash
        bash setup.sh bootlocal  
     ```
+- Local KMS
+  ```bash
+    $ kubectl create -f local-kms.yml
+  ```
 - [Deploy Config Server](../helm-charts/config-server/README.md#Installing%20the%20Chart)
   
 - [Deploy Edge Service](../helm-charts/edge-service/README.md#Installing%20the%20Chart)

@@ -7,8 +7,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.port }}
+    - port: {{ default .Values.service.port.to .Values.service.port.from }}
+      targetPort: {{ .Values.service.port.to }}
       protocol: TCP
       {{- if eq .Values.service.type "LoadBalancer" }}
       nodePort: {{ .Values.service.nodePort }}

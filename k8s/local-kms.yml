@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kms
+  labels:
+    run: kms
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: kms
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kms
+  labels:
+    run: kms
+spec:
+  containers:
+    - name: kms
+      image: nsmithuk/local-kms:3.11.2
+      ports:
+        - containerPort: 8080
+      volumeMounts:
+        - name: seed-volume
+          mountPath: /init
+  volumes:
+    - name: seed-volume
+      hostPath:
+        path: /kms

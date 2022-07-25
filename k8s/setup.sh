@@ -47,7 +47,7 @@ boot_minikube_darwin() {
   install_helpers_darwin
   install_helm_darwin
   install_minikube_darwin
-  minikube start --kubernetes-version=v1.19.2;
+  minikube start --mount-string="$(pwd)/../env/local/kms:/kms" --kubernetes-version=v1.19.2 --mount;
   exit_if_fail;
 }
 
@@ -58,7 +58,7 @@ boot_minikube_win() {
   minikube --version &> /dev/null || { echo "Installing minikube for windows.....";choco install minikube;exit_if_fail; }
   helm --version &> /dev/null || { echo "Installing helm for windows.....";choco install kubernetes-helm;exit_if_fail; }
   create_internal_swtich
-  minikube start --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube”
+  minikube start --mount-string="$(pwd)/../env/local/kms:/kms" --kubernetes-version=v1.19.2 — vm-driver=”hyperv” — hyperv-virtual-switch=”minikube” --mount;
   exit_if_fail;
 }
 
