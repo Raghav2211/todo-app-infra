@@ -1,6 +1,7 @@
 # Deploy Todo Application to K8s cluster using helm
 
 - Local Deployment
+- EKS
 
 ## Local Deployment ##
 
@@ -11,6 +12,7 @@
     ```bash
        bash setup.sh bootlocal  
     ```
+- [Deploy Config Server](../helm-charts/config-server/README.md#Installing%20the%20Chart)
   
 - [Deploy Edge Service](../helm-charts/edge-service/README.md#Installing%20the%20Chart)
 
@@ -37,3 +39,7 @@
   http://localhost:8081  # get access_token
 
   http://localhost:8080/webjars/swagger-ui/index.html # use access_token to access the API(s)
+
+
+## EKS ##
+[Deploy](../aws/v2_0_0.md)

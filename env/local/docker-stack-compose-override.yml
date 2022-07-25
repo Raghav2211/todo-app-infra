@@ -9,6 +9,22 @@ services:
       placement: 
         constraints: 
           - "node.role == worker"
+  kms:
+    deploy:
+      labels:
+        name: kms
+        version: latest
+        component: security
+        env: "local"
+      replicas: 1
+      placement:
+        constraints:
+          - "node.role == worker"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+
   todo:
     image: ${TODO_STACK_IMAGE}
     deploy:
@@ -35,6 +51,23 @@ services:
         component: web
         env: "local"
       replicas: ${EDGE_SERVICE_REPLICA}
+      placement:
+        constraints:
+          - "node.role == worker"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+
+  config-server:
+    image: ${CONFIG_SERVER_STACK_IMAGE_TAG}
+    deploy:
+      labels:
+        name: config-server
+        version: latest
+        component: security
+        env: "local"
+      replicas: ${CONFIG_SERVER_REPLICA}
       placement:
         constraints:
           - "node.role == worker"

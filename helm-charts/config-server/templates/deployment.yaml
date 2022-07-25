@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "edge-service.fullname" . }}
-  labels: {{- include "edge-service.labels" . | nindent 4 }}
+  name: {{ include "config-server.fullname" . }}
+  labels: {{- include "config-server.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replica | default 1 }}
   selector:
     matchLabels:
-      {{- include "edge-service.selectorLabels" . | nindent 6 }}
+      {{- include "config-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "edge-service.selectorLabels" . | nindent 8 }}
+        {{- include "config-server.selectorLabels" . | nindent 8 }}
     spec:
 {{- if .Values.affinity }}
       affinity:

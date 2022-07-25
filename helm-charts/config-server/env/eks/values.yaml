@@ -1,0 +1,10 @@
+image:
+  repository: "{{ .Values.aws.account }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/config-server"
+
+springProfiles: eks
+
+affinity: {}
+
+service:
+  type: ClusterIP
+  port: 8080

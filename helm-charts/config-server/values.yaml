@@ -1,7 +1,7 @@
-#Default values fo Edge Service
+#Default values fo Config server
 replica: 1
 image:
-  repository: edge-service
+  repository: config-server
   pullPolicy: Always
   tag: "1.0.0"
 
@@ -16,8 +16,8 @@ livenessProbe: {}
 
 service:
   type: LoadBalancer
-  port: 8081
-  nodePort: 30001
+  port: 8888
+  nodePort: 30002
 
 resources: {}
   # limits:
@@ -30,6 +30,3 @@ resources: {}
 springProfiles: k8s
 
 affinity: {}
-
-ingress:
-  enabled: false
