@@ -4,7 +4,3 @@ image:
 springProfiles: eks
 
 affinity: {}
-
-service:
-  type: ClusterIP
-  port: 8080

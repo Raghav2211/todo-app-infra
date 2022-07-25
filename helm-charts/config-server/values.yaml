@@ -15,11 +15,10 @@ livenessProbe: {}
 #  failureThreshold: 3
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port:
     to: 8888
     from: 8080
-  nodePort: 30002
 
 resources: {}
   # limits:

@@ -2,7 +2,7 @@
 replica: 1
 image:
   repository: edge-service
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
   tag: "1.0.0"
 
 
@@ -16,7 +16,7 @@ livenessProbe: {}
 
 service:
   type: LoadBalancer
-  port: 8081
+  port: 8080
   nodePort: 30001
 
 resources: {}
