@@ -10,9 +10,11 @@ spec:
     - port: {{ default .Values.service.port.to .Values.service.port.from }}
       targetPort: {{ .Values.service.port.to }}
       protocol: TCP
+      # NODE_PORT IS FOR DEBUG PURPOSE ONLY
       {{- if eq .Values.service.type "LoadBalancer" }}
       nodePort: {{ .Values.service.nodePort }}
       {{end}}
+      # NODE_PORT IS FOR DEBUG PURPOSE ONLY
       name: http
   selector:
     {{- include "config-server.selectorLabels" . | nindent 4 }}

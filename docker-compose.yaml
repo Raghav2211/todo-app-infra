@@ -3,11 +3,15 @@ services:
   mongo:
     container_name: mongo
     image: mongo:4.2.21
+    restart: always
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=pass
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_DATABASE: tododb
     ports:
       - "27017:27017"
+    volumes:
+      - ./env/local/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
   kms:
     container_name: kms
     image: nsmithuk/local-kms:3.11.2
@@ -20,12 +24,18 @@ services:
   config-server:
     image: config-server:${CONFIG_SERVER_IMAGE_TAG}
     container_name: config-server
+    depends_on:
+      - kms
 
   todo:
     image: todo:${TODO_IMAGE_TAG}
     container_name: todo
     ports:
       - "8080:8080"
+    depends_on:
+      - mongo
+      - config-server
+      - edge-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
       AWS_ACCESS_KEY: dummy
@@ -36,6 +46,8 @@ services:
     container_name: edge-service
     ports:
       - "8081:8080"
+    depends_on:
+      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: docker
       AWS_ACCESS_KEY: dummy
