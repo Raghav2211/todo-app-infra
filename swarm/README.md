@@ -45,7 +45,8 @@
        
        # load images in virtual box docker daemon env
        $ docker load -i todo.tgz
-       $ docker load -i edge.tgz 
+       $ docker load -i edge.tgz
+       $ docker load -i config.tgz  
     ```
  
  - Deploy the Stack

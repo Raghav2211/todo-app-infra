@@ -24,18 +24,12 @@ services:
   config-server:
     image: config-server:${CONFIG_SERVER_IMAGE_TAG}
     container_name: config-server
-    depends_on:
-      - kms
 
   todo:
     image: todo:${TODO_IMAGE_TAG}
     container_name: todo
     ports:
       - "8080:8080"
-    depends_on:
-      - mongodb
-      - config-server
-      - edge-service
     environment:
       SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
@@ -46,8 +40,6 @@ services:
     container_name: edge-service
     ports:
       - "8081:8080"
-    depends_on:
-      - config-server
     environment:
       SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
