@@ -1,9 +1,9 @@
 version: "3.9"
 services:
-  mongo:
+  mongodb:
     deploy:
       labels:
-        name: mongo
+        name: mongodb
         component: database
         env: "local"
       placement: 

@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  mongo:
-    container_name: mongo
+  mongodb:
+    container_name: mongodb
     image: mongo:4.2.21
     restart: always
     environment:
@@ -33,11 +33,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mongo
+      - mongodb
       - config-server
       - edge-service
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
 
@@ -49,6 +49,6 @@ services:
     depends_on:
       - config-server
     environment:
-      SPRING_PROFILES_ACTIVE: docker
+      SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy

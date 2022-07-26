@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  mongo:
+  mongodb:
     volumes: 
       - mongo_data:/data/db:cached   # Strong consistency is quite expensive, requiring coordination between all of a files writers to guarantee
                                                       # they don’t inappropriately clobber each other’s changes
