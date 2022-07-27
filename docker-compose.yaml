@@ -12,6 +12,12 @@ services:
       - "27017:27017"
     volumes:
       - ./env/local/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
+
+  redis-server:
+    image: "redis:6.0-alpine"
+    container_name: redis
+    command: redis-server
+
   kms:
     container_name: kms
     image: nsmithuk/local-kms:3.11.2
@@ -34,6 +40,7 @@ services:
       SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
+    restart: on-failure
 
   edge-service:
     image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
@@ -44,3 +51,4 @@ services:
       SPRING_PROFILES_ACTIVE: local
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
+    restart: on-failure
