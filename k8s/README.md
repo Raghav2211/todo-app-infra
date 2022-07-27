@@ -22,15 +22,18 @@
 
 - [Deploy Todo-app](../helm-charts/todo/README.md#Installing%20the%20Chart)  
 
-- Verify all pods are up and running
+  - Verify all pods are up and running
  
-   ```bash
-     $ kubectl get pods
-      NAME                         READY   STATUS    RESTARTS   AGE
-      todo-6f4f69b7d7-8t8kg        1/1     Running   0          92m
-      mysql-58b87bf444-pshmk       1/1     Running   0          92m
+     ```bash
+       $ kubectl get pods
+        NAME                            READY   STATUS    RESTARTS   AGE
+        config-server-58847745b-jkjd5   1/1     Running   0          21m
+        edge-service-7777c54494-tl2kj   1/1     Running   0          20m
+        kms                             1/1     Running   0          16h
+        mongodb-8b4cb7dc-vzz2r          1/1     Running   0          6m15s
+        todo-777c54c599-cbnvc           1/1     Running   0          9m40s
 
-   ```
+     ```
 
 - Execute below command in a separate terminal which creates a route to services deployed with type LoadBalancer and sets their Ingress to their ClusterIP.
 
