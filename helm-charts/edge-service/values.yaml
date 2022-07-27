@@ -16,7 +16,7 @@ livenessProbe: {}
 
 service:
   type: LoadBalancer
-  port: 8080
+  port: 8081
   nodePort: 30001
 
 resources: {}
@@ -27,7 +27,7 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-springProfiles: k8s
+springProfiles: local
 
 affinity: {}
 

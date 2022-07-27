@@ -39,5 +39,11 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.springProfiles }}
+{{- if eq .Values.springProfiles "local" }}
+            - name: AWS_ACCESS_KEY
+              value: "dummy"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "dummy"
+{{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
