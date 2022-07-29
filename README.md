@@ -1,4 +1,5 @@
 # TODO APP INFRA
+[![Terraform Check](https://github.com/Raghav2211/todo-app-infra/actions/workflows/terraform-check.yml/badge.svg)](https://github.com/Raghav2211/todo-app-infra/actions/workflows/terraform-check.yml)
 
 Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-flux-todo-app.git) in different environment 
 
