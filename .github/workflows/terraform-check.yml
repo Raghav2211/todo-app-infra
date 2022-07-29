@@ -1,4 +1,4 @@
-name: "Terraform Plan"
+name: "Terraform Check"
 
 # Trigger when a pull request is received
 on:
@@ -6,10 +6,9 @@ on:
     paths:
       - '**.tf'
       - '!**/README.md'
-      - '!.github/**'
 
 jobs:
-  terraform-plan:
+  terraform-validate:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
     defaults:
@@ -31,7 +30,7 @@ jobs:
 
       - name: "Terraform Format check"
         run: |
-          find . \( -path './lab/.terraform' \) -prune -o -type f -name '*.tf' | while read f
+          find . \( -path '*/.terraform/*' \) -prune -false -o -type f -name '*.tf' | while read f
           do
             terraform fmt -check $f
               if [ $? -ne 0 ]
