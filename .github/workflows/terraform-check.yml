@@ -53,6 +53,9 @@ jobs:
           terraform -chdir=lab/us-east-2/dev/database/mongo/todo init -backend=false
           terraform -chdir=lab/us-east-2/dev/database/mongo/todo validate
 
+          terraform -chdir=lab/us-east-2/dev/elasticache/redis/todo init -backend=false
+          terraform -chdir=lab/us-east-2/dev/elasticache/redis/todo validate
+
           terraform -chdir=lab/us-east-2/dev/eks init -backend=false
           terraform -chdir=lab/us-east-2/dev/eks validate
 
