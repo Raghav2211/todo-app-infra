@@ -44,9 +44,23 @@ jobs:
         env:
           AWS_DEFAULT_REGION: us-east-2
         run: |
+          terraform -chdir=remote-state/lab/us-east-2 init -backend=false
+          terraform -chdir=remote-state/lab/us-east-2 validate
+
           terraform -chdir=lab/us-east-2/dev/vpc init -backend=false
           terraform -chdir=lab/us-east-2/dev/vpc validate
-#          terraform init /aws/lab/us-east-2/dev/database/mysql
-#          terraform validate /aws/lab/us-east-2/dev/database/mysql
-#          terraform init /aws/lab/us-east-2/dev/services/todo/app
-#          terraform validate /aws/lab/us-east-2/dev/services/todo/app
+
+          terraform -chdir=lab/us-east-2/dev/database/mongo/todo init -backend=false
+          terraform -chdir=lab/us-east-2/dev/database/mongo/todo validate
+
+          terraform -chdir=lab/us-east-2/dev/eks init -backend=false
+          terraform -chdir=lab/us-east-2/dev/eks validate
+
+          terraform -chdir=lab/global/route53 init -backend=false
+          terraform -chdir=lab/global/route53 validate
+
+          terraform -chdir=lab/us-east-2/dev/apps/external-dns init -backend=false
+          terraform -chdir=lab/us-east-2/dev/apps/external-dns validate
+
+          terraform -chdir=lab/us-east-2/dev/apps/ingress-nginx init -backend=false
+          terraform -chdir=lab/us-east-2/dev/apps/ingress-nginx validate
