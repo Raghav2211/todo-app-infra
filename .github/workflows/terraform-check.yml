@@ -44,7 +44,7 @@ jobs:
         env:
           AWS_DEFAULT_REGION: us-east-2
         run: |
-          terraform -chdir=lab/us-east-2/dev/vpc init
+          terraform -chdir=lab/us-east-2/dev/vpc init -backend=false
           terraform -chdir=lab/us-east-2/dev/vpc validate
 #          terraform init /aws/lab/us-east-2/dev/database/mysql
 #          terraform validate /aws/lab/us-east-2/dev/database/mysql
