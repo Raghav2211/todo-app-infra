@@ -44,9 +44,9 @@ jobs:
         env:
           AWS_DEFAULT_REGION: us-east-2
         run: |
-          terraform init /aws/lab/us-east-2/dev/vpc
-          terraform validate /aws/lab/us-east-2/dev/vpc
-          terraform init /aws/lab/us-east-2/dev/database/mysql
-          terraform validate /aws/lab/us-east-2/dev/database/mysql
-          terraform init /aws/lab/us-east-2/dev/services/todo/app
-          terraform validate /aws/lab/us-east-2/dev/services/todo/app
+          terraform -chdir=lab/us-east-2/dev/vpc validate
+          terraform -chdir=lab/us-east-2/dev/vpc init
+#          terraform init /aws/lab/us-east-2/dev/database/mysql
+#          terraform validate /aws/lab/us-east-2/dev/database/mysql
+#          terraform init /aws/lab/us-east-2/dev/services/todo/app
+#          terraform validate /aws/lab/us-east-2/dev/services/todo/app
