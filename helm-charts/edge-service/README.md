@@ -14,6 +14,7 @@ To install the chart with the release name `edge-service` with respective enviro
 - Local
 ```bash
 # Verify the configuration 
+$ helm dep update edge-service
 $ helm install --dry-run --debug edge-service edge-service -f edge-service/env/minikube/values.yaml
 
 # Install chart

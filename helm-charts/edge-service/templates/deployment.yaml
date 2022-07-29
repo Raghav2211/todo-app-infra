@@ -39,7 +39,7 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.springProfiles }}
-{{- if eq .Values.springProfiles "local" }}
+{{- if eq .Values.springProfiles "k8s" }}
             - name: AWS_ACCESS_KEY
               value: "dummy"
             - name: AWS_SECRET_ACCESS_KEY
