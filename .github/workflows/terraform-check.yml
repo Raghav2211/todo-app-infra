@@ -9,8 +9,11 @@ on:
 
 jobs:
   terraform-validate:
-    name: "Terraform Plan"
+    name: "tf validate"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aws
     steps:
       # Checkout the code
       # Marketplace: https://github.com/marketplace/actions/checkout
