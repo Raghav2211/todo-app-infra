@@ -9,6 +9,9 @@ service:
   type: ClusterIP
   port: 8080
 
+redis:
+  enabled: false
+
 ingress:
   enabled: true
   class: nginx
