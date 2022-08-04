@@ -5,7 +5,7 @@ data "terraform_remote_state" "eks" {
 
   config = {
     bucket         = "todo-tf-state-lab"
-    key            = "eks/${var.app.environment}.tf"
+    key            = "${var.app.account}/${data.aws_region.current.name}/${var.app.environment}/eks/${var.app.environment}.tf"
     region         = data.aws_region.current.name
     encrypt        = true
     kms_key_id     = "alias/todo-tf-state-key"
