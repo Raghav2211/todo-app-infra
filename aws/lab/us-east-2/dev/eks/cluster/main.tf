@@ -1,8 +1,3 @@
-locals {
-  k8s_version = 1.19
-
-}
-
 module "dev_eks" {
   source                   = "../../../../../modules/eks//cluster"
   app                      = var.app
