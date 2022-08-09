@@ -56,8 +56,8 @@ jobs:
           terraform -chdir=lab/us-east-2/dev/elasticache/redis/todo init -backend=false
           terraform -chdir=lab/us-east-2/dev/elasticache/redis/todo validate
 
-          terraform -chdir=lab/us-east-2/dev/eks init -backend=false
-          terraform -chdir=lab/us-east-2/dev/eks validate
+          terraform -chdir=lab/us-east-2/dev/eks/cluster init -backend=false
+          terraform -chdir=lab/us-east-2/dev/eks/cluster validate
 
           terraform -chdir=lab/global/route53 init -backend=false
           terraform -chdir=lab/global/route53 validate
