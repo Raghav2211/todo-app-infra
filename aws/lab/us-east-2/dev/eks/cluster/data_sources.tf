@@ -10,3 +10,13 @@ data "terraform_remote_state" "vpc_dev" {
     dynamodb_table = "todo-tf-state-lab"
   }
 }
+
+data "aws_ami" "eks_default_bottlerocket" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["bottlerocket-aws-k8s-${module.dev_eks.k8s_version}-x86_64-*"]
+  }
+}

@@ -1,3 +1,7 @@
+output "k8s_version" {
+  value = local.k8s_version
+}
+
 output "cluster_arn" {
   value = module.eks.cluster_arn
 }

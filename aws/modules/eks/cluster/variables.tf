@@ -10,11 +10,8 @@ variable "app" {
 variable "vpc_id" {
   type = string
 }
-variable "public_subnet_ids" {
-  type = list(string)
-}
 
-variable "private_subnet_ids" {
+variable "subnet_ids" {
   type = list(string)
 }
 
@@ -22,6 +19,7 @@ variable "additional_cluster_tags" {
   type    = map(string)
   default = {}
 }
+
 variable "tags" {
   description = "Common tags for all resources"
   type        = map(string)
@@ -34,13 +32,6 @@ variable "enable_ssh" {
   default     = false
 }
 
-variable "bottlerocket_node_group_config" {
-  type = map(object({
-    instance_type = string
-    asg = object({
-      min_size     = number
-      max_size     = number
-      desired_size = number
-    })
-  }))
+variable "self_managed_node_groups" {
+  type = any
 }
