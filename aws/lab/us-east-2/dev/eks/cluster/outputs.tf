@@ -31,7 +31,6 @@ output "oidc_provider_arn" {
   value = module.dev_eks.oidc_provider_arn
 }
 
-
 output "cluster_iam_role_arn" {
   value = module.dev_eks.cluster_iam_role_arn
 }

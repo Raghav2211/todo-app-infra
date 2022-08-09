@@ -1,37 +1,25 @@
 locals {
-  k8s_version = 1.19
-  bottlerocket_config = {
-    for instance, config in var.bottlerocket_node_group_config :
-    instance => {
-      name = instance
+  k8s_version  = 1.19
+  cluster_name = "${var.app.account}-${var.app.environment}-eks"
 
-      platform      = "bottlerocket"
-      ami_id        = data.aws_ami.eks_default_bottlerocket.id
-      instance_type = config.instance_type
-      min_size      = config.asg.min_size
-      max_size      = config.asg.max_size
-      desired_size  = config.asg.desired_size
-      key_name      = aws_key_pair.this.key_name
-
-      iam_role_additional_policies = ["arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
-
-      bootstrap_extra_args = <<-EOT
-          # The admin host container provides SSH access and runs with "superpowers".
-          # It is disabled by default, but can be disabled explicitly.
-          [settings.host-containers.admin]
-          enabled = false
-
-          # The control host container provides out-of-band access via SSM.
-          # It is enabled by default, and can be disabled if you do not expect to use SSM.
-          # This could leave you with no way to access the API and change settings on an existing node!
-          [settings.host-containers.control]
-          enabled = true
-
-          [settings.kubernetes.node-labels]
-          ingress = "allowed"
-          EOT
+  self_managed_node_groups = {
+    for config in var.self_managed_node_groups :
+    config.name => {
+      name                         = config.name
+      platform                     = config.platform
+      ami_id                       = config.ami_id
+      instance_type                = config.instance_type
+      min_size                     = config.asg_min_size
+      max_size                     = config.asg_max_size
+      desired_size                 = config.asg_desired_capacity
+      key_name                     = config.key_name
+      iam_role_name                = config.iam_role_name
+      iam_role_use_name_prefix     = false
+      iam_role_additional_policies = config.iam_role_additional_policies
+      bootstrap_extra_args         = config.bootstrap_extra_args
     }
   }
+
 
   tags = merge(var.tags, {
     account     = var.app.account
@@ -46,13 +34,15 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "18.24.0"
 
-  cluster_name                    = var.app.environment
-  cluster_version                 = "1.19"
+  cluster_name                    = local.cluster_name
+  cluster_version                 = local.k8s_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
   #cluster_service_ipv4_cidr       = data.aws_vpc.selected.cidr_block # TODO : change CIDR block for service layer of k8s as per user requirement
   vpc_id     = var.vpc_id
-  subnet_ids = var.private_subnet_ids # should be private
+  subnet_ids = var.subnet_ids # should be private
+
+  # cluster addons
   cluster_addons = {
     coredns = {
       addon_version     = "v1.8.0-eksbuild.1"
@@ -73,13 +63,18 @@ module "eks" {
     resources        = ["secrets"]
   }]
 
+  # cluster IAM configuration
+  iam_role_name            = "${var.app.account}-${var.app.environment}-eks-cluster-role"
+  iam_role_use_name_prefix = false
 
 
   # Self managed node groups will not automatically create the aws-auth configmap so we need to
   create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
 
-  # Extend cluster security group rules
+  # Extend cluster security group configuration
+  cluster_security_group_name            = "${var.app.account}-${var.app.environment}-eks-cluster-sg"
+  cluster_security_group_use_name_prefix = false
   cluster_security_group_additional_rules = {
     egress_nodes_ephemeral_ports_tcp = {
       description                = "To node 1025-65535"
@@ -92,7 +87,10 @@ module "eks" {
   }
   cluster_security_group_tags = local.tags
 
-  # Extend node-to-node security group rules
+
+  # Extend node-to-node security group configuration
+  node_security_group_name            = "${var.app.account}-${var.app.environment}-eks-node-sg"
+  node_security_group_use_name_prefix = false
   node_security_group_additional_rules = {
     ingress_self_all = {
       description = "Node to node all ports/protocols"
@@ -120,20 +118,12 @@ module "eks" {
     # enable discovery of autoscaling groups by cluster-autoscaler
     autoscaling_group_tags = {
       "k8s.io/cluster-autoscaler/enabled" : true,
-      "k8s.io/cluster-autoscaler/${var.app.environment}" : "owned",
+      "k8s.io/cluster-autoscaler/${local.cluster_name}" : "owned",
     }
   }
-  self_managed_node_groups = local.bottlerocket_config
+  self_managed_node_groups = local.self_managed_node_groups
   cluster_tags             = var.additional_cluster_tags
   tags                     = local.tags
 }
 
-resource "tls_private_key" "this" {
-  algorithm = "RSA"
-}
-
-resource "aws_key_pair" "this" {
-  key_name   = var.app.environment
-  public_key = tls_private_key.this.public_key_openssh
-}
 
