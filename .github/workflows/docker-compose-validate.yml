@@ -6,16 +6,16 @@ on:
       - main
       - master
     paths:
-      - docker-compose.yaml
+      - 'docker-compose.yaml'
   pull_request:
     branches:
       - main
       - master
     paths:
-      - docker-compose.yaml
+      - 'docker-compose.yaml'
 
 jobs:
-  docker:
+  validate:
     timeout-minutes: 10
     runs-on: ubuntu-latest
 
