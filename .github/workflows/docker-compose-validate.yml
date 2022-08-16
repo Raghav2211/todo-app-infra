@@ -35,5 +35,22 @@ jobs:
           docker run --network container:config-server appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/actuator/health
 
       - name: Stop docker-compose stack
-        #if: always()
+        if: always()
         run: docker-compose -f "docker-compose.yaml" down
+
+      - name: Build docker-compose(override) stack
+        run: docker-compose -f docker-compose.yaml -f env/local/docker-compose-override.yml --env-file=env/ci/Docker_Maven.env up -d
+
+      - name: Test docker-compose(override) stack
+        timeout-minutes: 5
+        run: |
+          sleep 120
+          docker run --network container:todo appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8082/actuator/health
+          docker run --network container:edge-service appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8081/actuator/health
+          docker run --network container:config-server appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/actuator/health
+
+      - name: Stop docker-compose(override) stack
+        if: always()
+        run: docker-compose -f "docker-compose.yaml" down
+
+
