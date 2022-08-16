@@ -37,4 +37,3 @@ jobs:
       - name: Stop docker-compose stack
         #if: always()
         run: docker-compose -f "docker-compose.yaml" down
-        
