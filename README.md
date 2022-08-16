@@ -39,9 +39,9 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
     
       Parameter | Description | Default
       --- | --- | ---
-      `TODO_IMAGE_TAG` | Image tag for Todo-App | `2.0.0`
-      `EDGE_SERVICE_IMAGE_TAG` | Image tag for Edge Service | `1.0.0`
-      `CONFIG_SERVER_IMAGE_TAG` | Image tag for Config Server | `1.0.0`
+      `TODO_IMAGE` | Image tag for Todo-App | ``
+      `EDGE_SERVICE_IMAGE` | Image tag for Edge Service | ``
+      `CONFIG_SERVER_IMAGE` | Image tag for Config Server | ``
       `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``  
 
 2. On swarm cluster using docker stack
