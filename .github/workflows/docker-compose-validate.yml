@@ -6,15 +6,13 @@ on:
       - main
       - master
     paths:
-      - 'docker-compose.yaml'
-      - '!**.md'
+      - 'docker**.yaml'
   pull_request:
     branches:
       - main
       - master
     paths:
-      - 'docker-compose.yaml'
-      - '!**.md'
+      - 'docker**.yaml'
 
 jobs:
   validate:

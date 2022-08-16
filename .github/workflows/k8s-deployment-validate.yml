@@ -1,4 +1,5 @@
 name: K8s Deployment validate
+
 on:
   push:
     branches:
@@ -6,14 +7,13 @@ on:
       - master
     paths:
       - 'helm-charts/**'
-      - '!**.md'
   pull_request:
     branches:
       - main
       - master
     paths:
       - 'helm-charts/**'
-      - '!**.md'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
