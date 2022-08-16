@@ -22,5 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Start minikube
         uses: medyagh/setup-minikube@master
+      - name: Deploy local kms
+        run: kubectl create -f k8s/local-kms.yml
       - name: Try the cluster !
         run: kubectl get pods -A
