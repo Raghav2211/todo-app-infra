@@ -1,9 +1,18 @@
 name: "Terraform Check"
 
-# Trigger when a pull request is received
 on:
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - '**.tf'
+      - '!**/README.md'
   pull_request:
-    paths:
+    branches:
+      - main
+      - master
+    paths-ignore:
       - '**.tf'
       - '!**/README.md'
 
