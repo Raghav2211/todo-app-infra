@@ -1,0 +1,26 @@
+name: K8s Deployment validate
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'helm-charts/**'
+      - '!**.md'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'helm-charts/**'
+      - '!**.md'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: build example and deploy to minikube
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
+      - name: Try the cluster !
+        run: kubectl get pods -A
