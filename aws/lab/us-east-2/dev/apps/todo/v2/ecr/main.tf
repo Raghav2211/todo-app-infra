@@ -7,8 +7,8 @@ module "todo_app_ecr" {
     application = "todo-app"
     team        = "todo"
   }
-  repo_name            = "apps/todo-app"
-  keep_no_of_images    = 10
+  repo_name         = "apps/todo-app"
+  keep_no_of_images = 10
 }
 
 module "edge_service_ecr" {
@@ -20,8 +20,8 @@ module "edge_service_ecr" {
     application = "edge-service"
     team        = "todo"
   }
-  repo_name            = "apps/edge-service"
-  keep_no_of_images    = 10
+  repo_name         = "apps/edge-service"
+  keep_no_of_images = 10
 }
 
 module "config_server_ecr" {
@@ -33,6 +33,6 @@ module "config_server_ecr" {
     application = "config-server"
     team        = "todo"
   }
-  repo_name            = "apps/config-server"
-  keep_no_of_images    = 10
+  repo_name         = "apps/config-server"
+  keep_no_of_images = 10
 }

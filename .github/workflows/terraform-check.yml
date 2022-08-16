@@ -59,6 +59,9 @@ jobs:
           terraform -chdir=lab/us-east-2/dev/eks/cluster init -backend=false
           terraform -chdir=lab/us-east-2/dev/eks/cluster validate
 
+          terraform -chdir=lab/us-east-2/dev/apps/todo/v2/ecr init -backend=false
+          terraform -chdir=lab/us-east-2/dev/apps/todo/v2/ecr validate
+
           terraform -chdir=lab/global/route53 init -backend=false
           terraform -chdir=lab/global/route53 validate
 
