@@ -10,10 +10,10 @@ locals {
 }
 
 module "ecr" {
-  source                            = "terraform-aws-modules/ecr/aws"
-  version                           = "= 1.4.0"
+  source  = "terraform-aws-modules/ecr/aws"
+  version = "= 1.4.0"
 
-  repository_name                   = var.repo_name
+  repository_name = var.repo_name
   repository_lifecycle_policy = jsonencode({
     rules = [
       {
