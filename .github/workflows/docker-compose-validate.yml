@@ -23,10 +23,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Start containers
-        run: docker-compose -f "docker-compose.yml" --env-file=env/ci/Docker_Maven.env up -d
+      - name: Build docker-compose stack
+        run: docker-compose -f "docker-compose.yaml" --env-file=env/ci/Docker_Maven.env up -d
 
-      - name: Test local stack
+      - name: Test docker-compose stack
         timeout-minutes: 5
         run: |
           sleep 120
@@ -34,6 +34,6 @@ jobs:
           docker run --network container:edge appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8081/actuator/health
           docker run --network container:config-server appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8080/actuator/health
 
-      - name: Stop containers
+      - name: Stop docker-compose stack
         #if: always()
-        run: docker-compose -f "docker-compose.yml" down
+        run: docker-compose -f "docker-compose.yaml" down
