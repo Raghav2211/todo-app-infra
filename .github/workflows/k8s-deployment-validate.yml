@@ -17,9 +17,14 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    name: build example and deploy to minikube
+    name: build & validate helm-charts in minikube
     steps:
       - uses: actions/checkout@v2
+      - name: Helm lint
+        run: |
+          helm lint helm-charts/todo
+          helm lint helm-charts/edge-service
+          helm lint helm-charts/config-server
       - name: Start minikube
         uses: medyagh/setup-minikube@master
       - name: Deploy local kms
