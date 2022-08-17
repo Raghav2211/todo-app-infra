@@ -38,7 +38,14 @@ jobs:
         run: helm install edge-service helm-charts/edge-service -f helm-charts/edge-service/env/ci/values.yaml
       - name: Deploy Todo App
         run: helm install todo helm-charts/todo -f helm-charts/todo/env/ci/values.yaml
-      - name: Try the cluster !
+      - name: Cluster view
         run: |
-          sleep 120
+          sleep 150
           kubectl get pods -A
+          kubectl get svc -A
+          kubectl get deploy -A
+      - name: Verify Cluster
+        shell: bash
+        run: |
+          chmod +x k8s/deployment-validate.sh
+          k8s/deployment-validate.sh
