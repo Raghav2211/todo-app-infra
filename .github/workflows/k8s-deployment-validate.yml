@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Helm lint
         run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
           helm dependency build helm-charts/edge-service
           helm dependency build helm-charts/todo
           helm lint helm-charts/todo
