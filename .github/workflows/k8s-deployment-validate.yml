@@ -29,5 +29,9 @@ jobs:
         uses: medyagh/setup-minikube@master
       - name: Deploy local kms
         run: kubectl create -f k8s/local-kms.yml
+      - name: Deploy Config Server
+        run: helm install config-server config-server -f config-server/env/ci/values.yaml
       - name: Try the cluster !
-        run: kubectl get pods -A
+        run: |
+          sleep 120
+          kubectl get pods -A
