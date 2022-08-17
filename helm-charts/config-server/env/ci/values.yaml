@@ -1,0 +1,12 @@
+image:
+  repository: "ghcr.io/raghav2211/spring-web-flux-todo-app/maven/config-server"
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - minikube

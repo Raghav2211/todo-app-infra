@@ -1,5 +1,7 @@
 # TODO APP INFRA
 [![Terraform Check](https://github.com/Raghav2211/todo-app-infra/actions/workflows/terraform-check.yml/badge.svg)](https://github.com/Raghav2211/todo-app-infra/actions/workflows/terraform-check.yml)
+[![Docker compose Validate](https://github.com/Raghav2211/todo-app-infra/actions/workflows/docker-compose-validate.yml/badge.svg)](https://github.com/Raghav2211/todo-app-infra/actions/workflows/docker-compose-validate.yml)
+[![K8s Deployment validate](https://github.com/Raghav2211/todo-app-infra/actions/workflows/k8s-deployment-validate.yml/badge.svg)](https://github.com/Raghav2211/todo-app-infra/actions/workflows/k8s-deployment-validate.yml)
 
 Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-flux-todo-app.git) in different environment 
 
@@ -38,9 +40,9 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
     
       Parameter | Description | Default
       --- | --- | ---
-      `TODO_IMAGE_TAG` | Image tag for Todo-App | `2.0.0`
-      `EDGE_SERVICE_IMAGE_TAG` | Image tag for Edge Service | `1.0.0`
-      `CONFIG_SERVER_IMAGE_TAG` | Image tag for Config Server | `1.0.0`
+      `TODO_IMAGE` | Image tag for Todo-App | ``
+      `EDGE_SERVICE_IMAGE` | Image tag for Edge Service | ``
+      `CONFIG_SERVER_IMAGE` | Image tag for Config Server | ``
       `MONGO_DATA_SRC_PATH` | Host path for persistence mongo data | ``  
 
 2. On swarm cluster using docker stack
@@ -51,6 +53,7 @@ Repo contain IAC to deploy [todo-app](https://github.com/Raghav2211/spring-web-f
 [EC2](aws/v1_0_0.md)
 5. On EKS
 [EKS](aws/v2_0_0.md)
+
 
 
 

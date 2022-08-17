@@ -28,27 +28,27 @@ services:
       - 4599:8080
 
   config-server:
-    image: config-server:${CONFIG_SERVER_IMAGE_TAG}
+    image: ${CONFIG_SERVER_IMAGE}
     container_name: config-server
 
   todo:
-    image: todo:${TODO_IMAGE_TAG}
+    image: ${TODO_IMAGE}
     container_name: todo
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
     restart: on-failure
 
   edge-service:
-    image: edge-service:${EDGE_SERVICE_IMAGE_TAG}
+    image: ${EDGE_SERVICE_IMAGE}
     container_name: edge-service
     ports:
       - "8081:8081"
     environment:
-      SPRING_PROFILES_ACTIVE: local
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-local}
       AWS_ACCESS_KEY: dummy
       AWS_SECRET_ACCESS_KEY: dummy
     restart: on-failure

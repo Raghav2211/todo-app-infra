@@ -1,0 +1,54 @@
+name: K8s Deployment validate
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'helm-charts/**'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'helm-charts/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: build & validate helm-charts in minikube
+    steps:
+      - uses: actions/checkout@v2
+      - name: Helm lint
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm dependency build helm-charts/edge-service
+          helm dependency build helm-charts/todo
+          helm lint helm-charts/todo
+          helm lint helm-charts/edge-service
+          helm lint helm-charts/config-server
+      - name: Start minikube
+        with:
+          minikube-version: 1.25.2
+          kubernetes-version: v1.19.0
+        uses: medyagh/setup-minikube@master
+      - name: Deploy local kms
+        run: kubectl create -f k8s/local-kms.yml
+      - name: Deploy Config Server
+        run: helm install config-server helm-charts/config-server -f helm-charts/config-server/env/ci/values.yaml
+      - name: Deploy Edge service
+        run: helm install edge-service helm-charts/edge-service -f helm-charts/edge-service/env/ci/values.yaml
+      - name: Deploy Todo App
+        run: helm install todo helm-charts/todo -f helm-charts/todo/env/ci/values.yaml
+      - name: Cluster view
+        run: |
+          sleep 150
+          kubectl get pods -A
+          kubectl get svc -A
+          kubectl get deploy -A
+      - name: Verify Cluster
+        shell: bash
+        run: |
+          chmod +x k8s/deployment-validate.sh
+          k8s/deployment-validate.sh
