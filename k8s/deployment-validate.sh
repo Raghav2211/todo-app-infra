@@ -1,6 +1,6 @@
 # #!/bin/bash
 n=0
-while [ "$(kubectl get pods -l=app.kubernetes.io/instance='config-server' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
+while [ "$(kubectl get pods -l=app.kubernetes.io/name='config-server' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
    sleep 5
     n=$((n+1))
     if [ "$n" -eq 5 ]; then
@@ -11,7 +11,7 @@ done
 echo "config-server is ready"
 
 n=0
-while [ "$(kubectl get pods -l=app.kubernetes.io/instance='edge-service' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
+while [ "$(kubectl get pods -l=app.kubernetes.io/name='edge-service' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
    sleep 5
     n=$((n+1))
     if [ "$n" -eq 5 ]; then
@@ -22,7 +22,7 @@ done
 echo "edge-service is ready"
 
 n=0
-while [ "$(kubectl get pods -l=app.kubernetes.io/instance='todo' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
+while [ "$(kubectl get pods -l=app.kubernetes.io/name='todo' -o jsonpath='{.items[*].status.containerStatuses[0].ready}')" != "true" ]; do
    sleep 5
     n=$((n+1))
     if [ "$n" -eq 5 ]; then

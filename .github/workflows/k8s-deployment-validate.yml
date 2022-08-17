@@ -29,6 +29,9 @@ jobs:
           helm lint helm-charts/edge-service
           helm lint helm-charts/config-server
       - name: Start minikube
+        with:
+          minikube-version: 1.25.2
+          kubernetes-version: v1.19.0
         uses: medyagh/setup-minikube@master
       - name: Deploy local kms
         run: kubectl create -f k8s/local-kms.yml
