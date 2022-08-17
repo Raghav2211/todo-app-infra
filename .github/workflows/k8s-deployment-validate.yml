@@ -34,9 +34,9 @@ jobs:
         run: kubectl create -f k8s/local-kms.yml
       - name: Deploy Config Server
         run: helm install config-server helm-charts/config-server -f helm-charts/config-server/env/ci/values.yaml
-      - name: Deploy Config Server
-        run: helm install config-server helm-charts/config-server -f helm-charts/config-server/env/ci/values.yaml
+      - name: Deploy Edge service
+        run: helm install edge-service helm-charts/edge-service -f helm-charts/edge-service/env/ci/values.yaml
       - name: Try the cluster !
         run: |
-          sleep 120
+          sleep 60
           kubectl get pods -A
