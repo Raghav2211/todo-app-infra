@@ -1,8 +1,6 @@
 image:
   repository: "ghcr.io/raghav2211/spring-web-flux-todo-app/maven/edge-service"
 
-springProfiles: ci
-
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
