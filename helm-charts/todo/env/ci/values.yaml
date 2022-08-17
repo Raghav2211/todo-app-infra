@@ -1,5 +1,7 @@
 image:
-  repository: "ghcr.io/raghav2211/spring-web-flux-todo-app/maven/config-server"
+  repository: "ghcr.io/raghav2211/spring-web-flux-todo-app/maven/todo"
+
+springProfiles: ci
 
 affinity:
   nodeAffinity:

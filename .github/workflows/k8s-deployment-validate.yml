@@ -36,7 +36,9 @@ jobs:
         run: helm install config-server helm-charts/config-server -f helm-charts/config-server/env/ci/values.yaml
       - name: Deploy Edge service
         run: helm install edge-service helm-charts/edge-service -f helm-charts/edge-service/env/ci/values.yaml
+      - name: Deploy Todo App
+        run: helm install todo helm-charts/todo -f helm-charts/todo/env/ci/values.yaml
       - name: Try the cluster !
         run: |
-          sleep 60
+          sleep 120
           kubectl get pods -A
