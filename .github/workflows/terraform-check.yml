@@ -5,14 +5,16 @@ on:
     branches:
       - main
       - master
-    paths:
+    paths-ignore:
       - '**.tf'
+      - '!**/README.md'
   pull_request:
     branches:
       - main
       - master
-    paths:
+    paths-ignore:
       - '**.tf'
+      - '!**/README.md'
 
 jobs:
   terraform-validate:
