@@ -68,6 +68,9 @@ jobs:
           terraform -chdir=lab/us-east-2/dev/apps/todo/v2/redis init -backend=false
           terraform -chdir=lab/us-east-2/dev/apps/todo/v2/redis validate
 
+          terraform -chdir=lab/us-east-2/dev/apps/todo/v2/kms init -backend=false
+          terraform -chdir=lab/us-east-2/dev/apps/todo/v2/kms validate
+
           terraform -chdir=lab/us-east-2/dev/eks/cluster init -backend=false
           terraform -chdir=lab/us-east-2/dev/eks/cluster validate
 
