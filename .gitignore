@@ -76,3 +76,4 @@ override.tf.json
 terraform.rc
 /aws/packer/todo/todo
 *.tgz
+*.DS_Store

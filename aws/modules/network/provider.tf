@@ -7,3 +7,6 @@ terraform {
   }
   required_version = "= 1.2.2"
 }
+provider "aws" {
+  region = var.app.region
+}

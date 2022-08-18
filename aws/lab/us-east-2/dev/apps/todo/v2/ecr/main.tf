@@ -3,6 +3,7 @@ module "todo_app_ecr" {
   app = {
     environment = "dev"
     account     = "lab"
+    region      = "us-east-2"
     project     = "todo"
     application = "todo-app"
     team        = "todo"
@@ -16,6 +17,7 @@ module "edge_service_ecr" {
   app = {
     environment = "dev"
     account     = "lab"
+    region      = "us-east-2"
     project     = "todo"
     application = "edge-service"
     team        = "todo"
@@ -29,6 +31,7 @@ module "config_server_ecr" {
   app = {
     environment = "dev"
     account     = "lab"
+    region      = "us-east-2"
     project     = "todo"
     application = "config-server"
     team        = "todo"

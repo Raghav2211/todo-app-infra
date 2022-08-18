@@ -3,6 +3,7 @@ variable "app" {
     {
       environment = string # dev, uat
       account     = string # lab, prd
+      region      = string
       project     = string # todo
       application = string # edge,config etc.
       team        = string # todo

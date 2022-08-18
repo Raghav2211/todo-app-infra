@@ -2,6 +2,7 @@ variable "app" {
   default = {
     environment = "dev"
     account     = "lab"
+    region      = "us-east-2"
     name        = "todo"
     version     = "1.0.0"
   }
