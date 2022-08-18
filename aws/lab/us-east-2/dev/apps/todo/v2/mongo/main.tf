@@ -1,4 +1,4 @@
-module "dev_mongo" {
+module "todo_mongo" {
   source             = "../../../../../../../modules/database/mongo"
   app                = var.app
   master_username    = var.master_username
