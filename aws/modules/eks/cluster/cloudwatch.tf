@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "eks_cluster_log_group" {
   tags              = local.tags
 }
 
-resource "aws_iam_role_policy" "eks_cluster_cloudwatch_policy" {
+resource "aws_iam_role_policy" "eks_cluster_cloudwatch_inline_policy" {
   name = "cloudwatch policy"
   role = data.aws_iam_role.cluster_iam_role.id
   policy = jsonencode({
@@ -17,5 +17,4 @@ resource "aws_iam_role_policy" "eks_cluster_cloudwatch_policy" {
       },
     ]
   })
-  force_detach_policies = true
 }
