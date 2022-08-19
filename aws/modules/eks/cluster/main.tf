@@ -1,35 +1,3 @@
-locals {
-  k8s_version  = 1.19
-  cluster_name = "${var.app.account}-${var.app.environment}-eks"
-
-  self_managed_node_groups = {
-    for config in var.self_managed_node_groups :
-    config.name => {
-      name                         = config.name
-      platform                     = config.platform
-      ami_id                       = config.ami_id
-      instance_type                = config.instance_type
-      min_size                     = config.asg_min_size
-      max_size                     = config.asg_max_size
-      desired_size                 = config.asg_desired_capacity
-      key_name                     = config.key_name
-      iam_role_name                = config.iam_role_name
-      iam_role_use_name_prefix     = false
-      iam_role_additional_policies = config.iam_role_additional_policies
-      bootstrap_extra_args         = config.bootstrap_extra_args
-    }
-  }
-
-
-  tags = merge(var.tags, {
-    account     = var.app.account
-    project     = "infra"
-    environment = var.app.environment
-    application = "eks"
-    team        = "sre"
-  })
-}
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "18.24.0"
@@ -64,9 +32,8 @@ module "eks" {
   }]
 
   # cluster IAM configuration
-  iam_role_name            = "${var.app.account}-${var.app.environment}-eks-cluster-role"
-  iam_role_use_name_prefix = false
-
+  create_iam_role = false
+  iam_role_arn    = data.aws_iam_role.cluster_iam_role.arn
 
   # Self managed node groups will not automatically create the aws-auth configmap so we need to
   create_aws_auth_configmap = true
