@@ -5,7 +5,7 @@ resource "aws_cloudwatch_log_group" "eks_cluster_log_group" {
 }
 
 resource "aws_iam_role_policy" "eks_cluster_cloudwatch_inline_policy" {
-  name = "cloudwatch policy"
+  name = "${local.cluster_name}_cloudwatch_inline_policy"
   role = data.aws_iam_role.cluster_iam_role.id
   policy = jsonencode({
     Version = "2012-10-17"
