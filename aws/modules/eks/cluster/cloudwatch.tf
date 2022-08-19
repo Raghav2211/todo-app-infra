@@ -18,5 +18,4 @@ resource "aws_iam_role_policy" "eks_cluster_cloudwatch_policy" {
     ]
   })
   force_detach_policies = true
-  tags                  = local.tags
 }
