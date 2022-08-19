@@ -1,4 +1,4 @@
-resource "aws_cloudwatch_log_group" "this" {
+resource "aws_cloudwatch_log_group" "eks_cluster_log_group" {
   name              = "/aws/eks/${local.cluster_name}/cluster"
   retention_in_days = 90
   tags              = local.tags
@@ -13,7 +13,7 @@ resource "aws_iam_role_policy" "eks_cluster_cloudwatch_policy" {
       {
         Action   = ["logs:CreateLogGroup"]
         Effect   = "Deny"
-        Resource = aws_cloudwatch_log_group.this[0].arn
+        Resource = aws_cloudwatch_log_group.eks_cluster_log_group.arn
       },
     ]
   })
