@@ -12,7 +12,7 @@ locals {
 ################################################
 #   IAM ROLE for self managed node groups      #
 ################################################
-data "aws_iam_policy_document" "assume_role_policy" {
+data "aws_iam_policy_document" "eks_node_group_assume_role_policy" {
   statement {
     sid     = "EKSNodeAssumeRole"
     actions = ["sts:AssumeRole"]
@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 resource "aws_iam_role" "eks_node_group_iam_role" {
   name                  = var.node_group_iam_role_name
   description           = "eks ${var.app.account} self managed node group IAM role"
-  assume_role_policy    = data.aws_iam_policy_document.assume_role_policy.json
+  assume_role_policy    = data.aws_iam_policy_document.eks_node_group_assume_role_policy.json
   force_detach_policies = true
   tags                  = local.tags
 }
@@ -44,7 +44,7 @@ resource "aws_iam_instance_profile" "eks_node_group_profile" {
 ################################################
 #   IAM ROLE for eks cluster                   #
 ################################################
-data "aws_iam_policy_document" "assume_role_policy" {
+data "aws_iam_policy_document" "eks_cluster_assume_role_policy" {
 
   statement {
     sid     = "EKSClusterAssumeRole"
@@ -60,7 +60,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 resource "aws_iam_role" "cluster_iam_role" {
   name                  = var.cluster_iam_role_name
   description           = "eks ${var.app.account} cluster IAM role"
-  assume_role_policy    = data.aws_iam_policy_document.assume_role_policy.json
+  assume_role_policy    = data.aws_iam_policy_document.eks_cluster_assume_role_policy.json
   force_detach_policies = true
   tags                  = local.tags
 }
