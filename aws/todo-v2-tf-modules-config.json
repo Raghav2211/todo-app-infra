@@ -1,0 +1,23 @@
+{
+  "global_module": [
+    "iam",
+    "route53"
+  ],
+  "region_module": [
+    "vpc",
+    "eks",
+    "apps"
+  ],
+  "apps": [
+    {
+      "todo": {
+        "submodules": [
+          "ecr",
+          "kms",
+          "mongo",
+          "redis"
+        ]
+      }
+    }
+  ]
+}
