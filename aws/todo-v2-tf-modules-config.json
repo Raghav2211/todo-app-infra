@@ -1,23 +1,25 @@
 {
-  "global_module": [
-    "iam",
-    "route53"
-  ],
-  "region_module": [
-    "vpc",
-    "eks",
-    "apps"
-  ],
-  "apps": [
-    {
-      "todo": {
-        "submodules": [
-          "ecr",
-          "kms",
-          "mongo",
-          "redis"
-        ]
+  "lab": {
+    "global": [
+      "iam",
+      "route53"
+    ],
+    "us-east-2": [
+      "vpc",
+      "eks",
+      "apps"
+    ],
+    "apps": [
+      {
+        "todo": {
+          "v2": [
+            "kms",
+            "ecr",
+            "mongo",
+            "redis"
+          ]
+        }
       }
-    }
-  ]
+    ]
+  }
 }
