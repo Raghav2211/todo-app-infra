@@ -1,0 +1,25 @@
+{
+  "lab": {
+    "global": [
+      "iam",
+      "route53"
+    ],
+    "us-east-2": [
+      "vpc",
+      "eks",
+      "apps"
+    ],
+    "apps": [
+      {
+        "todo": {
+          "v2": [
+            "kms",
+            "ecr",
+            "mongo",
+            "redis"
+          ]
+        }
+      }
+    ]
+  }
+}

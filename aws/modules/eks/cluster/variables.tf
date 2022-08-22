@@ -3,6 +3,7 @@ variable "app" {
     {
       environment = string # dev, uat
       account     = string # lab, prd
+      id          = string
       region      = string
     }
   )

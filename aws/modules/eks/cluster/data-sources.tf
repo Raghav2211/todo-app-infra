@@ -6,6 +6,14 @@ data "aws_vpc" "selected" {
   id = var.vpc_id
 }
 
+data "aws_iam_role" "cluster_iam_role" {
+  name = local.cluster_iam_role_name
+}
+
+data "aws_iam_instance_profile" "node_group_iam_instance_profile" {
+  name = local.node_group_iam_instance_profile_name
+}
+
 # This policy is required for the KMS key used for EKS root volumes, so the cluster is allowed to enc/dec/attach encrypted EBS volumes
 data "aws_iam_policy_document" "ebs" {
   # Copy of default KMS policy that lets you manage it
