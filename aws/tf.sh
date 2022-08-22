@@ -11,6 +11,37 @@ fmt() {
     done
 }
 
+plan() {
+  local chdir=$1
+  local plan_file=$2
+  terraform -chdir=$chdir plan $plan_file  
+}
+
+apply() {
+  local chdir=$1
+  local plan_file=$2
+  terraform -chdir=$chdir apply $plan_file  
+}
+
+module_apply() {
+  local account=$1
+  local region=$2
+  local chdir
+  local plan_file
+  if [[ $region == "global" ]]; then
+    component=$3
+    chdir=$account/global/$component
+    plan_file=$account-global-${component////-}.plan
+  else
+    environment=$3
+    component=$4
+    chdir=$account/$region/$environment/$component
+    plan_file=$account-$region-$environment-${component////-}.plan   
+  fi
+  echo "\n🔧 Running command[apply] for account[$account] region[$region] environment[$environment] component[$component]"
+  apply $chdir $plan_file
+}
+
 v2_buila_all() {
   local account=$1
   local region=$2
@@ -44,7 +75,7 @@ tf() {
   if [[ $region == "global" ]]; then
     local component=$3
     local cmd=$4
-    echo "\n🔧 Run command[$cmd] for account[$account] component[$component]"
+    echo "\n🔧 Running command[$cmd] for account[$account] component[$component]"
     if [[ $cmd == "plan" ]]; then
       terraform -chdir=$account/global/$component $cmd -out $account-global-${component////-}.plan
     elif [[ $cmd == "apply" ]]; then
@@ -56,7 +87,7 @@ tf() {
     local environment=$3
     local component=$4
     local cmd=$5
-    echo "\n🔧 Run command[$cmd] for for account[$account] region[$region] environment[$environment] component[$component]"
+    echo "\n🔧 Running command[$cmd] for for account[$account] region[$region] environment[$environment] component[$component]"
     if [[ $cmd == "plan" ]]; then
       terraform -chdir=$account/$region/$environment/$component $cmd -out $account-$region-$environment-${component////-}.plan
     elif [[ $cmd == "apply" ]]; then
@@ -97,6 +128,19 @@ while test -n "$1"; do
          fmt
          shift
          ;;
+       apply)
+        if [[ $# -gt 4 ]]; then
+          echo "Too many args";
+          help
+          exit 1;
+         elif [[ $# -lt 3 ]]; then
+          echo "Less args";
+          help
+          exit 1;	   
+        fi    
+         module_apply $2 $3 $4 $5
+         exit $?
+         ;;  
        v2-build-all)
          if [[ $# -gt 4 ]]; then
           echo "Too many args";
