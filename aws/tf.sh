@@ -14,7 +14,7 @@ fmt() {
 plan() {
   local chdir=$1
   local plan_file=$2
-  terraform -chdir=$chdir plan $plan_file  
+  terraform -chdir=$chdir plan -out $plan_file  
 }
 
 apply() {
@@ -89,9 +89,9 @@ tf() {
     local cmd=$5
     echo "\n🔧 Running command[$cmd] for for account[$account] region[$region] environment[$environment] component[$component]"
     if [[ $cmd == "plan" ]]; then
-      terraform -chdir=$account/$region/$environment/$component $cmd -out $account-$region-$environment-${component////-}.plan
+      plan $account/$region/$environment/$component $account-$region-$environment-${component////-}.plan
     elif [[ $cmd == "apply" ]]; then
-        terraform -chdir=$account/$region/$environment/$component $cmd $account-$region-$environment-${component////-}.plan
+      apply $account/$region/$environment/$component $account-$region-$environment-${component////-}.plan
     else
       terraform -chdir=$account/$region/$environment/$component $cmd
     fi
